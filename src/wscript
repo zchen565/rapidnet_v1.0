@@ -61,7 +61,8 @@ all_modules = (
     'applications/mincost-prov',
     'applications/mincost-query',
     'applications/messf',
-    'applications/messf-query'
+    'applications/messf-query',
+    'applications/acquaintance'
 
     
     

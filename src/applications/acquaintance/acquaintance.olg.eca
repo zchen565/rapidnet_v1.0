@@ -1,0 +1,20 @@
+ECA Rule raEca0Ins ACTION_ADD<live(@Local, A, C)> :- EVENT_INSERT<liveEvent(@Local, A, C)>.
+ECA Rule raEca0Del ACTION_DELETE<live(@Local, A, C)> :- EVENT_DELETE<liveEvent(@Local, A, C)>.
+ECA Rule rbEca0Ins ACTION_ADD<like(@Local, A, C)> :- EVENT_INSERT<likeEvent(@Local, A, C)>.
+ECA Rule rbEca0Del ACTION_DELETE<like(@Local, A, C)> :- EVENT_DELETE<likeEvent(@Local, A, C)>.
+ECA Rule rcEca0Ins ACTION_ADD<know(@Local, A, B, S)> :- EVENT_INSERT<knowEvent(@Local, A, B, S)>.
+ECA Rule rcEca0Del ACTION_DELETE<know(@Local, A, B, S)> :- EVENT_DELETE<knowEvent(@Local, A, B, S)>.
+ECA Rule r1Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<liveEvent(@Local, A, C)>, live(@Local, B, C), A != B, S := 1.
+ECA Rule r1Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<liveEvent(@Local, A, C)>, live(@Local, B, C), A != B, S := 1.
+ECA Rule r1Eca1Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<live(@Local, B, C)>, liveEvent(@Local, A, C), A != B, S := 1.
+ECA Rule r1Eca1Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<live(@Local, B, C)>, liveEvent(@Local, A, C), A != B, S := 1.
+ECA Rule r2Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<likeEvent(@Local, A, C)>, like(@Local, B, C), A != B, S := 1.
+ECA Rule r2Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<likeEvent(@Local, A, C)>, like(@Local, B, C), A != B, S := 1.
+ECA Rule r2Eca1Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<like(@Local, B, C)>, likeEvent(@Local, A, C), A != B, S := 1.
+ECA Rule r2Eca1Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<like(@Local, B, C)>, likeEvent(@Local, A, C), A != B, S := 1.
+ECA Rule r4Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<relation(@Local, A, B)>, A != B, S := 0.
+ECA Rule r4Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<relation(@Local, A, B)>, A != B, S := 0.
+ECA Rule r5Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<liveEvent(@Local, A, C1)>, live(@Local, B, C2), C1 != C2, A != B, S := 0.
+ECA Rule r5Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<liveEvent(@Local, A, C1)>, live(@Local, B, C2), C1 != C2, A != B, S := 0.
+ECA Rule r5Eca1Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<live(@Local, B, C2)>, liveEvent(@Local, A, C1), C1 != C2, A != B, S := 0.
+ECA Rule r5Eca1Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<live(@Local, B, C2)>, liveEvent(@Local, A, C1), C1 != C2, A != B, S := 0.

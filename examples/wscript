@@ -198,6 +198,11 @@ def build(bld):
    
     obj = bld.create_ns3_program('messf-query-test')
     obj.source = 'messf-query-test.cc'
+
+    obj = bld.create_ns3_program('acquaintance-test')
+    obj.source = 'acquaintance-test.cc'
+
+
   
    
 
