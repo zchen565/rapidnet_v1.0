@@ -67,6 +67,10 @@ protected:
 
   virtual void RcEca0Del (Ptr<Tuple> knowEvent);
 
+  virtual void RdEca0Ins (Ptr<Tuple> knowEvent);
+
+  virtual void RdEca0Del (Ptr<Tuple> knowEvent);
+
   virtual void R1Eca0Ins (Ptr<Tuple> liveEvent);
 
   virtual void R1Eca0Del (Ptr<Tuple> liveEvent);

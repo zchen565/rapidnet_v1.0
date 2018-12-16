@@ -81,12 +81,14 @@ Acquaintance::InitDatabase ()
   AddRelationWithKeys (KNOW, attrdeflist (
     attrdef ("know_attr1", IPV4),
     attrdef ("know_attr2", INT32),
-    attrdef ("know_attr3", INT32)));
+    attrdef ("know_attr3", INT32),
+    attrdef ("know_attr4", INT32)));
 
   AddRelationWithKeys (KNOWEVENT, attrdeflist (
     attrdef ("knowEvent_attr1", IPV4),
     attrdef ("knowEvent_attr2", INT32),
-    attrdef ("knowEvent_attr3", INT32)));
+    attrdef ("knowEvent_attr3", INT32),
+    attrdef ("knowEvent_attr4", INT32)));
 
   AddRelationWithKeys (LIKE, attrdeflist (
     attrdef ("like_attr1", IPV4),
@@ -143,6 +145,14 @@ Acquaintance::DemuxRecv (Ptr<Tuple> tuple)
   if (IsDeleteEvent (tuple, KNOWEVENT))
     {
       RcEca0Del (tuple);
+    }
+  if (IsInsertEvent (tuple, KNOWEVENT))
+    {
+      RdEca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOWEVENT))
+    {
+      RdEca0Del (tuple);
     }
   if (IsInsertEvent (tuple, LIVEEVENT))
     {
@@ -329,6 +339,54 @@ Acquaintance::RcEca0Del (Ptr<Tuple> knowEvent)
     strlist ("Local",
       "knowEvent_attr2",
       "knowEvent_attr3",
+      "knowEvent_attr4"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::RdEca0Ins (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("RdEca0Ins triggered");
+
+  Ptr<Tuple> result = knowEvent;
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "knowEvent_attr3",
+      "knowEvent_attr2",
+      "knowEvent_attr4"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::RdEca0Del (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("RdEca0Del triggered");
+
+  Ptr<Tuple> result = knowEvent;
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "knowEvent_attr3",
+      "knowEvent_attr2",
       "knowEvent_attr4"),
     strlist ("know_attr1",
       "know_attr2",

@@ -4,6 +4,8 @@ ECA Rule rbEca0Ins ACTION_ADD<like(@Local, A, C)> :- EVENT_INSERT<likeEvent(@Loc
 ECA Rule rbEca0Del ACTION_DELETE<like(@Local, A, C)> :- EVENT_DELETE<likeEvent(@Local, A, C)>.
 ECA Rule rcEca0Ins ACTION_ADD<know(@Local, A, B, S)> :- EVENT_INSERT<knowEvent(@Local, A, B, S)>.
 ECA Rule rcEca0Del ACTION_DELETE<know(@Local, A, B, S)> :- EVENT_DELETE<knowEvent(@Local, A, B, S)>.
+ECA Rule rdEca0Ins ACTION_ADD<know(@Local, B, A, S)> :- EVENT_INSERT<knowEvent(@Local, A, B, S)>.
+ECA Rule rdEca0Del ACTION_DELETE<know(@Local, B, A, S)> :- EVENT_DELETE<knowEvent(@Local, A, B, S)>.
 ECA Rule r1Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<liveEvent(@Local, A, C)>, live(@Local, B, C), A != B, S := 1.
 ECA Rule r1Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<liveEvent(@Local, A, C)>, live(@Local, B, C), A != B, S := 1.
 ECA Rule r1Eca1Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<live(@Local, B, C)>, liveEvent(@Local, A, C), A != B, S := 1.

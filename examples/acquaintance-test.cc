@@ -43,7 +43,7 @@
 "./data/acquaintance/lived_obs.txt"
 
 #define LiveObsBack \
-"./data/acquaintance/live_obs.bak"
+"./data/acquaintance/lived_obs.bak"
 
 #define KnowTar \
 "./data/acquaintance/knows_target.txt"
@@ -80,7 +80,6 @@ attr ("relation_attr3", Int32Value, person2))
 
 #define insertknow(local, person1, person2, state) \
 app(local)->Insert(know(addr(local), person1, person2, state)); \
-app(local)->Insert(know(addr(local), person2, person1, state));
 
 #define insertlike(local, person, hobby) \
 app(local)->Insert(like(addr(local), person, hobby));
@@ -125,6 +124,7 @@ void parse(vector<string> know_obs,
 ){
 
 	// first parse know_obs
+	int num_people = 0;
 	for(int i=0; i<know_obs.size()-1; i++){
 		string know = know_obs[i];
 		if(know.size()==0) continue;
@@ -133,16 +133,25 @@ void parse(vector<string> know_obs,
 		string person1 = know.substr(0, l);
 		l++;
 		string person2 = know.substr(l, know.length()-l);
-		if(people.count(person1)==0)
+		if(people.count(person1)==0){
 			people.insert(pair<string, int>(person1, people.size()));
-		if(people.count(person2)==0)
+			cout << person1 << ' ' << num_people << endl;
+			num_people++;
+		}
+		if(people.count(person2)==0){
 			people.insert(pair<string, int>(person2, people.size()));
+			cout << person2 << ' ' << num_people << endl;
+			num_people++;
+		}
 		cout << people[person1] << ' ' << people[person2] << endl;
 		insertknow(1, people[person1], people[person2], 1);
 	}	
 	cout << endl;
 
 	cout << "live size: " << live_obs.size() << endl;
+	for(int i=0; i<live_obs.size(); i++){
+		cout << live_obs[i] << endl; 
+	}
 
 	// parse live_obs
 	for(int i=0; i<live_obs.size()-1; i++){
@@ -157,7 +166,7 @@ void parse(vector<string> know_obs,
 			people.insert(pair<string, int>(person, people.size()));
 		if(cities.count(city)==0)
 			cities.insert(pair<string, int>(city, cities.size()));
-		cout << people[person] << ' ' << cities[city] << endl;
+		// cout << people[person] << ' ' << cities[city] << endl;
 		insertlive(1, people[person], cities[city]);
 	}
 	cout << endl;
@@ -181,7 +190,7 @@ void parse(vector<string> know_obs,
 			people.insert(pair<string, int>(person, people.size()));
 		if(hobbies.count(hobby)==0)
 			hobbies.insert(pair<string, int>(hobby, hobbies.size()));
-		cout << people[person] << ' ' << hobbies[hobby] << endl;
+		// cout << people[person] << ' ' << hobbies[hobby] << endl;
 		insertlike(1, people[person], hobbies[hobby]);
 	}
 }
@@ -197,8 +206,8 @@ void Print(){
 
 void train(){
 	vector<string> know_obs = readFile(KnowObsBack);
-	vector<string> live_obs = readFile(LiveObs);
-	vector<string> like_obs = readFile(LikeObs);
+	vector<string> live_obs = readFile(LiveObsBack);
+	vector<string> like_obs = readFile(LikeObsBack);
 	parse(know_obs, live_obs, like_obs);
 }
 

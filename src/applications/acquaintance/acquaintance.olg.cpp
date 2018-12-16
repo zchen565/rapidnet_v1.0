@@ -33,14 +33,15 @@
 /* We do not support C11 <threads.h>.  */
 materialize(liveEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
 materialize(likeEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(knowEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
+materialize(knowEvent, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32)).
 materialize(live, infinity, infinity, keys(1, 2:int32, 3:int32)).
 materialize(like, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(know, infinity, infinity, keys(1, 2:int32, 3:int32)).
+materialize(know, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32)).
 materialize(relation, infinity, infinity, keys(1, 2:int32, 3:int32)).
 ra live(@Local, A, C) :- liveEvent(@Local, A, C).
 rb like(@Local, A, C) :- likeEvent(@Local, A, C).
 rc know(@Local, A, B, S) :- knowEvent(@Local, A, B, S).
+rd know(@Local, B, A, S) :- knowEvent(@Local, A, B, S).
 r1 0.8 knowEvent(@Local, A, B, S) :- liveEvent(@Local, A, C), live(@Local, B, C), A!=B, S:=1.
 r2 0.4 knowEvent(@Local, A, B, S) :- likeEvent(@Local, A, C), like(@Local, B, C), A!=B, S:=1.
 r4 0.2 knowEvent(@Local, A, B, S) :- relation(@Local, A, B), A!=B, S:=0.

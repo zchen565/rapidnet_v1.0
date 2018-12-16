@@ -1,24 +1,46 @@
-materialize(know, -1, 0, keys(2, 3)
-materialize(like, -1, 0, keys(2, 3)
-materialize(live, -1, 0, keys(2, 3)
+materialize(know, -1, 0, keys(1, 2, 3, 4)
+materialize(knowEvent, -1, 0, keys(1, 2, 3, 4)
+materialize(like, -1, 0, keys(1, 2, 3)
+materialize(likeEvent, -1, 0, keys(1, 2, 3)
+materialize(live, -1, 0, keys(1, 2, 3)
+materialize(liveEvent, -1, 0, keys(1, 2, 3)
 materialize(pQList, -1, 0, keys(1, 2)
 materialize(pResultTmp, -1, 0, keys(1, 2)
 materialize(prov, -1, 0, keys(1, 2, 3)
 materialize(rQList, -1, 0, keys(1, 2)
 materialize(rResultTmp, -1, 0, keys(1, 2)
-materialize(relation, -1, 0, keys(2, 3)
+materialize(relation, -1, 0, keys(1, 2, 3)
 materialize(ruleExec, -1, 0, keys(1, 2)
-prov_r1_1 eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- live(@Local, A, C), PID1 := f_sha1(((live+ Local)+ A)+ C), List := f_append(PID1), live(@Local, B, C), PID2 := f_sha1(((live+ Local)+ B)+ C), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S := 1, RLOC := Local, RWeight := 0.8, R := r1, RID := f_sha1((R+ RLOC)+ List).
-prov_r1_2 ruleExec(@RLOC, RID, RWeight, R, List) :- eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List).
-prov_r1_3 eknow(@Local, A, B, S, RID, RWeight, RLOC) :- eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List).
-prov_r1_4 know(@Local, A, B, S) :- eknow(@Local, A, B, S, RID, RWeight, RLOC).
-prov_r1_5 prov(@Local, VID, RID, RLOC, Score) :- eknow(@Local, A, B, S, RID, RWeight, RLOC), VID := f_sha1((((know+ Local)+ A)+ B)+ S), Score := -1.
-prov_r2_1 eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- like(@Local, A, C), PID1 := f_sha1(((like+ Local)+ A)+ C), List := f_append(PID1), like(@Local, B, C), PID2 := f_sha1(((like+ Local)+ B)+ C), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S := 1, RLOC := Local, RWeight := 0.4, R := r2, RID := f_sha1((R+ RLOC)+ List).
-prov_r3_1 eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- know(@Local, A, C, S1), PID1 := f_sha1((((know+ Local)+ A)+ C)+ S1), List := f_append(PID1), know(@Local, B, C, S2), PID2 := f_sha1((((know+ Local)+ B)+ C)+ S2), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S1 == 1, S2 == 1, S := 1, RLOC := Local, RWeight := 1, R := r3, RID := f_sha1((R+ RLOC)+ List).
-prov_r4_1 eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- relation(@Local, A, B), PID1 := f_sha1(((relation+ Local)+ A)+ B), List := f_append(PID1), A != B, S := 0, RLOC := Local, RWeight := 0.2, R := r4, RID := f_sha1((R+ RLOC)+ List).
-prov_r5_1 eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- live(@Local, A, C1), PID1 := f_sha1(((live+ Local)+ A)+ C1), List := f_append(PID1), live(@Local, B, C2), PID2 := f_sha1(((live+ Local)+ B)+ C2), List2 := f_append(PID2), List := f_concat(List, List2), C1 != C2, A != B, S := 0, RLOC := Local, RWeight := 0.8, R := r5, RID := f_sha1((R+ RLOC)+ List).
-prov_edb_1 prov(@Local, VID, RID, RLoc, Score) :- RLoc := Local, like(@Local, A, C), VID := f_sha1(((like+ Local)+ A)+ C), RID := VID, Score := C.
-prov_edb_2 prov(@Local, VID, RID, RLoc, Score) :- RLoc := Local, live(@Local, A, C), VID := f_sha1(((live+ Local)+ A)+ C), RID := VID, Score := C.
+prov_ra_1 eliveTemp(@RLOC, Local, A, C, RID, RWeight, R, List) :- liveEvent(@Local, A, C), PID1 := f_sha1(((liveEvent+ Local)+ A)+ C), List := f_append(PID1), RLOC := Local, RWeight := 1, R := ra, RID := f_sha1((R+ RLOC)+ List).
+prov_ra_2 ruleExec(@RLOC, RID, RWeight, R, List) :- eliveTemp(@RLOC, Local, A, C, RID, RWeight, R, List).
+prov_ra_3 elive(@Local, A, C, RID, RWeight, RLOC) :- eliveTemp(@RLOC, Local, A, C, RID, RWeight, R, List).
+prov_ra_4 live(@Local, A, C) :- elive(@Local, A, C, RID, RWeight, RLOC).
+prov_ra_5 prov(@Local, VID, RID, RLOC, Score) :- elive(@Local, A, C, RID, RWeight, RLOC), VID := f_sha1(((live+ Local)+ A)+ C), Score := -1.
+prov_rb_1 elikeTemp(@RLOC, Local, A, C, RID, RWeight, R, List) :- likeEvent(@Local, A, C), PID1 := f_sha1(((likeEvent+ Local)+ A)+ C), List := f_append(PID1), RLOC := Local, RWeight := 1, R := rb, RID := f_sha1((R+ RLOC)+ List).
+prov_rb_2 ruleExec(@RLOC, RID, RWeight, R, List) :- elikeTemp(@RLOC, Local, A, C, RID, RWeight, R, List).
+prov_rb_3 elike(@Local, A, C, RID, RWeight, RLOC) :- elikeTemp(@RLOC, Local, A, C, RID, RWeight, R, List).
+prov_rb_4 like(@Local, A, C) :- elike(@Local, A, C, RID, RWeight, RLOC).
+prov_rb_5 prov(@Local, VID, RID, RLOC, Score) :- elike(@Local, A, C, RID, RWeight, RLOC), VID := f_sha1(((like+ Local)+ A)+ C), Score := -1.
+prov_rc_1 eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- knowEvent(@Local, A, B, S), PID1 := f_sha1((((knowEvent+ Local)+ A)+ B)+ S), List := f_append(PID1), RLOC := Local, RWeight := 1, R := rc, RID := f_sha1((R+ RLOC)+ List).
+prov_rc_2 ruleExec(@RLOC, RID, RWeight, R, List) :- eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List).
+prov_rc_3 eknow(@Local, A, B, S, RID, RWeight, RLOC) :- eknowTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List).
+prov_rc_4 know(@Local, A, B, S) :- eknow(@Local, A, B, S, RID, RWeight, RLOC).
+prov_rc_5 prov(@Local, VID, RID, RLOC, Score) :- eknow(@Local, A, B, S, RID, RWeight, RLOC), VID := f_sha1((((know+ Local)+ A)+ B)+ S), Score := -1.
+prov_rd_1 eknowTemp(@RLOC, Local, B, A, S, RID, RWeight, R, List) :- knowEvent(@Local, A, B, S), PID1 := f_sha1((((knowEvent+ Local)+ A)+ B)+ S), List := f_append(PID1), RLOC := Local, RWeight := 1, R := rd, RID := f_sha1((R+ RLOC)+ List).
+prov_r1_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- liveEvent(@Local, A, C), PID1 := f_sha1(((liveEvent+ Local)+ A)+ C), List := f_append(PID1), live(@Local, B, C), PID2 := f_sha1(((live+ Local)+ B)+ C), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S := 1, RLOC := Local, RWeight := 0.8, R := r1, RID := f_sha1((R+ RLOC)+ List).
+prov_r1_2 ruleExec(@RLOC, RID, RWeight, R, List) :- eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List).
+prov_r1_3 eknowEvent(@Local, A, B, S, RID, RWeight, RLOC) :- eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List).
+prov_r1_4 knowEvent(@Local, A, B, S) :- eknowEvent(@Local, A, B, S, RID, RWeight, RLOC).
+prov_r1_5 prov(@Local, VID, RID, RLOC, Score) :- eknowEvent(@Local, A, B, S, RID, RWeight, RLOC), VID := f_sha1((((knowEvent+ Local)+ A)+ B)+ S), Score := -1.
+prov_r2_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- likeEvent(@Local, A, C), PID1 := f_sha1(((likeEvent+ Local)+ A)+ C), List := f_append(PID1), like(@Local, B, C), PID2 := f_sha1(((like+ Local)+ B)+ C), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S := 1, RLOC := Local, RWeight := 0.4, R := r2, RID := f_sha1((R+ RLOC)+ List).
+prov_r3a_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- knowEvent(@Local, A, C, S1), PID1 := f_sha1((((knowEvent+ Local)+ A)+ C)+ S1), List := f_append(PID1), know(@Local, B, C, S2), PID2 := f_sha1((((know+ Local)+ B)+ C)+ S2), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S1 == 1, S2 == 1, S := 1, RLOC := Local, RWeight := 1, R := r3a, RID := f_sha1((R+ RLOC)+ List).
+prov_r3b_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- knowEvent(@Local, A, C, S1), PID1 := f_sha1((((knowEvent+ Local)+ A)+ C)+ S1), List := f_append(PID1), know(@Local, C, B, S2), PID2 := f_sha1((((know+ Local)+ C)+ B)+ S2), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S1 == 1, S2 == 1, S := 1, RLOC := Local, RWeight := 1, R := r3b, RID := f_sha1((R+ RLOC)+ List).
+prov_r3c_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- knowEvent(@Local, C, A, S1), PID1 := f_sha1((((knowEvent+ Local)+ C)+ A)+ S1), List := f_append(PID1), know(@Local, B, C, S2), PID2 := f_sha1((((know+ Local)+ B)+ C)+ S2), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S1 == 1, S2 == 1, S := 1, RLOC := Local, RWeight := 1, R := r3c, RID := f_sha1((R+ RLOC)+ List).
+prov_r3d_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- knowEvent(@Local, C, A, S1), PID1 := f_sha1((((knowEvent+ Local)+ C)+ A)+ S1), List := f_append(PID1), know(@Local, C, B, S2), PID2 := f_sha1((((know+ Local)+ C)+ B)+ S2), List2 := f_append(PID2), List := f_concat(List, List2), A != B, S1 == 1, S2 == 1, S := 1, RLOC := Local, RWeight := 1, R := r3d, RID := f_sha1((R+ RLOC)+ List).
+prov_r4_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- relation(@Local, A, B), PID1 := f_sha1(((relation+ Local)+ A)+ B), List := f_append(PID1), A != B, S := 0, RLOC := Local, RWeight := 0.2, R := r4, RID := f_sha1((R+ RLOC)+ List).
+prov_r5_1 eknowEventTemp(@RLOC, Local, A, B, S, RID, RWeight, R, List) :- liveEvent(@Local, A, C1), PID1 := f_sha1(((liveEvent+ Local)+ A)+ C1), List := f_append(PID1), live(@Local, B, C2), PID2 := f_sha1(((live+ Local)+ B)+ C2), List2 := f_append(PID2), List := f_concat(List, List2), C1 != C2, A != B, S := 0, RLOC := Local, RWeight := 0.8, R := r5, RID := f_sha1((R+ RLOC)+ List).
+prov_edb_1 prov(@Local, VID, RID, RLoc, Score) :- RLoc := Local, likeEvent(@Local, A, C), VID := f_sha1(((likeEvent+ Local)+ A)+ C), RID := VID, Score := C.
+prov_edb_2 prov(@Local, VID, RID, RLoc, Score) :- RLoc := Local, liveEvent(@Local, A, C), VID := f_sha1(((liveEvent+ Local)+ A)+ C), RID := VID, Score := C.
 prov_edb_3 prov(@Local, VID, RID, RLoc, Score) :- RLoc := Local, relation(@Local, A, B), VID := f_sha1(((relation+ Local)+ A)+ B), RID := VID, Score := B.
 edb1 pReturn(@Ret, QID, VID, Prov) :- provQuery(@X, QID, VID, Ret), prov(@X, VID, RID, RLoc, Score), RID == VID, Prov := f_pEDB(VID, X).
 idb1 pQList(@X, QID, LIST< RID >) :- provQuery(@X, QID, VID, Ret), prov(@X, VID, RID, RLoc, Score), RID != VID.
