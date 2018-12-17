@@ -29,34 +29,9 @@ namespace messf {
 class Messf : public RapidNetApplicationBase
 {
 public:
-  static const string EPRETURN;
-  static const string EPROVQUERY;
-  static const string ERRETURN;
-  static const string ERULEQUERY;
-  static const string EFINAL;
-  static const string EFINALDELETE;
-  static const string EFINALTEMP;
-  static const string EFINALTEMPDELETE;
-  static const string EMSG;
-  static const string EMSGDELETE;
-  static const string EMSGTEMP;
-  static const string EMSGTEMPDELETE;
   static const string FINAL;
   static const string LINK;
   static const string MSG;
-  static const string MSGDELETE;
-  static const string PITERATE;
-  static const string PQLIST;
-  static const string PRESULTTMP;
-  static const string PRETURN;
-  static const string PROV;
-  static const string PROVQUERY;
-  static const string RITERATE;
-  static const string RQLIST;
-  static const string RRESULTTMP;
-  static const string RRETURN;
-  static const string RULEEXEC;
-  static const string RULEQUERY;
   static const string SOURCE;
 
   static TypeId GetTypeId (void);
@@ -77,99 +52,11 @@ protected:
 
   virtual void DemuxRecv (Ptr<Tuple> tuple);
 
-  virtual void Prov_r1_1Eca0Ins (Ptr<Tuple> source);
+  virtual void R1Eca0Ins (Ptr<Tuple> source);
 
-  virtual void Prov_r1_1Eca0Del (Ptr<Tuple> source);
+  virtual void R2_eca (Ptr<Tuple> msg);
 
-  virtual void Prov_r1_2_ecaAdd (Ptr<Tuple> emsgTemp);
-
-  virtual void Prov_r1_2_ecaDel (Ptr<Tuple> emsgTempDelete);
-
-  virtual void Prov_r1_3_ecaAdd (Ptr<Tuple> emsgTemp);
-
-  virtual void Prov_r1_3_ecaDel (Ptr<Tuple> emsgTempDelete);
-
-  virtual void Prov_r1_4_ecaAdd (Ptr<Tuple> emsg);
-
-  virtual void Prov_r1_4_ecaDel (Ptr<Tuple> emsgDelete);
-
-  virtual void Prov_r1_5_ecaAdd (Ptr<Tuple> emsg);
-
-  virtual void Prov_r1_5_ecaDel (Ptr<Tuple> emsgDelete);
-
-  virtual void Prov_r2_1_ecaAdd (Ptr<Tuple> msg);
-
-  virtual void Prov_r2_1_ecaDel (Ptr<Tuple> msgDelete);
-
-  virtual void Prov_r3_1_ecaAdd (Ptr<Tuple> msg);
-
-  virtual void Prov_r3_1_ecaDel (Ptr<Tuple> msgDelete);
-
-  virtual void Prov_r3_2_ecaAdd (Ptr<Tuple> efinalTemp);
-
-  virtual void Prov_r3_2_ecaDel (Ptr<Tuple> efinalTempDelete);
-
-  virtual void Prov_r3_3_ecaAdd (Ptr<Tuple> efinalTemp);
-
-  virtual void Prov_r3_3_ecaDel (Ptr<Tuple> efinalTempDelete);
-
-  virtual void Prov_r3_4_ecaAdd (Ptr<Tuple> efinal);
-
-  virtual void Prov_r3_4_ecaDel (Ptr<Tuple> efinalDelete);
-
-  virtual void Prov_r3_5_ecaAdd (Ptr<Tuple> efinal);
-
-  virtual void Prov_r3_5_ecaDel (Ptr<Tuple> efinalDelete);
-
-  virtual void Prov_edb_1Eca1Ins (Ptr<Tuple> link);
-
-  virtual void Prov_edb_1Eca1Del (Ptr<Tuple> link);
-
-  virtual void Prov_edb_2Eca1Ins (Ptr<Tuple> source);
-
-  virtual void Prov_edb_2Eca1Del (Ptr<Tuple> source);
-
-  virtual void Edb1_eca (Ptr<Tuple> provQuery);
-
-  virtual void Idb1_eca (Ptr<Tuple> provQuery);
-
-  virtual void Idb2_eca (Ptr<Tuple> provQuery);
-
-  virtual void Idb3_eca (Ptr<Tuple> provQuery);
-
-  virtual void Idb4_eca (Ptr<Tuple> pIterate);
-
-  virtual void Idb5_eca (Ptr<Tuple> pIterate);
-
-  virtual void Idb6_eca (Ptr<Tuple> eRuleQuery);
-
-  virtual void Idb7_eca (Ptr<Tuple> rReturn);
-
-  virtual void Idb8Eca0Ins (Ptr<Tuple> pResultTmp);
-
-  virtual void Idb8Eca1Ins (Ptr<Tuple> pQList);
-
-  virtual void Idb9_eca (Ptr<Tuple> ePReturn);
-
-  virtual void Rv1_eca (Ptr<Tuple> ruleQuery);
-
-  virtual void Rv2_eca (Ptr<Tuple> ruleQuery);
-
-  virtual void Rv3_eca (Ptr<Tuple> ruleQuery);
-
-  virtual void Rv4_eca (Ptr<Tuple> rIterate);
-
-  virtual void Rv5_eca (Ptr<Tuple> rIterate);
-
-  virtual void Rv6_eca (Ptr<Tuple> eProvQuery);
-
-  virtual void Rv7_eca (Ptr<Tuple> pReturn);
-
-  virtual void Rv8Eca0Ins (Ptr<Tuple> rResultTmp);
-
-  virtual void Rv8Eca1Ins (Ptr<Tuple> rQList);
-
-  virtual void Rv9_eca (Ptr<Tuple> eRReturn);
+  virtual void R3_eca (Ptr<Tuple> msg);
 
 };
 

@@ -174,7 +174,7 @@ void parse(vector<string> know_obs,
 ){
 
 	// first parse know_obs
-	int num_people = 0;
+	int num_people = people.size();
 	for(int i=0; i<know_obs.size()-1; i++){
 		string know = know_obs[i];
 		if(know.size()==0) continue;
@@ -302,8 +302,8 @@ int main(int argc, char *argv[]){
 	queryapps.Start(Seconds(0.0));
 	queryapps.Stop(Seconds(10.0));
 
-	schedule (1.0, train);
 	schedule (2.0, TupleToQuery);
+	schedule (1.0, train);
 	schedule (5.0, Print);
 
 	Simulator::Run ();
