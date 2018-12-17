@@ -202,6 +202,10 @@ def build(bld):
     obj = bld.create_ns3_program('acquaintance-test')
     obj.source = 'acquaintance-test.cc'
 
+    obj = bld.create_ns3_program('acquaintance-query-test')
+    obj.source = 'acquaintance-query-test.cc'
+
+
 
   
    

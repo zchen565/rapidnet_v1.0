@@ -31,20 +31,7 @@
    synchronized with ISO/IEC 10646:2014, plus Amendment 1 (published
    2015-05-15).  */
 /* We do not support C11 <threads.h>.  */
-materialize(liveEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(likeEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(knowEvent, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32)).
-materialize(live, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(like, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(know, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32)).
-materialize(relation, infinity, infinity, keys(1, 2:int32, 3:int32)).
-ra live(@Local, A, C) :- liveEvent(@Local, A, C).
-rb like(@Local, A, C) :- likeEvent(@Local, A, C).
-rc know(@Local, A, B, S) :- knowEvent(@Local, A, B, S).
-rd know(@Local, B, A, S) :- knowEvent(@Local, A, B, S).
-r1 0.8 knowEvent(@Local, A, B, S) :- liveEvent(@Local, A, C), live(@Local, B, C), A!=B, S:=1.
-r2 0.4 knowEvent(@Local, A, B, S) :- likeEvent(@Local, A, C), like(@Local, B, C), A!=B, S:=1.
-r3a 1.0 know(@Local, A, B, S) :- knowEvent(@Local, A, C, S1), know(@Local, B, C, S2), A!=B, S1==1, S2==1, S:=1.
-r3b 1.0 know(@Local, B, A, S) :- knowEvent(@Local, A, C, S1), know(@Local, B, C, S2), A!=B, S1==1, S2==1, S:=1.
-r4 0.2 knowEvent(@Local, A, B, S) :- relation(@Local, A, B), A!=B, S:=0.
-r5 0.8 knowEvent(@Local, A, B, S) :- liveEvent(@Local, A, C1), live(@Local, B, C2), C1!=C2, A!=B, S:=0.
+materialize(records, infinity, infinity, keys(1, 2:cid, 3:cid)).
+materialize(tuple, infinity, infinity, keys(1, 2:str, 3:int32, 4:int32, 5:int32)).
+q1 provQuery(@X, QID, UID, ME) :- periodic(@ME, E, 4, 2), tuple(@ME, Name, X, Y, S), UID:=f_sha1(Name+X+Y+C), Time:=f_now(), QID:=f_sha1(""+UID+Time).
+q2 records(@ME, QID, RID, Prov) :- pReturn(@ME, QID, RID, Prov).

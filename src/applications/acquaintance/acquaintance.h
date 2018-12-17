@@ -87,6 +87,22 @@ protected:
 
   virtual void R2Eca1Del (Ptr<Tuple> like);
 
+  virtual void R3aEca0Ins (Ptr<Tuple> knowEvent);
+
+  virtual void R3aEca0Del (Ptr<Tuple> knowEvent);
+
+  virtual void R3aEca1Ins (Ptr<Tuple> know);
+
+  virtual void R3aEca1Del (Ptr<Tuple> know);
+
+  virtual void R3bEca0Ins (Ptr<Tuple> knowEvent);
+
+  virtual void R3bEca0Del (Ptr<Tuple> knowEvent);
+
+  virtual void R3bEca1Ins (Ptr<Tuple> know);
+
+  virtual void R3bEca1Del (Ptr<Tuple> know);
+
   virtual void R4Eca0Ins (Ptr<Tuple> relation);
 
   virtual void R4Eca0Del (Ptr<Tuple> relation);

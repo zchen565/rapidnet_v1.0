@@ -186,6 +186,38 @@ Acquaintance::DemuxRecv (Ptr<Tuple> tuple)
     {
       R2Eca1Del (tuple);
     }
+  if (IsInsertEvent (tuple, KNOWEVENT))
+    {
+      R3aEca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOWEVENT))
+    {
+      R3aEca0Del (tuple);
+    }
+  if (IsInsertEvent (tuple, KNOW))
+    {
+      R3aEca1Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOW))
+    {
+      R3aEca1Del (tuple);
+    }
+  if (IsInsertEvent (tuple, KNOWEVENT))
+    {
+      R3bEca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOWEVENT))
+    {
+      R3bEca0Del (tuple);
+    }
+  if (IsInsertEvent (tuple, KNOW))
+    {
+      R3bEca1Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOW))
+    {
+      R3bEca1Del (tuple);
+    }
   if (IsInsertEvent (tuple, RELATION))
     {
       R4Eca0Ins (tuple);
@@ -688,6 +720,382 @@ Acquaintance::R2Eca1Del (Ptr<Tuple> like)
       "knowEvent_attr2",
       "knowEvent_attr3",
       "knowEvent_attr4"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::R3aEca0Ins (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("R3aEca0Ins triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOW)->Join (
+    knowEvent,
+    strlist ("know_attr3", "know_attr1"),
+    strlist ("knowEvent_attr3", "knowEvent_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "knowEvent_attr2",
+      "know_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::R3aEca0Del (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("R3aEca0Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOW)->Join (
+    knowEvent,
+    strlist ("know_attr3", "know_attr1"),
+    strlist ("knowEvent_attr3", "knowEvent_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "knowEvent_attr2",
+      "know_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::R3aEca1Ins (Ptr<Tuple> know)
+{
+  RAPIDNET_LOG_INFO ("R3aEca1Ins triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOWEVENT)->Join (
+    know,
+    strlist ("knowEvent_attr3", "knowEvent_attr1"),
+    strlist ("know_attr3", "know_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "knowEvent_attr2",
+      "know_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::R3aEca1Del (Ptr<Tuple> know)
+{
+  RAPIDNET_LOG_INFO ("R3aEca1Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOWEVENT)->Join (
+    know,
+    strlist ("knowEvent_attr3", "knowEvent_attr1"),
+    strlist ("know_attr3", "know_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "knowEvent_attr2",
+      "know_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::R3bEca0Ins (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("R3bEca0Ins triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOW)->Join (
+    knowEvent,
+    strlist ("know_attr3", "know_attr1"),
+    strlist ("knowEvent_attr3", "knowEvent_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::R3bEca0Del (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("R3bEca0Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOW)->Join (
+    knowEvent,
+    strlist ("know_attr3", "know_attr1"),
+    strlist ("knowEvent_attr3", "knowEvent_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::R3bEca1Ins (Ptr<Tuple> know)
+{
+  RAPIDNET_LOG_INFO ("R3bEca1Ins triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOWEVENT)->Join (
+    know,
+    strlist ("knowEvent_attr3", "knowEvent_attr1"),
+    strlist ("know_attr3", "know_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::R3bEca1Del (Ptr<Tuple> know)
+{
+  RAPIDNET_LOG_INFO ("R3bEca1Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOWEVENT)->Join (
+    know,
+    strlist ("knowEvent_attr3", "knowEvent_attr1"),
+    strlist ("know_attr3", "know_attr1"));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    KNOW,
+    strlist ("Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S"),
+    strlist ("know_attr1",
+      "know_attr2",
+      "know_attr3",
+      "know_attr4"));
 
   Delete (result);
 }

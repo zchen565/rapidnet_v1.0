@@ -14,6 +14,14 @@ ECA Rule r2Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<likeEv
 ECA Rule r2Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<likeEvent(@Local, A, C)>, like(@Local, B, C), A != B, S := 1.
 ECA Rule r2Eca1Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<like(@Local, B, C)>, likeEvent(@Local, A, C), A != B, S := 1.
 ECA Rule r2Eca1Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<like(@Local, B, C)>, likeEvent(@Local, A, C), A != B, S := 1.
+ECA Rule r3aEca0Ins ACTION_ADD<know(@Local, A, B, S)> :- EVENT_INSERT<knowEvent(@Local, A, C, S1)>, know(@Local, B, C, S2), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3aEca0Del ACTION_DELETE<know(@Local, A, B, S)> :- EVENT_DELETE<knowEvent(@Local, A, C, S1)>, know(@Local, B, C, S2), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3aEca1Ins ACTION_ADD<know(@Local, A, B, S)> :- EVENT_INSERT<know(@Local, B, C, S2)>, knowEvent(@Local, A, C, S1), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3aEca1Del ACTION_DELETE<know(@Local, A, B, S)> :- EVENT_DELETE<know(@Local, B, C, S2)>, knowEvent(@Local, A, C, S1), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3bEca0Ins ACTION_ADD<know(@Local, B, A, S)> :- EVENT_INSERT<knowEvent(@Local, A, C, S1)>, know(@Local, B, C, S2), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3bEca0Del ACTION_DELETE<know(@Local, B, A, S)> :- EVENT_DELETE<knowEvent(@Local, A, C, S1)>, know(@Local, B, C, S2), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3bEca1Ins ACTION_ADD<know(@Local, B, A, S)> :- EVENT_INSERT<know(@Local, B, C, S2)>, knowEvent(@Local, A, C, S1), A != B, S1 == 1, S2 == 1, S := 1.
+ECA Rule r3bEca1Del ACTION_DELETE<know(@Local, B, A, S)> :- EVENT_DELETE<know(@Local, B, C, S2)>, knowEvent(@Local, A, C, S1), A != B, S1 == 1, S2 == 1, S := 1.
 ECA Rule r4Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<relation(@Local, A, B)>, A != B, S := 0.
 ECA Rule r4Eca0Del ACTION_DELETE<knowEvent(@Local, A, B, S)> :- EVENT_DELETE<relation(@Local, A, B)>, A != B, S := 0.
 ECA Rule r5Eca0Ins ACTION_ADD<knowEvent(@Local, A, B, S)> :- EVENT_INSERT<liveEvent(@Local, A, C1)>, live(@Local, B, C2), C1 != C2, A != B, S := 0.

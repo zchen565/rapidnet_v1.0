@@ -21,6 +21,7 @@
 #include "ns3/values-module.h"
 #include "ns3/helper-module.h"
 #include "ns3/acquaintance-module.h"
+#include "ns3/acquaintance-query-module.h"
 #include <fstream>
 #include <string>
 #include <vector>
@@ -47,6 +48,9 @@
 
 #define KnowTar \
 "./data/acquaintance/knows_target.txt"
+
+#define KnowTarBack \
+"./data/acquaintance/knows_target.bak"
 
 #define KnowTru \
 "./data/acquaintance/knows_truth.txt"
@@ -90,12 +94,24 @@ app(local)->Insert(live(addr(local), person, city));
 #define insertrelation(local, person1, person2) \
 app(local)->Insert(relation(addr(local), person1, person2));
 
+#define tupleQuery(local, name, person1, person2, state) \
+tuple(AcquaintanceQuery::TUPLE, \
+attr("tuple_attr1", Ipv4Value, local), \
+attr("tuple_attr2", StrValue, name), \
+attr("tuple_attr3", Int32Value, person1), \
+attr("tuple_attr4", Int32Value, person2), \
+attr("tuple_attr5", Int32Value, state) \
+)
+
+#define inserttuple(local, name, person1, person2, state) \
+queryNode->Insert(tupleQuery(queryNode->GetAddress(), name, person1, person2, state));
 
 
 using namespace std;
 using namespace ns3;
 using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::acquaintance;
+using namespace ns3::rapidnet::acquaintancequery;
 
 
 map<string, int> people;
@@ -103,6 +119,40 @@ map<string, int> cities;
 map<string, int> hobbies;
 
 ApplicationContainer apps;
+ApplicationContainer queryapps;
+
+void initApps(){
+	NodeContainer mainAppNodes;
+	mainAppNodes.Create (1);
+
+	NodeContainer queryAppNodes;
+	queryAppNodes.Create (1);
+
+	NodeContainer csmaNodes;
+	csmaNodes.Add(mainAppNodes);
+	csmaNodes.Add(queryAppNodes);
+
+	CsmaHelper csma;
+
+	NetDeviceContainer csmaDevices;
+	csmaDevices = csma.Install (csmaNodes);
+
+	InternetStackHelper stack;
+	stack.Install (csmaNodes);
+
+	Ipv4AddressHelper address;
+	Ipv4Address base = "10.1.1.0";
+
+	address.SetBase (base, "255.255.255.0");
+	address.Assign (csmaDevices);
+
+	apps.Add(Create<AcquaintanceHelper>()->Install(mainAppNodes));
+	queryapps.Add(Create<AcquaintanceQueryHelper>()->Install(queryAppNodes));
+
+	SetMaxJitter (apps, 0.001);
+	SetMaxJitter (queryapps, 0.001);
+}
+
 
 vector<string> readFile(string filename){
 	vector<string> re;
@@ -167,7 +217,7 @@ void parse(vector<string> know_obs,
 		if(cities.count(city)==0)
 			cities.insert(pair<string, int>(city, cities.size()));
 		// cout << people[person] << ' ' << cities[city] << endl;
-		insertlive(1, people[person], cities[city]);
+		// insertlive(1, people[person], cities[city]);
 	}
 	cout << endl;
 
@@ -191,16 +241,16 @@ void parse(vector<string> know_obs,
 		if(hobbies.count(hobby)==0)
 			hobbies.insert(pair<string, int>(hobby, hobbies.size()));
 		// cout << people[person] << ' ' << hobbies[hobby] << endl;
-		insertlike(1, people[person], hobbies[hobby]);
+		// insertlike(1, people[person], hobbies[hobby]);
 	}
 }
 
 void Print(){
 	PrintRelation(apps, Acquaintance::KNOW);
-	PrintRelation(apps, Acquaintance::LIVE);
+	// PrintRelation(apps, Acquaintance::LIVE);
 	// PrintRelation(apps, Acquaintance::LIKE);
-
 	// PrintRelation(apps, Acquaintance::PROV);
+	// PrintRelation(queryapps, AcquaintanceQuery::RECORDS);
 }
 
 
@@ -211,24 +261,55 @@ void train(){
 	parse(know_obs, live_obs, like_obs);
 }
 
+void TupleToQuery(){
+	vector<string> know_tar = readFile(KnowTar);
+	Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
+
+	int num_people = people.size();
+	for(int i=0; i<know_tar.size()-1; i++){
+		string know = know_tar[i];
+		if(know.size()==0) continue;
+		int l = 0;
+		while(know.at(l)!=' ') l++;
+		string person1 = know.substr(0, l);
+		l++;
+		string person2 = know.substr(l, know.length()-l);
+		if(people.count(person1)==0){
+			people.insert(pair<string, int>(person1, people.size()));
+			cout << person1 << ' ' << num_people << endl;
+			num_people++;
+		}
+		if(people.count(person2)==0){
+			people.insert(pair<string, int>(person2, people.size()));
+			cout << person2 << ' ' << num_people << endl;
+			num_people++;
+		}
+		cout << people[person1] << ' ' << people[person2] << endl;
+		inserttuple(2, person1+person2,  people[person1], people[person2], 1);
+	}
+}
 
 
 int main(int argc, char *argv[]){
+	LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
+	LogComponentEnable("AcquaintanceQuery", LOG_LEVEL_INFO);
+	LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
 
-	apps = InitRapidNetApps (3, Create<AcquaintanceHelper> ());
-	SetMaxJitter (apps, 0.001);
+	initApps();
 
-	apps.Start (Seconds (0.0));
-	apps.Stop (Seconds (10.0));
+	apps.Start(Seconds(0.0));
+	apps.Stop(Seconds(10.0));
+	queryapps.Start(Seconds(0.0));
+	queryapps.Stop(Seconds(10.0));
 
-	schedule (2.0, train);
+	schedule (1.0, train);
+	schedule (2.0, TupleToQuery);
 	schedule (5.0, Print);
 
 	Simulator::Run ();
 	Simulator::Destroy ();
 
 	return 0;
-
 }
 	
 

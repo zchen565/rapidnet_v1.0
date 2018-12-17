@@ -14,5 +14,7 @@ rd know(@Local, B, A, S) :- knowEvent(@Local, A, B, S).
 
 r1 0.8 knowEvent(@Local, A, B, S) :- liveEvent(@Local, A, C), live(@Local, B, C), A!=B, S:=1.
 r2 0.4 knowEvent(@Local, A, B, S) :- likeEvent(@Local, A, C), like(@Local, B, C), A!=B, S:=1.
+r3a 1.0 know(@Local, A, B, S) :- knowEvent(@Local, A, C, S1), know(@Local, B, C, S2), A!=B, S1==1, S2==1, S:=1.
+r3b 1.0 know(@Local, B, A, S) :- knowEvent(@Local, A, C, S1), know(@Local, B, C, S2), A!=B, S1==1, S2==1, S:=1.
 r4 0.2 knowEvent(@Local, A, B, S) :- relation(@Local, A, B), A!=B, S:=0.
 r5 0.8 knowEvent(@Local, A, B, S) :- liveEvent(@Local, A, C1), live(@Local, B, C2), C1!=C2, A!=B, S:=0.
