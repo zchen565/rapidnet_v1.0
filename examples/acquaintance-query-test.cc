@@ -47,10 +47,10 @@
 "./data/acquaintance/lived_obs.bak"
 
 #define KnowTar \
-"./data/acquaintance/knows_target.txt"
+"./data/acquaintance/knows_targets.txt"
 
 #define KnowTarBack \
-"./data/acquaintance/knows_target.bak"
+"./data/acquaintance/knows_targets.bak"
 
 #define KnowTru \
 "./data/acquaintance/knows_truth.txt"
@@ -246,11 +246,12 @@ void parse(vector<string> know_obs,
 }
 
 void Print(){
-	PrintRelation(apps, Acquaintance::KNOW);
+	// PrintRelation(apps, Acquaintance::KNOW);
 	// PrintRelation(apps, Acquaintance::LIVE);
 	// PrintRelation(apps, Acquaintance::LIKE);
 	// PrintRelation(apps, Acquaintance::PROV);
 	// PrintRelation(queryapps, AcquaintanceQuery::RECORDS);
+	PrintRelation(queryapps, AcquaintanceQuery::TUPLE);
 }
 
 
@@ -262,7 +263,10 @@ void train(){
 }
 
 void TupleToQuery(){
+	cout << "Initialization" << endl;
 	vector<string> know_tar = readFile(KnowTar);
+	cout << "reading finish" << endl;
+
 	Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
 
 	int num_people = people.size();
@@ -285,15 +289,15 @@ void TupleToQuery(){
 			num_people++;
 		}
 		cout << people[person1] << ' ' << people[person2] << endl;
-		inserttuple(2, person1+person2,  people[person1], people[person2], 1);
+		inserttuple(1, person1+person2,  people[person1], people[person2], 1);
 	}
 }
 
 
 int main(int argc, char *argv[]){
-	LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
+	// LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
 	LogComponentEnable("AcquaintanceQuery", LOG_LEVEL_INFO);
-	LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
+	// LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
 
 	initApps();
 
@@ -302,8 +306,8 @@ int main(int argc, char *argv[]){
 	queryapps.Start(Seconds(0.0));
 	queryapps.Stop(Seconds(10.0));
 
-	schedule (2.0, TupleToQuery);
 	schedule (1.0, train);
+	schedule (4.0, TupleToQuery);
 	schedule (5.0, Print);
 
 	Simulator::Run ();
