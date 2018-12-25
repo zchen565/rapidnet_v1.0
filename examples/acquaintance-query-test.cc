@@ -289,7 +289,7 @@ void TupleToQuery(){
 			num_people++;
 		}
 		cout << people[person1] << ' ' << people[person2] << endl;
-		inserttuple(1, person1+person2,  people[person1], people[person2], 1);
+		inserttuple(2, person1+person2,  people[person1], people[person2], 1);
 	}
 }
 

@@ -17,9 +17,7 @@ using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::acquaintancequery;
 
 const string AcquaintanceQuery::PRETURN = "pReturn";
-const string AcquaintanceQuery::PERIODIC = "periodic";
 const string AcquaintanceQuery::PROVQUERY = "provQuery";
-const string AcquaintanceQuery::Q1_ECAPERIODIC = "q1_ecaperiodic";
 const string AcquaintanceQuery::RECORDS = "records";
 const string AcquaintanceQuery::TUPLE = "tuple";
 
@@ -60,9 +58,6 @@ AcquaintanceQuery::StartApplication (void)
   NS_LOG_FUNCTION_NOARGS ();
 
   RapidNetApplicationBase::StartApplication ();
-  m_event_q1_ecaperiodic=
-    Simulator::Schedule (Seconds (0), &AcquaintanceQuery::Q1_ecaperiodic, this);
-  m_count_q1_ecaperiodic = 0;
   RAPIDNET_LOG_INFO("AcquaintanceQuery Application Started");
 }
 
@@ -72,7 +67,6 @@ AcquaintanceQuery::StopApplication ()
   NS_LOG_FUNCTION_NOARGS ();
 
   RapidNetApplicationBase::StopApplication ();
-  Simulator::Cancel(m_event_q1_ecaperiodic);
   RAPIDNET_LOG_INFO("AcquaintanceQuery Application Stopped");
 }
 
@@ -100,9 +94,9 @@ AcquaintanceQuery::DemuxRecv (Ptr<Tuple> tuple)
 {
   RapidNetApplicationBase::DemuxRecv (tuple);
 
-  if (IsRecvEvent (tuple, Q1_ECAPERIODIC))
+  if (IsInsertEvent (tuple, TUPLE))
     {
-      Q1_eca (tuple);
+      Q1Eca0Ins (tuple);
     }
   if (IsRecvEvent (tuple, PRETURN))
     {
@@ -111,32 +105,11 @@ AcquaintanceQuery::DemuxRecv (Ptr<Tuple> tuple)
 }
 
 void
-AcquaintanceQuery::Q1_ecaperiodic ()
+AcquaintanceQuery::Q1Eca0Ins (Ptr<Tuple> tuple)
 {
-  RAPIDNET_LOG_INFO ("Q1_ecaperiodic triggered");
+  RAPIDNET_LOG_INFO ("Q1Eca0Ins triggered");
 
-  SendLocal (tuple (Q1_ECAPERIODIC, attrlist (
-    attr ("q1_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
-    attr ("q1_ecaperiodic_attr2", Int32Value, rand ()))));
-
-  if (++m_count_q1_ecaperiodic < 2)
-    {
-      m_event_q1_ecaperiodic = Simulator::Schedule (Seconds(4),
-        &AcquaintanceQuery::Q1_ecaperiodic, this);
-    }
-}
-
-void
-AcquaintanceQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
-{
-  RAPIDNET_LOG_INFO ("Q1_eca triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (TUPLE)->Join (
-    q1_ecaperiodic,
-    strlist ("tuple_attr1"),
-    strlist ("q1_ecaperiodic_attr1"));
+  Ptr<Tuple> result = tuple;
 
   result->Assign (Assignor::New ("UID",
     FSha1::New (
@@ -146,7 +119,7 @@ AcquaintanceQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
             VarExpr::New ("tuple_attr2"),
             VarExpr::New ("tuple_attr3")),
           VarExpr::New ("tuple_attr4")),
-        VarExpr::New ("C")))));
+        VarExpr::New ("tuple_attr5")))));
 
   result->Assign (Assignor::New ("Time",
     FNow::New (
@@ -165,7 +138,7 @@ AcquaintanceQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
     strlist ("tuple_attr3",
       "QID",
       "UID",
-      "q1_ecaperiodic_attr1",
+      "tuple_attr1",
       "tuple_attr3"),
     strlist ("provQuery_attr1",
       "provQuery_attr2",
