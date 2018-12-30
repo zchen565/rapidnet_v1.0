@@ -1,4 +1,4 @@
-IMAGE_NAME="zhanj7_v1.2:rapidnet"
+IMAGE_NAME="zhanj7_v1.4:rapidnet"
 COMMAND="/bin/bash"
 
 MNT_FROM="/Users/milliondegree/Documents/rapidnet_v1.0/"
