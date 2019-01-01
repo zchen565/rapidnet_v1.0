@@ -30,7 +30,9 @@ class AcquaintanceQuery : public RapidNetApplicationBase
 {
 public:
   static const string PRETURN;
+  static const string PERIODIC;
   static const string PROVQUERY;
+  static const string Q1_ECAPERIODIC;
   static const string RECORDS;
   static const string TUPLE;
 
@@ -52,10 +54,14 @@ protected:
 
   virtual void DemuxRecv (Ptr<Tuple> tuple);
 
-  virtual void Q1Eca0Ins (Ptr<Tuple> tuple);
+  virtual void Q1_ecaperiodic ();
+
+  virtual void Q1_eca (Ptr<Tuple> q1_ecaperiodic);
 
   virtual void Q2_eca (Ptr<Tuple> pReturn);
 
+  uint32_t m_count_q1_ecaperiodic;
+  EventId m_event_q1_ecaperiodic;
 };
 
 } // namespace acquaintancequery

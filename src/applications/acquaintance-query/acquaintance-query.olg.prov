@@ -5,18 +5,18 @@ materialize(rQList, -1, 0, keys(1, 2)
 materialize(rResultTmp, -1, 0, keys(1, 2)
 materialize(records, -1, 0, keys(1, 2, 3)
 materialize(ruleExec, -1, 0, keys(1, 2)
-materialize(tuple, -1, 0, keys(1, 2, 3, 4, 5)
-prov_q1_1 eprovQueryTemp(@RLOC, X, QID, UID, ME, RID, RWeight, R, List) :- periodic(@ME, E, 4, 2), PID1 := f_sha1((((periodic+ ME)+ E)+ 4)+ 2), List := f_append(PID1), tuple(@ME, Name, X, Y, S), PID2 := f_sha1(((((tuple+ ME)+ Name)+ X)+ Y)+ S), List2 := f_append(PID2), List := f_concat(List, List2), UID := f_sha1(((Name+ X)+ Y)+ C), Time := f_now(), QID := f_sha1((+ UID)+ Time), RLOC := ME, RWeight := 1, R := q1, RID := f_sha1((R+ RLOC)+ List).
-prov_q1_2 ruleExec(@RLOC, RID, RWeight, R, List) :- eprovQueryTemp(@RLOC, X, QID, UID, ME, RID, RWeight, R, List).
-prov_q1_3 eprovQuery(@X, QID, UID, ME, RID, RWeight, RLOC) :- eprovQueryTemp(@RLOC, X, QID, UID, ME, RID, RWeight, R, List).
-prov_q1_4 provQuery(@X, QID, UID, ME) :- eprovQuery(@X, QID, UID, ME, RID, RWeight, RLOC).
-prov_q1_5 prov(@X, VID, RID, RLOC, Score) :- eprovQuery(@X, QID, UID, ME, RID, RWeight, RLOC), VID := f_sha1((((provQuery+ X)+ QID)+ UID)+ ME), Score := -1.
+materialize(tuple, -1, 0, keys(1, 2)
+prov_q1_1 eprovQueryTemp(@RLOC, Loc, QID, UID, ME, RID, RWeight, R, List) :- periodic(@ME, E, 4, 2), PID1 := f_sha1((((periodic+ ME)+ E)+ 4)+ 2), List := f_append(PID1), tuple(@ME, Name, Loc, X, Y, S), PID2 := f_sha1((((((tuple+ ME)+ Name)+ Loc)+ X)+ Y)+ S), List2 := f_append(PID2), List := f_concat(List, List2), UID := f_sha1((((Name+ Loc)+ X)+ Y)+ S), Time := f_now(), QID := f_sha1((+ UID)+ Time), RLOC := ME, RWeight := 1, R := q1, RID := f_sha1((R+ RLOC)+ List).
+prov_q1_2 ruleExec(@RLOC, RID, RWeight, R, List) :- eprovQueryTemp(@RLOC, Loc, QID, UID, ME, RID, RWeight, R, List).
+prov_q1_3 eprovQuery(@Loc, QID, UID, ME, RID, RWeight, RLOC) :- eprovQueryTemp(@RLOC, Loc, QID, UID, ME, RID, RWeight, R, List).
+prov_q1_4 provQuery(@Loc, QID, UID, ME) :- eprovQuery(@Loc, QID, UID, ME, RID, RWeight, RLOC).
+prov_q1_5 prov(@Loc, VID, RID, RLOC, Score) :- eprovQuery(@Loc, QID, UID, ME, RID, RWeight, RLOC), VID := f_sha1((((provQuery+ Loc)+ QID)+ UID)+ ME), Score := -1.
 prov_q2_1 erecordsTemp(@RLOC, ME, QID, RID, Prov, $1, RWeight, R, List) :- $1 := RID, pReturn(@ME, QID, RID, Prov), PID1 := f_sha1((((pReturn+ ME)+ QID)+ RID)+ Prov), List := f_append(PID1), RLOC := ME, RWeight := 1, R := q2, RID := f_sha1((R+ RLOC)+ List).
 prov_q2_2 ruleExec(@RLOC, $1, RWeight, R, List) :- erecordsTemp(@RLOC, ME, QID, RID, Prov, $1, RWeight, R, List).
 prov_q2_3 erecords(@ME, QID, RID, Prov, $1, RWeight, RLOC) :- erecordsTemp(@RLOC, ME, QID, RID, Prov, $1, RWeight, R, List).
 prov_q2_4 records(@ME, QID, RID, Prov) :- erecords(@ME, QID, RID, Prov, $1, RWeight, RLOC).
 prov_q2_5 prov(@ME, VID, $1, RLOC, Score) :- erecords(@ME, QID, RID, Prov, $1, RWeight, RLOC), VID := f_sha1((((records+ ME)+ QID)+ RID)+ Prov), Score := -1.
-prov_edb_1 prov(@ME, VID, RID, RLoc, Score) :- RLoc := ME, tuple(@ME, Name, X, Y, S), VID := f_sha1(((((tuple+ ME)+ Name)+ X)+ Y)+ S), RID := VID, Score := S.
+prov_edb_1 prov(@ME, VID, RID, RLoc, Score) :- RLoc := ME, tuple(@ME, Name, Loc, X, Y, S), VID := f_sha1((((((tuple+ ME)+ Name)+ Loc)+ X)+ Y)+ S), RID := VID, Score := S.
 edb1 pReturn(@Ret, QID, VID, Prov) :- provQuery(@X, QID, VID, Ret), prov(@X, VID, RID, RLoc, Score), RID == VID, Prov := f_pEDB(VID, X).
 idb1 pQList(@X, QID, LIST< RID >) :- provQuery(@X, QID, VID, Ret), prov(@X, VID, RID, RLoc, Score), RID != VID.
 idb2 pResultTmp(@X, QID, Ret, VID, Buf) :- provQuery(@X, QID, VID, Ret), Buf := f_empty().
