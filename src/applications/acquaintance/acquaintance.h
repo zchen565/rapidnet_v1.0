@@ -152,6 +152,10 @@ protected:
 
   virtual void Prov_rc_5_ecaDel (Ptr<Tuple> eknowDelete);
 
+  virtual void Prov_rd_1Eca0Ins (Ptr<Tuple> knowEvent);
+
+  virtual void Prov_rd_1Eca0Del (Ptr<Tuple> knowEvent);
+
   virtual void Prov_r1_1Eca0Ins (Ptr<Tuple> liveEvent);
 
   virtual void Prov_r1_1Eca0Del (Ptr<Tuple> liveEvent);
@@ -239,6 +243,14 @@ protected:
   virtual void Prov_r12_1Eca0Ins (Ptr<Tuple> know);
 
   virtual void Prov_r12_1Eca0Del (Ptr<Tuple> know);
+
+  virtual void Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent);
+
+  virtual void Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent);
+
+  virtual void Prov_r13_1Eca3Ins (Ptr<Tuple> know);
+
+  virtual void Prov_r13_1Eca3Del (Ptr<Tuple> know);
 
   virtual void Prov_edb_1Eca1Ins (Ptr<Tuple> likeEvent);
 

@@ -198,6 +198,7 @@ void parse(vector<string> know_obs,
 void Print(){
 	PrintRelation(apps, Acquaintance::KNOW);
 	PrintRelation(apps, Acquaintance::LIVE);
+    PrintRelation(apps, Acquaintance::RELATION);
 	// PrintRelation(apps, Acquaintance::LIKE);
 
 	// PrintRelation(apps, Acquaintance::PROV);
