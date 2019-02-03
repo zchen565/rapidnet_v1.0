@@ -65,7 +65,6 @@ attr ("relation_attr3", Int32Value, person2))
 
 #define insertknow(local, person1, person2, state) \
 app(local)->Insert(know(addr(local), person1, person2, state)); \
-app(local)->Insert(know(addr(local), person2, person1, state));
 
 #define insertlike(local, person, hobby) \
 app(local)->Insert(like(addr(local), person, hobby));
@@ -222,8 +221,7 @@ void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "know", 1, 9, 8, 1); 
-  
+  inserttuple(1, "know", 1, 8, 9, 1);  
    
 }
 
@@ -236,6 +234,8 @@ void Print(){
 
 	PrintRelation (queryapps, AcquaintanceQuery::TUPLE);
   	PrintRelation (queryapps, AcquaintanceQuery::RECORDS); //modify: add col tuple's vid (hash)
+    cout << endl;
+    PrintRelation (apps, Acquaintance::SHARESULT);
 }
 
 

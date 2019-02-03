@@ -1917,7 +1917,7 @@ Acquaintance::Prov_r1_1Eca0Ins (Ptr<Tuple> liveEvent)
     VarExpr::New ("liveEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.8))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r1"))));
@@ -2016,7 +2016,7 @@ Acquaintance::Prov_r1_1Eca0Del (Ptr<Tuple> liveEvent)
     VarExpr::New ("liveEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.8))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r1"))));
@@ -2115,7 +2115,7 @@ Acquaintance::Prov_r1_1Eca3Ins (Ptr<Tuple> live)
     VarExpr::New ("live_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.8))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r1"))));
@@ -2214,7 +2214,7 @@ Acquaintance::Prov_r1_1Eca3Del (Ptr<Tuple> live)
     VarExpr::New ("live_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.8))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r1"))));
@@ -2553,7 +2553,7 @@ Acquaintance::Prov_r2_1Eca0Ins (Ptr<Tuple> likeEvent)
     VarExpr::New ("likeEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
@@ -2652,7 +2652,7 @@ Acquaintance::Prov_r2_1Eca0Del (Ptr<Tuple> likeEvent)
     VarExpr::New ("likeEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
@@ -2751,7 +2751,7 @@ Acquaintance::Prov_r2_1Eca3Ins (Ptr<Tuple> like)
     VarExpr::New ("like_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
@@ -2850,7 +2850,7 @@ Acquaintance::Prov_r2_1Eca3Del (Ptr<Tuple> like)
     VarExpr::New ("like_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
@@ -3099,7 +3099,7 @@ Acquaintance::Prov_r5_1Eca0Ins (Ptr<Tuple> liveEvent)
     VarExpr::New ("liveEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.2))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r5"))));
@@ -3203,7 +3203,7 @@ Acquaintance::Prov_r5_1Eca0Del (Ptr<Tuple> liveEvent)
     VarExpr::New ("liveEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.2))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r5"))));
@@ -3307,7 +3307,7 @@ Acquaintance::Prov_r5_1Eca3Ins (Ptr<Tuple> live)
     VarExpr::New ("live_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.2))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r5"))));
@@ -3411,7 +3411,7 @@ Acquaintance::Prov_r5_1Eca3Del (Ptr<Tuple> live)
     VarExpr::New ("live_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.2))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r5"))));
@@ -4961,7 +4961,7 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
     VarExpr::New ("knowEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r13"))));
@@ -5084,7 +5084,7 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
     VarExpr::New ("knowEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r13"))));
@@ -5207,7 +5207,7 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
     VarExpr::New ("know_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r13"))));
@@ -5330,7 +5330,7 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
     VarExpr::New ("know_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r13"))));
@@ -5453,7 +5453,7 @@ Acquaintance::Prov_r14_1Eca0Ins (Ptr<Tuple> knowEvent)
     VarExpr::New ("knowEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r14"))));
@@ -5576,7 +5576,7 @@ Acquaintance::Prov_r14_1Eca0Del (Ptr<Tuple> knowEvent)
     VarExpr::New ("knowEvent_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r14"))));
@@ -5699,7 +5699,7 @@ Acquaintance::Prov_r14_1Eca3Ins (Ptr<Tuple> know)
     VarExpr::New ("know_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r14"))));
@@ -5822,7 +5822,7 @@ Acquaintance::Prov_r14_1Eca3Del (Ptr<Tuple> know)
     VarExpr::New ("know_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
+    ValueExpr::New (RealValue::New (0.4))));
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r14"))));
