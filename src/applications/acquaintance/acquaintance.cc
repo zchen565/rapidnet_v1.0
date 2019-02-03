@@ -507,6 +507,22 @@ Acquaintance::DemuxRecv (Ptr<Tuple> tuple)
     {
       Prov_r13_1Eca3Del (tuple);
     }
+  if (IsInsertEvent (tuple, KNOWEVENT))
+    {
+      Prov_r14_1Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOWEVENT))
+    {
+      Prov_r14_1Eca0Del (tuple);
+    }
+  if (IsInsertEvent (tuple, KNOW))
+    {
+      Prov_r14_1Eca3Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, KNOW))
+    {
+      Prov_r14_1Eca3Del (tuple);
+    }
   if (IsInsertEvent (tuple, LIKEEVENT))
     {
       Prov_edb_1Eca1Ins (tuple);
@@ -5361,6 +5377,498 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
       "Local",
       "knowEvent_attr2",
       "know_attr2",
+      "S",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eknowTempDelete_attr1",
+      "eknowTempDelete_attr2",
+      "eknowTempDelete_attr3",
+      "eknowTempDelete_attr4",
+      "eknowTempDelete_attr5",
+      "eknowTempDelete_attr6",
+      "eknowTempDelete_attr7",
+      "eknowTempDelete_attr8",
+      "eknowTempDelete_attr9",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_r14_1Eca0Ins (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("Prov_r14_1Eca0Ins triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOW)->Join (
+    knowEvent,
+    strlist ("know_attr3", "know_attr1"),
+    strlist ("knowEvent_attr3", "knowEvent_attr1"));
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("PID2",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("know_attr4")))));
+
+  result->Assign (Assignor::New ("List2",
+    FAppend::New (
+      VarExpr::New ("PID2"))));
+
+  result->Assign (Assignor::New ("List",
+    FConcat::New (
+      VarExpr::New ("List"),
+      VarExpr::New ("List2"))));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("knowEvent_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r14"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("knowEvent_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("know_attr2"),
+      VarExpr::New ("knowEvent_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    EKNOWTEMP,
+    strlist ("RLOC",
+      "Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eknowTemp_attr1",
+      "eknowTemp_attr2",
+      "eknowTemp_attr3",
+      "eknowTemp_attr4",
+      "eknowTemp_attr5",
+      "eknowTemp_attr6",
+      "eknowTemp_attr7",
+      "eknowTemp_attr8",
+      "eknowTemp_attr9",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_r14_1Eca0Del (Ptr<Tuple> knowEvent)
+{
+  RAPIDNET_LOG_INFO ("Prov_r14_1Eca0Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOW)->Join (
+    knowEvent,
+    strlist ("know_attr3", "know_attr1"),
+    strlist ("knowEvent_attr3", "knowEvent_attr1"));
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("PID2",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("know_attr4")))));
+
+  result->Assign (Assignor::New ("List2",
+    FAppend::New (
+      VarExpr::New ("PID2"))));
+
+  result->Assign (Assignor::New ("List",
+    FConcat::New (
+      VarExpr::New ("List"),
+      VarExpr::New ("List2"))));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("knowEvent_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r14"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("knowEvent_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("know_attr2"),
+      VarExpr::New ("knowEvent_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    EKNOWTEMPDELETE,
+    strlist ("RLOC",
+      "Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eknowTempDelete_attr1",
+      "eknowTempDelete_attr2",
+      "eknowTempDelete_attr3",
+      "eknowTempDelete_attr4",
+      "eknowTempDelete_attr5",
+      "eknowTempDelete_attr6",
+      "eknowTempDelete_attr7",
+      "eknowTempDelete_attr8",
+      "eknowTempDelete_attr9",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_r14_1Eca3Ins (Ptr<Tuple> know)
+{
+  RAPIDNET_LOG_INFO ("Prov_r14_1Eca3Ins triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOWEVENT)->Join (
+    know,
+    strlist ("knowEvent_attr3", "knowEvent_attr1"),
+    strlist ("know_attr3", "know_attr1"));
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("PID2",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
+
+  result->Assign (Assignor::New ("List2",
+    FAppend::New (
+      VarExpr::New ("PID2"))));
+
+  result->Assign (Assignor::New ("List",
+    FConcat::New (
+      VarExpr::New ("List"),
+      VarExpr::New ("List2"))));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("know_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r14"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("know_attr2"),
+      VarExpr::New ("know_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    EKNOWTEMP,
+    strlist ("RLOC",
+      "Local",
+      "know_attr2",
+      "knowEvent_attr2",
+      "S",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eknowTemp_attr1",
+      "eknowTemp_attr2",
+      "eknowTemp_attr3",
+      "eknowTemp_attr4",
+      "eknowTemp_attr5",
+      "eknowTemp_attr6",
+      "eknowTemp_attr7",
+      "eknowTemp_attr8",
+      "eknowTemp_attr9",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_r14_1Eca3Del (Ptr<Tuple> know)
+{
+  RAPIDNET_LOG_INFO ("Prov_r14_1Eca3Del triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (KNOWEVENT)->Join (
+    know,
+    strlist ("knowEvent_attr3", "knowEvent_attr1"),
+    strlist ("know_attr3", "know_attr1"));
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("PID2",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
+
+  result->Assign (Assignor::New ("List2",
+    FAppend::New (
+      VarExpr::New ("PID2"))));
+
+  result->Assign (Assignor::New ("List",
+    FConcat::New (
+      VarExpr::New ("List"),
+      VarExpr::New ("List2"))));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("know_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r14"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("knowEvent_attr2"),
+      VarExpr::New ("know_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("know_attr2"),
+      VarExpr::New ("know_attr3"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("knowEvent_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("know_attr4"),
+      ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Project (
+    EKNOWTEMPDELETE,
+    strlist ("RLOC",
+      "Local",
+      "know_attr2",
+      "knowEvent_attr2",
       "S",
       "RID",
       "RWeight",

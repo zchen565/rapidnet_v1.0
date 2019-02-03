@@ -252,6 +252,14 @@ protected:
 
   virtual void Prov_r13_1Eca3Del (Ptr<Tuple> know);
 
+  virtual void Prov_r14_1Eca0Ins (Ptr<Tuple> knowEvent);
+
+  virtual void Prov_r14_1Eca0Del (Ptr<Tuple> knowEvent);
+
+  virtual void Prov_r14_1Eca3Ins (Ptr<Tuple> know);
+
+  virtual void Prov_r14_1Eca3Del (Ptr<Tuple> know);
+
   virtual void Prov_edb_1Eca1Ins (Ptr<Tuple> likeEvent);
 
   virtual void Prov_edb_1Eca1Del (Ptr<Tuple> likeEvent);
