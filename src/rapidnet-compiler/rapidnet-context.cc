@@ -755,6 +755,10 @@ LookupFunction (string functionName)
     {
       return "FConcat";
     }
+  else if (functionName == "f_intersect")
+    {
+      return "FIntersect";
+    }
   else if (functionName == "f_item")
     {
       return "FItem";

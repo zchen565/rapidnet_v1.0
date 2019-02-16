@@ -141,11 +141,13 @@ AcquaintanceQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              VarExpr::New ("tuple_attr2"),
-              VarExpr::New ("tuple_attr3")),
-            VarExpr::New ("tuple_attr4")),
-          VarExpr::New ("tuple_attr5")),
-        VarExpr::New ("tuple_attr6")))));
+              Operation::New (RN_PLUS,
+                VarExpr::New ("tuple_attr2"),
+                VarExpr::New ("tuple_attr3")),
+              VarExpr::New ("tuple_attr4")),
+            VarExpr::New ("tuple_attr5")),
+          VarExpr::New ("tuple_attr6")),
+        VarExpr::New ("tuple_attr7")))));
 
   result->Assign (Assignor::New ("Time",
     FNow::New (

@@ -112,6 +112,16 @@ tuple (string name, Ptr<TupleAttribute> attr1,
     attr1, attr2, attr3, attr4, attr5, attr6));
 }
 
+
+Ptr<Tuple>
+tuple (string name, Ptr<TupleAttribute> attr1,
+  Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
+  Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5,
+  Ptr<TupleAttribute> attr6, Ptr<TupleAttribute> attr7)
+{
+  return tuple (name, attrlist (
+    attr1, attr2, attr3, attr4, attr5, attr6, attr7));
+}
 string
 GetSHA1Digest (string message)
 {

@@ -89,6 +89,48 @@ FConcat::New (Ptr<Expression> head, Ptr<Expression> tail)
 }
 
 Ptr<Value>
+FIntersect::Eval (Ptr<Tuple> tuple)
+{
+  list<Ptr<Value> > result;
+  set<Ptr<Value> > s;
+  Ptr<ListValue> lst1Value = DynamicCast<ListValue, Value> (
+      m_lst1->Eval (tuple));
+  Ptr<ListValue> lst2Value = DynamicCast<ListValue, Value> (
+      m_lst2->Eval (tuple));
+  /*
+  clog << "intersecting: " << endl;
+  for (rn_list_iterator it = lst1Value->Begin(); it != lst1Value->End(); ++it) 
+    clog << *it << " ";
+  clog << endl;
+  for (rn_list_iterator it = lst2Value->Begin(); it != lst2Value->End(); ++it) 
+    clog << *it << " ";
+  clog << endl;
+  */
+  for (rn_list_iterator it1 = lst1Value->Begin(); it1 != lst1Value->End(); ++it1)
+    {
+      if (s.find (*it1) != s.end()) continue;
+      for (rn_list_iterator it2 = lst2Value->Begin(); it2 != lst2Value->End(); ++it2)
+      {
+        if ((*it1)->Equals((*it2)))
+          {
+          result.push_back(*it1);
+          s.insert(*it1);
+          }
+      }
+    }
+  return ListValue::New (result);
+}
+
+Ptr<FunctionExpr>
+FIntersect::New (Ptr<Expression> lst1, Ptr<Expression> lst2)
+{
+  Ptr<FIntersect> retval = Create<FIntersect> ();
+  retval->m_lst1 = lst1;
+  retval->m_lst2 = lst2;
+  return retval;
+}
+
+Ptr<Value>
 FItem::Eval (Ptr<Tuple> tuple)
 {
   list<Ptr<Value> > lst = rn_list (m_lst->Eval (tuple));

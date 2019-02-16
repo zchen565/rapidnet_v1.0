@@ -33,5 +33,5 @@
 /* We do not support C11 <threads.h>.  */
 materialize(records,infinity,infinity,keys(1,2:cid,3:cid)).
 materialize(tuple, infinity, infinity, keys(1,2:str)).
-q1 provQuery(@Loc, QID, UID, ME):- periodic(@ME,E,4,2), tuple(@ME, Name, Loc, X, Y, S), UID:=f_sha1(Name+Loc+X+Y+S), Time := f_now(), QID:=f_sha1(""+UID+Time).
+q1 provQuery(@Loc, QID, UID, ME):- periodic(@ME,E,4,2), tuple(@ME, Name, Loc, X, Y, S, P), UID:=f_sha1(Name+Loc+X+Y+S+P), Time := f_now(), QID:=f_sha1(""+UID+Time).
 q2 records(@ME, QID, RID, Prov) :- pReturn(@ME, QID, RID, Prov).

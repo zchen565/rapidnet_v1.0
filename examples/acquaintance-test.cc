@@ -21,10 +21,12 @@
 #include "ns3/values-module.h"
 #include "ns3/helper-module.h"
 #include "ns3/acquaintance-module.h"
+#include "ns3/list-value.h"
 #include <fstream>
 #include <string>
 #include <vector>
 #include <map>
+#include <list> 
 
 
 #define KnowObs \
@@ -64,12 +66,13 @@ attr ("likeEvent_attr1", Ipv4Value, local), \
 attr ("likeEvent_attr2", Int32Value, person), \
 attr ("likeEvent_attr3", Int32Value, hobby))
 
-#define know(local, person1, person2, state) \
+#define know(local, person1, person2, state, path) \
 tuple (Acquaintance::KNOWEVENT, \
 attr ("knowEvent_attr1", Ipv4Value, local), \
 attr ("knowEvent_attr2", Int32Value, person1), \
 attr ("knowEvent_attr3", Int32Value, person2), \
-attr ("knowEvent_attr4", Int32Value, state))
+attr ("knowEvent_attr4", Int32Value, state), \
+attr ("knowEvent_attr5", ListValue, path))
 
 #define relation(local, person1, person2) \
 tuple (Acquaintance::RELATION, \
@@ -78,8 +81,8 @@ attr ("relation_attr2", Int32Value, person1), \
 attr ("relation_attr3", Int32Value, person2))
 
 
-#define insertknow(local, person1, person2, state) \
-app(local)->Insert(know(addr(local), person1, person2, state)); \
+#define insertknow(local, person1, person2, state, path) \
+app(local)->Insert(know(addr(local), person1, person2, state, path)); \
 
 #define insertlike(local, person, hobby) \
 app(local)->Insert(like(addr(local), person, hobby));
@@ -144,7 +147,15 @@ void parse(vector<string> know_obs,
 			num_people++;
 		}
 		cout << people[person1] << ' ' << people[person2] << endl;
-		insertknow(1, people[person1], people[person2], 1);
+		list< Ptr<Value> > p;
+		Ptr<Value> p1 = (Ptr<Value>) Create<Int32Value>(people[person1]);
+		Ptr<Value> p2 = (Ptr<Value>) Create<Int32Value>(people[person2]);
+		p.push_back(p1);
+		p.push_back(p2);
+		
+		// p.push_back(people[person1]);
+		// p.push_back(people[person2]);
+		insertknow(1, people[person1], people[person2], 1, p);
 	}	
 	cout << endl;
 

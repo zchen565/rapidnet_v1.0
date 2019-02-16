@@ -21,6 +21,7 @@
 #define FUNCTIONS_H
 
 #include <list>
+#include <set>
 #include "expression.h"
 #include "tuple.h"
 
@@ -87,6 +88,20 @@ protected:
   Ptr<Expression> m_head, m_tail;
 };
 
+class FIntersect : public FunctionExpr
+{
+public:
+  virtual ~FIntersect () {}
+
+  virtual Ptr<Value> Eval (Ptr<Tuple> tuple);
+
+  static Ptr<FunctionExpr> New(Ptr<Expression> lst1, Ptr<Expression> lst2);
+
+protected:
+
+  Ptr<Expression> m_lst1, m_lst2;
+};
+  
 class FItem : public FunctionExpr
 {
 public:

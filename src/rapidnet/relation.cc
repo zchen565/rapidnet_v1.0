@@ -82,8 +82,8 @@ Relation::Insert (Ptr<Tuple> tuple)
       //New Key
       //Insert Case
       m_tuples [tupleKey] = tuple;
-      OnInsert.Invoke (tuple);
-      //OnInsert.Invoke (CopyObject<Tuple> (tuple));
+      // OnInsert.Invoke (tuple);
+      OnInsert.Invoke (CopyObject<Tuple> (tuple));
       return INSERTED;
     }
   else if (m_tuples [tupleKey]->Equals (tuple))
@@ -99,15 +99,18 @@ Relation::Insert (Ptr<Tuple> tuple)
         {
           m_tuples [tupleKey]->IncRefCount ();
         }
-      OnRefresh.Invoke (m_tuples [tupleKey]);
-      //OnRefresh.Invoke (CopyObject<Tuple> (m_tuples [tupleKey]));
+      // OnRefresh.Invoke (m_tuples [tupleKey]);
+      OnRefresh.Invoke (CopyObject<Tuple> (m_tuples [tupleKey]));
       return REFRESHED;
     }
   else
     {
       //Key exist - tuples don't match
       //Update Case
+      //clog << "Updated -- Problem. Original :" << m_tuples [tupleKey] << ". New: " << tuple << endl;
+
       Delete (GetTupleForKey (tupleKey));
+      
       Insert (tuple);
       return UPDATED;
     }

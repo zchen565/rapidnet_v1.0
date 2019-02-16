@@ -63,7 +63,9 @@ all_modules = (
     'applications/messf',
     'applications/messf-query',
     'applications/acquaintance',
-	'applications/acquaintance-query'
+    'applications/acquaintance-query'
+    
+    
     )
 
 def set_options(opt):

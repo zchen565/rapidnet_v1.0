@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <list>
 
 #define KnowObs \
 "./data/acquaintance/knows_obs.txt"
@@ -28,7 +29,7 @@
 "./data/acquaintance/lived_obs.txt"
 
 #define LiveObsBack \
-"./data/acquaintance/live_obs.bak"
+"./data/acquaintance/lived_obs.bak"
 
 #define KnowTar \
 "./data/acquaintance/knows_target.txt"
@@ -49,12 +50,13 @@ attr ("likeEvent_attr1", Ipv4Value, local), \
 attr ("likeEvent_attr2", Int32Value, person), \
 attr ("likeEvent_attr3", Int32Value, hobby))
 
-#define know(local, person1, person2, state) \
+#define know(local, person1, person2, state, path) \
 tuple (Acquaintance::KNOWEVENT, \
 attr ("knowEvent_attr1", Ipv4Value, local), \
 attr ("knowEvent_attr2", Int32Value, person1), \
 attr ("knowEvent_attr3", Int32Value, person2), \
-attr ("knowEvent_attr4", Int32Value, state))
+attr ("knowEvent_attr4", Int32Value, state), \
+attr ("knowEvent_attr5", ListValue, path))
 
 #define relation(local, person1, person2) \
 tuple (Acquaintance::RELATION, \
@@ -63,8 +65,8 @@ attr ("relation_attr2", Int32Value, person1), \
 attr ("relation_attr3", Int32Value, person2))
 
 
-#define insertknow(local, person1, person2, state) \
-app(local)->Insert(know(addr(local), person1, person2, state)); \
+#define insertknow(local, person1, person2, state, path) \
+app(local)->Insert(know(addr(local), person1, person2, state, path)); \
 
 #define insertlike(local, person, hobby) \
 app(local)->Insert(like(addr(local), person, hobby));
@@ -76,17 +78,18 @@ app(local)->Insert(live(addr(local), person, city));
 app(local)->Insert(relation(addr(local), person1, person2));
 
 //define the tuple you would like to query and how to insert it
-#define tupleQuery(loc, name, attr1, attr2, attr3, attr4)         \
+#define tupleQuery(loc, name, attr1, attr2, attr3, attr4, attr5) \
 tuple (AcquaintanceQuery::TUPLE, \
 attr ("tuple_attr1", Ipv4Value, loc), \
 attr ("tuple_attr2", StrValue, name), \
 attr ("tuple_attr3", Ipv4Value, attr1), \
 attr ("tuple_attr4", Int32Value, attr2), \
 attr ("tuple_attr5", Int32Value, attr3), \
-attr ("tuple_attr6", Int32Value, attr4))
+attr ("tuple_attr6", Int32Value, attr4), \
+attr ("tuple_attr7", ListValue, attr5))
 
-#define inserttuple(loc, name, attr1, attr2, attr3, attr4)     \
-queryNode->Insert (tupleQuery(queryNode->GetAddress(), name, addr(attr1), attr2, attr3, attr4));
+#define inserttuple(loc, name, attr1, attr2, attr3, attr4, attr5) \
+queryNode->Insert (tupleQuery(queryNode->GetAddress(), name, addr(attr1), attr2, attr3, attr4, attr5));
 
 using namespace std;
 using namespace ns3;
@@ -169,7 +172,13 @@ void parse(vector<string> know_obs,
 		if(people.count(person2)==0)
 			people.insert(pair<string, int>(person2, people.size()));
 		cout << people[person1] << ' ' << people[person2] << endl;
-		insertknow(1, people[person1], people[person2], 1);
+         
+		list< Ptr<Value> > p;
+		Ptr<Value> p1 = (Ptr<Value>) Create<Int32Value>(people[person1]);
+		Ptr<Value> p2 = (Ptr<Value>) Create<Int32Value>(people[person2]);
+		p.push_back(p1);
+		p.push_back(p2);
+		insertknow(1, people[person1], people[person2], 1, p);
 	}	
 	cout << endl;
 
@@ -200,7 +209,6 @@ void parse(vector<string> know_obs,
 
 	//parse like_obs
 	for(int i=0; i<like_obs.size()-1; i++){
-		cout << i << endl;
 		string like = like_obs[i];
 		if(like.size()==0) continue;
 		int l = 0;
@@ -221,8 +229,13 @@ void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "know", 1, 8, 9, 1);  
-   
+  int l[] = {6, 7};
+  list<Ptr<Value> > p;
+  for (int i=0; i<sizeof(l)/sizeof(int); i++){
+    Ptr<Value> t = (Ptr<Value>) Create<Int32Value>(l[i]);
+    p.push_back(t);
+  }
+  inserttuple(1, "know", 1, 6, 7, 1, p);  
 }
 
 void Print(){
@@ -230,19 +243,18 @@ void Print(){
 	//PrintRelation(apps, Acquaintance::LIVE);
 	//PrintRelation(apps, Acquaintance::LIKE);
 
-	//PrintRelation(apps, Acquaintance::PROV);
+	// PrintRelation(apps, Acquaintance::RULEEXEC);
 
 	PrintRelation (queryapps, AcquaintanceQuery::TUPLE);
   	PrintRelation (queryapps, AcquaintanceQuery::RECORDS); //modify: add col tuple's vid (hash)
-    cout << endl;
-    PrintRelation (apps, Acquaintance::SHARESULT);
+    // PrintRelation (apps, Acquaintance::SHARESULT);
 }
 
 
 void train(){
 	vector<string> know_obs = readFile(KnowObsBack);
-	vector<string> live_obs = readFile(LiveObs);
-	vector<string> like_obs = readFile(LikeObs);
+	vector<string> live_obs = readFile(LiveObsBack);
+	vector<string> like_obs = readFile(LikeObsBack);
 	parse(know_obs, live_obs, like_obs);
 }
 
