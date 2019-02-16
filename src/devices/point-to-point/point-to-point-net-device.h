@@ -522,7 +522,7 @@ private:
   bool m_linkUp;
   Callback<void> m_linkChangeCallback;
 
-  static const uint16_t DEFAULT_MTU = 1500;
+  static const uint16_t DEFAULT_MTU = 10000;
   static const uint16_t PPP_OVERHEAD = 2;
   static const uint16_t DEFAULT_FRAME_SIZE = DEFAULT_MTU + PPP_OVERHEAD;
 

@@ -377,6 +377,9 @@ PathvectorProv::Prov_r1_1Eca0Ins (Ptr<Tuple> link)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("link_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r1"))));
 
@@ -396,6 +399,7 @@ PathvectorProv::Prov_r1_1Eca0Ins (Ptr<Tuple> link)
       "link_attr3",
       "P",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -407,6 +411,7 @@ PathvectorProv::Prov_r1_1Eca0Ins (Ptr<Tuple> link)
       "epathTemp_attr6",
       "epathTemp_attr7",
       "epathTemp_attr8",
+      "epathTemp_attr9",
       RN_DEST));
 
   Send (result);
@@ -449,6 +454,9 @@ PathvectorProv::Prov_r1_1Eca0Del (Ptr<Tuple> link)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("link_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r1"))));
 
@@ -468,6 +476,7 @@ PathvectorProv::Prov_r1_1Eca0Del (Ptr<Tuple> link)
       "link_attr3",
       "P",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -479,6 +488,7 @@ PathvectorProv::Prov_r1_1Eca0Del (Ptr<Tuple> link)
       "epathTempDelete_attr6",
       "epathTempDelete_attr7",
       "epathTempDelete_attr8",
+      "epathTempDelete_attr9",
       RN_DEST));
 
   Send (result);
@@ -496,11 +506,13 @@ PathvectorProv::Prov_r1_2_ecaAdd (Ptr<Tuple> epathTemp)
     strlist ("epathTemp_attr1",
       "epathTemp_attr6",
       "epathTemp_attr7",
-      "epathTemp_attr8"),
+      "epathTemp_attr8",
+      "epathTemp_attr9"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
-      "ruleExec_attr4"));
+      "ruleExec_attr4",
+      "ruleExec_attr5"));
 
   Insert (result);
 }
@@ -517,11 +529,13 @@ PathvectorProv::Prov_r1_2_ecaDel (Ptr<Tuple> epathTempDelete)
     strlist ("epathTempDelete_attr1",
       "epathTempDelete_attr6",
       "epathTempDelete_attr7",
-      "epathTempDelete_attr8"),
+      "epathTempDelete_attr8",
+      "epathTempDelete_attr9"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
-      "ruleExec_attr4"));
+      "ruleExec_attr4",
+      "ruleExec_attr5"));
 
   Delete (result);
 }
@@ -540,6 +554,7 @@ PathvectorProv::Prov_r1_3_ecaAdd (Ptr<Tuple> epathTemp)
       "epathTemp_attr4",
       "epathTemp_attr5",
       "epathTemp_attr6",
+      "epathTemp_attr7",
       "epathTemp_attr1",
       "epathTemp_attr2"),
     strlist ("epath_attr1",
@@ -548,6 +563,7 @@ PathvectorProv::Prov_r1_3_ecaAdd (Ptr<Tuple> epathTemp)
       "epath_attr4",
       "epath_attr5",
       "epath_attr6",
+      "epath_attr7",
       RN_DEST));
 
   Send (result);
@@ -567,6 +583,7 @@ PathvectorProv::Prov_r1_3_ecaDel (Ptr<Tuple> epathTempDelete)
       "epathTempDelete_attr4",
       "epathTempDelete_attr5",
       "epathTempDelete_attr6",
+      "epathTempDelete_attr7",
       "epathTempDelete_attr1",
       "epathTempDelete_attr2"),
     strlist ("epathDelete_attr1",
@@ -575,6 +592,7 @@ PathvectorProv::Prov_r1_3_ecaDel (Ptr<Tuple> epathTempDelete)
       "epathDelete_attr4",
       "epathDelete_attr5",
       "epathDelete_attr6",
+      "epathDelete_attr7",
       RN_DEST));
 
   Send (result);
@@ -641,16 +659,21 @@ PathvectorProv::Prov_r1_5_ecaAdd (Ptr<Tuple> epath)
           VarExpr::New ("epath_attr3")),
         VarExpr::New ("epath_attr4")))));
 
+  result->Assign (Assignor::New ("Score",
+    ValueExpr::New (RealValue::New (-1))));
+
   result = result->Project (
     PROV,
     strlist ("epath_attr1",
       "VID",
       "epath_attr5",
-      "epath_attr6"),
+      "epath_attr7",
+      "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
       "prov_attr3",
-      "prov_attr4"));
+      "prov_attr4",
+      "prov_attr5"));
 
   Insert (result);
 }
@@ -674,16 +697,21 @@ PathvectorProv::Prov_r1_5_ecaDel (Ptr<Tuple> epathDelete)
           VarExpr::New ("epathDelete_attr3")),
         VarExpr::New ("epathDelete_attr4")))));
 
+  result->Assign (Assignor::New ("Score",
+    ValueExpr::New (RealValue::New (-1))));
+
   result = result->Project (
     PROV,
     strlist ("epathDelete_attr1",
       "VID",
       "epathDelete_attr5",
-      "epathDelete_attr6"),
+      "epathDelete_attr7",
+      "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
       "prov_attr3",
-      "prov_attr4"));
+      "prov_attr4",
+      "prov_attr5"));
 
   Delete (result);
 }
@@ -752,6 +780,9 @@ PathvectorProv::Prov_r2_1Eca0Ins (Ptr<Tuple> link)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("link_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
 
@@ -778,6 +809,7 @@ PathvectorProv::Prov_r2_1Eca0Ins (Ptr<Tuple> link)
       "C",
       "P",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -789,6 +821,7 @@ PathvectorProv::Prov_r2_1Eca0Ins (Ptr<Tuple> link)
       "epathTemp_attr6",
       "epathTemp_attr7",
       "epathTemp_attr8",
+      "epathTemp_attr9",
       RN_DEST));
 
   Send (result);
@@ -858,6 +891,9 @@ PathvectorProv::Prov_r2_1Eca0Del (Ptr<Tuple> link)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("link_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
 
@@ -884,6 +920,7 @@ PathvectorProv::Prov_r2_1Eca0Del (Ptr<Tuple> link)
       "C",
       "P",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -895,6 +932,7 @@ PathvectorProv::Prov_r2_1Eca0Del (Ptr<Tuple> link)
       "epathTempDelete_attr6",
       "epathTempDelete_attr7",
       "epathTempDelete_attr8",
+      "epathTempDelete_attr9",
       RN_DEST));
 
   Send (result);
@@ -964,6 +1002,9 @@ PathvectorProv::Prov_r2_1Eca3Ins (Ptr<Tuple> bestPath)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("bestPath_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
 
@@ -990,6 +1031,7 @@ PathvectorProv::Prov_r2_1Eca3Ins (Ptr<Tuple> bestPath)
       "C",
       "P",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -1001,6 +1043,7 @@ PathvectorProv::Prov_r2_1Eca3Ins (Ptr<Tuple> bestPath)
       "epathTemp_attr6",
       "epathTemp_attr7",
       "epathTemp_attr8",
+      "epathTemp_attr9",
       RN_DEST));
 
   Send (result);
@@ -1070,6 +1113,9 @@ PathvectorProv::Prov_r2_1Eca3Del (Ptr<Tuple> bestPath)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("bestPath_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r2"))));
 
@@ -1096,6 +1142,7 @@ PathvectorProv::Prov_r2_1Eca3Del (Ptr<Tuple> bestPath)
       "C",
       "P",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -1107,6 +1154,7 @@ PathvectorProv::Prov_r2_1Eca3Del (Ptr<Tuple> bestPath)
       "epathTempDelete_attr6",
       "epathTempDelete_attr7",
       "epathTempDelete_attr8",
+      "epathTempDelete_attr9",
       RN_DEST));
 
   Send (result);
@@ -1138,6 +1186,9 @@ PathvectorProv::Prov_r3_1Eca0Ins (Ptr<Tuple> bestPath)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("bestPath_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r3"))));
 
@@ -1157,6 +1208,7 @@ PathvectorProv::Prov_r3_1Eca0Ins (Ptr<Tuple> bestPath)
       "bestPath_attr3",
       "bestPath_attr4",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -1168,6 +1220,7 @@ PathvectorProv::Prov_r3_1Eca0Ins (Ptr<Tuple> bestPath)
       "ebestPathTemp_attr6",
       "ebestPathTemp_attr7",
       "ebestPathTemp_attr8",
+      "ebestPathTemp_attr9",
       RN_DEST));
 
   Send (result);
@@ -1199,6 +1252,9 @@ PathvectorProv::Prov_r3_1Eca0Del (Ptr<Tuple> bestPath)
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("bestPath_attr1")));
 
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r3"))));
 
@@ -1218,6 +1274,7 @@ PathvectorProv::Prov_r3_1Eca0Del (Ptr<Tuple> bestPath)
       "bestPath_attr3",
       "bestPath_attr4",
       "RID",
+      "RWeight",
       "R",
       "List",
       "RLOC"),
@@ -1229,6 +1286,7 @@ PathvectorProv::Prov_r3_1Eca0Del (Ptr<Tuple> bestPath)
       "ebestPathTempDelete_attr6",
       "ebestPathTempDelete_attr7",
       "ebestPathTempDelete_attr8",
+      "ebestPathTempDelete_attr9",
       RN_DEST));
 
   Send (result);
@@ -1246,11 +1304,13 @@ PathvectorProv::Prov_r3_2_ecaAdd (Ptr<Tuple> ebestPathTemp)
     strlist ("ebestPathTemp_attr1",
       "ebestPathTemp_attr6",
       "ebestPathTemp_attr7",
-      "ebestPathTemp_attr8"),
+      "ebestPathTemp_attr8",
+      "ebestPathTemp_attr9"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
-      "ruleExec_attr4"));
+      "ruleExec_attr4",
+      "ruleExec_attr5"));
 
   Insert (result);
 }
@@ -1267,11 +1327,13 @@ PathvectorProv::Prov_r3_2_ecaDel (Ptr<Tuple> ebestPathTempDelete)
     strlist ("ebestPathTempDelete_attr1",
       "ebestPathTempDelete_attr6",
       "ebestPathTempDelete_attr7",
-      "ebestPathTempDelete_attr8"),
+      "ebestPathTempDelete_attr8",
+      "ebestPathTempDelete_attr9"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
-      "ruleExec_attr4"));
+      "ruleExec_attr4",
+      "ruleExec_attr5"));
 
   Delete (result);
 }
@@ -1290,6 +1352,7 @@ PathvectorProv::Prov_r3_3_ecaAdd (Ptr<Tuple> ebestPathTemp)
       "ebestPathTemp_attr4",
       "ebestPathTemp_attr5",
       "ebestPathTemp_attr6",
+      "ebestPathTemp_attr7",
       "ebestPathTemp_attr1",
       "ebestPathTemp_attr2"),
     strlist ("ebestPath_attr1",
@@ -1298,6 +1361,7 @@ PathvectorProv::Prov_r3_3_ecaAdd (Ptr<Tuple> ebestPathTemp)
       "ebestPath_attr4",
       "ebestPath_attr5",
       "ebestPath_attr6",
+      "ebestPath_attr7",
       RN_DEST));
 
   Send (result);
@@ -1317,6 +1381,7 @@ PathvectorProv::Prov_r3_3_ecaDel (Ptr<Tuple> ebestPathTempDelete)
       "ebestPathTempDelete_attr4",
       "ebestPathTempDelete_attr5",
       "ebestPathTempDelete_attr6",
+      "ebestPathTempDelete_attr7",
       "ebestPathTempDelete_attr1",
       "ebestPathTempDelete_attr2"),
     strlist ("ebestPathDelete_attr1",
@@ -1325,6 +1390,7 @@ PathvectorProv::Prov_r3_3_ecaDel (Ptr<Tuple> ebestPathTempDelete)
       "ebestPathDelete_attr4",
       "ebestPathDelete_attr5",
       "ebestPathDelete_attr6",
+      "ebestPathDelete_attr7",
       RN_DEST));
 
   Send (result);
@@ -1391,16 +1457,21 @@ PathvectorProv::Prov_r3_5_ecaAdd (Ptr<Tuple> ebestPath)
           VarExpr::New ("ebestPath_attr3")),
         VarExpr::New ("ebestPath_attr4")))));
 
+  result->Assign (Assignor::New ("Score",
+    ValueExpr::New (RealValue::New (-1))));
+
   result = result->Project (
     PROV,
     strlist ("ebestPath_attr1",
       "VID",
       "ebestPath_attr5",
-      "ebestPath_attr6"),
+      "ebestPath_attr7",
+      "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
       "prov_attr3",
-      "prov_attr4"));
+      "prov_attr4",
+      "prov_attr5"));
 
   Insert (result);
 }
@@ -1424,16 +1495,21 @@ PathvectorProv::Prov_r3_5_ecaDel (Ptr<Tuple> ebestPathDelete)
           VarExpr::New ("ebestPathDelete_attr3")),
         VarExpr::New ("ebestPathDelete_attr4")))));
 
+  result->Assign (Assignor::New ("Score",
+    ValueExpr::New (RealValue::New (-1))));
+
   result = result->Project (
     PROV,
     strlist ("ebestPathDelete_attr1",
       "VID",
       "ebestPathDelete_attr5",
-      "ebestPathDelete_attr6"),
+      "ebestPathDelete_attr7",
+      "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
       "prov_attr3",
-      "prov_attr4"));
+      "prov_attr4",
+      "prov_attr5"));
 
   Delete (result);
 }
@@ -1445,7 +1521,7 @@ PathvectorProv::Prov_edb_1Eca1Ins (Ptr<Tuple> link)
 
   Ptr<Tuple> result = link;
 
-  result->Assign (Assignor::New ("$1",
+  result->Assign (Assignor::New ("RLoc",
     VarExpr::New ("link_attr1")));
 
   result->Assign (Assignor::New ("VID",
@@ -1461,16 +1537,21 @@ PathvectorProv::Prov_edb_1Eca1Ins (Ptr<Tuple> link)
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
+  result->Assign (Assignor::New ("Score",
+    VarExpr::New ("link_attr3")));
+
   result = result->Project (
     PROV,
     strlist ("link_attr1",
       "VID",
       "RID",
-      "$1"),
+      "RLoc",
+      "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
       "prov_attr3",
-      "prov_attr4"));
+      "prov_attr4",
+      "prov_attr5"));
 
   Insert (result);
 }
@@ -1482,7 +1563,7 @@ PathvectorProv::Prov_edb_1Eca1Del (Ptr<Tuple> link)
 
   Ptr<Tuple> result = link;
 
-  result->Assign (Assignor::New ("$1",
+  result->Assign (Assignor::New ("RLoc",
     VarExpr::New ("link_attr1")));
 
   result->Assign (Assignor::New ("VID",
@@ -1498,16 +1579,21 @@ PathvectorProv::Prov_edb_1Eca1Del (Ptr<Tuple> link)
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
+  result->Assign (Assignor::New ("Score",
+    VarExpr::New ("link_attr3")));
+
   result = result->Project (
     PROV,
     strlist ("link_attr1",
       "VID",
       "RID",
-      "$1"),
+      "RLoc",
+      "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
       "prov_attr3",
-      "prov_attr4"));
+      "prov_attr4",
+      "prov_attr5"));
 
   Delete (result);
 }
@@ -1902,7 +1988,7 @@ PathvectorProv::Rv1_eca (Ptr<Tuple> ruleQuery)
     RQLIST,
     strlist ("ruleQuery_attr1",
       "ruleQuery_attr2",
-      "ruleExec_attr4"),
+      "ruleExec_attr5"),
     strlist ("rQList_attr1",
       "rQList_attr2",
       "rQList_attr3"));
@@ -2181,6 +2267,7 @@ PathvectorProv::Rv9_eca (Ptr<Tuple> eRReturn)
     FPRule::New (
       VarExpr::New ("rResultTmp_attr5"),
       VarExpr::New ("eRReturn_attr1"),
+      VarExpr::New ("ruleExec_attr4"),
       VarExpr::New ("ruleExec_attr3"))));
 
   result = result->Project (
