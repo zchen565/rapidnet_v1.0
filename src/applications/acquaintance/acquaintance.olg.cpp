@@ -33,10 +33,10 @@
 /* We do not support C11 <threads.h>.  */
 materialize(liveEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
 materialize(likeEvent, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(knowEvent, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32)).
+materialize(knowEvent, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32, 5:list)).
 materialize(live, infinity, infinity, keys(1, 2:int32, 3:int32)).
 materialize(like, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(know, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32)).
+materialize(know, infinity, infinity, keys(1, 2:int32, 3:int32, 4:int32, 5:list)).
 materialize(relation, infinity, infinity, keys(1, 2:int32, 3:int32)).
 materialize(shaResult, infinity, infinity, keys(1, 2:cid, 3:str)).
 ra 1.0 live(@Local, A, C) :- liveEvent(@Local, A, C).
@@ -51,4 +51,4 @@ r9 shaResult(@Local, VID, Content) :- relation(@Local, A, B), VID := f_sha1("rel
 r10 shaResult(@Local, VID, Content) :- live(@Local, A, C), VID := f_sha1("live"+Local+A+C), Name := "live",Content := Name+A+C.
 r11 shaResult(@Local, VID, Content) :- like(@Local, A, C), VID := f_sha1("like"+Local+A+C), Name := "like",Content := Name+A+C.
 r12 shaResult(@Local, VID, Content) :- know(@Local, A, B, S, P), VID := f_sha1("know"+Local+A+B+S+P), Name := "know",Content := Name+A+B+S+P.
-r13 0.4 knowEvent(@Local, A, C, S, P) :- knowEvent(@Local, A, B, S1, P1), know(@Local, B, C, S2, P2), A!=B, A!=C, B!=C, S1==1, S2==1, S:=1, Pt:=f_removeLast(P1), P:=f_concat(Pt, P2), Pi:=f_intersect(P1, P2), f_size(Pi)==1.
+r13 0.4 knowEvent(@Local, A, C, S, P) :- knowEvent(@Local, A, B, S1, P1), know(@Local, B, C, S2, P2), A!=B, A!=C, B!=C, S1==1, S2==1, S:=1, Pt:=f_removeLast(P1), P:=f_concat(Pt, P2), f_size(P)<4, Pi:=f_intersect(P1, P2), f_size(Pi)==1.

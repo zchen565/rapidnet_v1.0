@@ -119,13 +119,15 @@ Acquaintance::InitDatabase ()
     attrdef ("know_attr1", IPV4),
     attrdef ("know_attr2", INT32),
     attrdef ("know_attr3", INT32),
-    attrdef ("know_attr4", INT32)));
+    attrdef ("know_attr4", INT32),
+    attrdef ("know_attr5", LIST)));
 
   AddRelationWithKeys (KNOWEVENT, attrdeflist (
     attrdef ("knowEvent_attr1", IPV4),
     attrdef ("knowEvent_attr2", INT32),
     attrdef ("knowEvent_attr3", INT32),
-    attrdef ("knowEvent_attr4", INT32)));
+    attrdef ("knowEvent_attr4", INT32),
+    attrdef ("knowEvent_attr5", LIST)));
 
   AddRelationWithKeys (LIKE, attrdeflist (
     attrdef ("like_attr1", IPV4),
@@ -4457,6 +4459,12 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
       ValueExpr::New (Int32Value::New (1)))));
 
   result = result->Select (Selector::New (
+    Operation::New (RN_LT,
+      FSize::New (
+        VarExpr::New ("P")),
+      ValueExpr::New (Int32Value::New (4)))));
+
+  result = result->Select (Selector::New (
     Operation::New (RN_EQ,
       FSize::New (
         VarExpr::New ("Pi")),
@@ -4604,6 +4612,12 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
     Operation::New (RN_EQ,
       VarExpr::New ("know_attr4"),
       ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_LT,
+      FSize::New (
+        VarExpr::New ("P")),
+      ValueExpr::New (Int32Value::New (4)))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_EQ,
@@ -4755,6 +4769,12 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
       ValueExpr::New (Int32Value::New (1)))));
 
   result = result->Select (Selector::New (
+    Operation::New (RN_LT,
+      FSize::New (
+        VarExpr::New ("P")),
+      ValueExpr::New (Int32Value::New (4)))));
+
+  result = result->Select (Selector::New (
     Operation::New (RN_EQ,
       FSize::New (
         VarExpr::New ("Pi")),
@@ -4902,6 +4922,12 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
     Operation::New (RN_EQ,
       VarExpr::New ("know_attr4"),
       ValueExpr::New (Int32Value::New (1)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_LT,
+      FSize::New (
+        VarExpr::New ("P")),
+      ValueExpr::New (Int32Value::New (4)))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_EQ,

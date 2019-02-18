@@ -229,13 +229,13 @@ void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  int l[] = {6, 7};
+  int l[] = {0, 1};
   list<Ptr<Value> > p;
   for (int i=0; i<sizeof(l)/sizeof(int); i++){
     Ptr<Value> t = (Ptr<Value>) Create<Int32Value>(l[i]);
     p.push_back(t);
   }
-  inserttuple(1, "know", 1, 6, 7, 1, p);  
+  inserttuple(1, "know", 1, 0, 1, 1, p);  
 }
 
 void Print(){
