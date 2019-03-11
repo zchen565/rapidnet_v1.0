@@ -152,6 +152,26 @@ protected:
 
   virtual void Prov_rc_5_ecaDel (Ptr<Tuple> eknowDelete);
 
+  virtual void Prov_rd_1Eca0Ins (Ptr<Tuple> relation);
+
+  virtual void Prov_rd_1Eca0Del (Ptr<Tuple> relation);
+
+  virtual void Prov_rd_2_ecaAdd (Ptr<Tuple> eknowEventTemp);
+
+  virtual void Prov_rd_2_ecaDel (Ptr<Tuple> eknowEventTempDelete);
+
+  virtual void Prov_rd_3_ecaAdd (Ptr<Tuple> eknowEventTemp);
+
+  virtual void Prov_rd_3_ecaDel (Ptr<Tuple> eknowEventTempDelete);
+
+  virtual void Prov_rd_4_ecaAdd (Ptr<Tuple> eknowEvent);
+
+  virtual void Prov_rd_4_ecaDel (Ptr<Tuple> eknowEventDelete);
+
+  virtual void Prov_rd_5_ecaAdd (Ptr<Tuple> eknowEvent);
+
+  virtual void Prov_rd_5_ecaDel (Ptr<Tuple> eknowEventDelete);
+
   virtual void Prov_r1_1Eca0Ins (Ptr<Tuple> liveEvent);
 
   virtual void Prov_r1_1Eca0Del (Ptr<Tuple> liveEvent);
@@ -159,22 +179,6 @@ protected:
   virtual void Prov_r1_1Eca3Ins (Ptr<Tuple> live);
 
   virtual void Prov_r1_1Eca3Del (Ptr<Tuple> live);
-
-  virtual void Prov_r1_2_ecaAdd (Ptr<Tuple> eknowEventTemp);
-
-  virtual void Prov_r1_2_ecaDel (Ptr<Tuple> eknowEventTempDelete);
-
-  virtual void Prov_r1_3_ecaAdd (Ptr<Tuple> eknowEventTemp);
-
-  virtual void Prov_r1_3_ecaDel (Ptr<Tuple> eknowEventTempDelete);
-
-  virtual void Prov_r1_4_ecaAdd (Ptr<Tuple> eknowEvent);
-
-  virtual void Prov_r1_4_ecaDel (Ptr<Tuple> eknowEventDelete);
-
-  virtual void Prov_r1_5_ecaAdd (Ptr<Tuple> eknowEvent);
-
-  virtual void Prov_r1_5_ecaDel (Ptr<Tuple> eknowEventDelete);
 
   virtual void Prov_r2_1Eca0Ins (Ptr<Tuple> likeEvent);
 
@@ -260,7 +264,11 @@ protected:
 
   virtual void Idb5_eca (Ptr<Tuple> pIterate);
 
-  virtual void Idb6_eca (Ptr<Tuple> eRuleQuery);
+  virtual void Idb6a_eca (Ptr<Tuple> eRuleQuery);
+
+  virtual void Idb6b_eca (Ptr<Tuple> eRuleQuery);
+
+  virtual void Idb6c_eca (Ptr<Tuple> eRuleQuery);
 
   virtual void Idb7_eca (Ptr<Tuple> rReturn);
 

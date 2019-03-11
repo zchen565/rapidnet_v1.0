@@ -37,6 +37,9 @@
 #define KnowTru \
 "./data/acquaintance/knows_truth.txt"
 
+#define KnowTes \
+"./data/acquaintance/knows_test.txt"
+
 
 #define live(local, person, city) \
 tuple (Acquaintance::LIVEEVENT, \
@@ -50,13 +53,12 @@ attr ("likeEvent_attr1", Ipv4Value, local), \
 attr ("likeEvent_attr2", Int32Value, person), \
 attr ("likeEvent_attr3", Int32Value, hobby))
 
-#define know(local, person1, person2, state, path) \
+#define know(local, person1, person2, state) \
 tuple (Acquaintance::KNOWEVENT, \
 attr ("knowEvent_attr1", Ipv4Value, local), \
 attr ("knowEvent_attr2", Int32Value, person1), \
 attr ("knowEvent_attr3", Int32Value, person2), \
-attr ("knowEvent_attr4", Int32Value, state), \
-attr ("knowEvent_attr5", ListValue, path))
+attr ("knowEvent_attr4", Int32Value, state))
 
 #define relation(local, person1, person2) \
 tuple (Acquaintance::RELATION, \
@@ -65,8 +67,8 @@ attr ("relation_attr2", Int32Value, person1), \
 attr ("relation_attr3", Int32Value, person2))
 
 
-#define insertknow(local, person1, person2, state, path) \
-app(local)->Insert(know(addr(local), person1, person2, state, path)); \
+#define insertknow(local, person1, person2) \
+app(local)->Insert(relation(addr(local), person1, person2)); \
 
 #define insertlike(local, person, hobby) \
 app(local)->Insert(like(addr(local), person, hobby));
@@ -78,18 +80,17 @@ app(local)->Insert(live(addr(local), person, city));
 app(local)->Insert(relation(addr(local), person1, person2));
 
 //define the tuple you would like to query and how to insert it
-#define tupleQuery(loc, name, attr1, attr2, attr3, attr4, attr5) \
+#define tupleQuery(loc, name, attr1, attr2, attr3, attr4) \
 tuple (AcquaintanceQuery::TUPLE, \
 attr ("tuple_attr1", Ipv4Value, loc), \
 attr ("tuple_attr2", StrValue, name), \
 attr ("tuple_attr3", Ipv4Value, attr1), \
 attr ("tuple_attr4", Int32Value, attr2), \
 attr ("tuple_attr5", Int32Value, attr3), \
-attr ("tuple_attr6", Int32Value, attr4), \
-attr ("tuple_attr7", ListValue, attr5))
+attr ("tuple_attr6", Int32Value, attr4))
 
-#define inserttuple(loc, name, attr1, attr2, attr3, attr4, attr5) \
-queryNode->Insert (tupleQuery(queryNode->GetAddress(), name, addr(attr1), attr2, attr3, attr4, attr5));
+#define inserttuple(loc, name, attr1, attr2, attr3, attr4) \
+queryNode->Insert (tupleQuery(queryNode->GetAddress(), name, addr(attr1), attr2, attr3, attr4));
 
 using namespace std;
 using namespace ns3;
@@ -178,7 +179,7 @@ void parse(vector<string> know_obs,
 		Ptr<Value> p2 = (Ptr<Value>) Create<Int32Value>(people[person2]);
 		p.push_back(p1);
 		p.push_back(p2);
-		insertknow(1, people[person1], people[person2], 1, p);
+		insertknow(1, people[person1], people[person2]);
 	}	
 	cout << endl;
 
@@ -187,7 +188,7 @@ void parse(vector<string> know_obs,
 	// parse live_obs
 	for(int i=0; i<live_obs.size()-1; i++){
 		string live = live_obs[i];
-		if(live.size()==0) continue;
+		if(live.size()==0||i%4!=0) continue;
 		int l = 0;
 		while(live.at(l)!=' ') l++;
 		string person = live.substr(0, l);
@@ -210,7 +211,7 @@ void parse(vector<string> know_obs,
 	//parse like_obs
 	for(int i=0; i<like_obs.size()-1; i++){
 		string like = like_obs[i];
-		if(like.size()==0) continue;
+		if(like.size()==0||i%4!=0) continue;
 		int l = 0;
 		while(like.at(l)!=' ') l++;
 		string person = like.substr(0, l);
@@ -235,7 +236,7 @@ TupleToQuery ()
     Ptr<Value> t = (Ptr<Value>) Create<Int32Value>(l[i]);
     p.push_back(t);
   }
-  inserttuple(1, "know", 1, 0, 1, 1, p);  
+  inserttuple(1, "know", 1, 2, 3, 1);  
 }
 
 void Print(){
@@ -244,6 +245,9 @@ void Print(){
 	//PrintRelation(apps, Acquaintance::LIKE);
 
 	// PrintRelation(apps, Acquaintance::RULEEXEC);
+    // PrintRelation (apps, Acquaintance::PQLIST);
+    // PrintRelation (apps, Acquaintance::RQLIST);
+    // PrintRelation (apps, Acquaintance::PROV);
 
 	PrintRelation (queryapps, AcquaintanceQuery::TUPLE);
   	PrintRelation (queryapps, AcquaintanceQuery::RECORDS); //modify: add col tuple's vid (hash)
@@ -262,12 +266,11 @@ void train(){
 
 int main(int argc, char *argv[]){
 
-	/*
-	LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
-  	LogComponentEnable("AcquaintanceQuery", LOG_LEVEL_INFO);
-  	LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
-    */
-
+	
+  LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
+  LogComponentEnable("AcquaintanceQuery", LOG_LEVEL_INFO);
+  LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
+  
   	initApps();
 
 	apps.Start (Seconds (0.0));

@@ -119,15 +119,13 @@ Acquaintance::InitDatabase ()
     attrdef ("know_attr1", IPV4),
     attrdef ("know_attr2", INT32),
     attrdef ("know_attr3", INT32),
-    attrdef ("know_attr4", INT32),
-    attrdef ("know_attr5", LIST)));
+    attrdef ("know_attr4", INT32)));
 
   AddRelationWithKeys (KNOWEVENT, attrdeflist (
     attrdef ("knowEvent_attr1", IPV4),
     attrdef ("knowEvent_attr2", INT32),
     attrdef ("knowEvent_attr3", INT32),
-    attrdef ("knowEvent_attr4", INT32),
-    attrdef ("knowEvent_attr5", LIST)));
+    attrdef ("knowEvent_attr4", INT32)));
 
   AddRelationWithKeys (LIKE, attrdeflist (
     attrdef ("like_attr1", IPV4),
@@ -311,6 +309,46 @@ Acquaintance::DemuxRecv (Ptr<Tuple> tuple)
     {
       Prov_rc_5_ecaDel (tuple);
     }
+  if (IsInsertEvent (tuple, RELATION))
+    {
+      Prov_rd_1Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, RELATION))
+    {
+      Prov_rd_1Eca0Del (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENTTEMP))
+    {
+      Prov_rd_2_ecaAdd (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENTTEMPDELETE))
+    {
+      Prov_rd_2_ecaDel (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENTTEMP))
+    {
+      Prov_rd_3_ecaAdd (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENTTEMPDELETE))
+    {
+      Prov_rd_3_ecaDel (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENT))
+    {
+      Prov_rd_4_ecaAdd (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENTDELETE))
+    {
+      Prov_rd_4_ecaDel (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENT))
+    {
+      Prov_rd_5_ecaAdd (tuple);
+    }
+  if (IsRecvEvent (tuple, EKNOWEVENTDELETE))
+    {
+      Prov_rd_5_ecaDel (tuple);
+    }
   if (IsInsertEvent (tuple, LIVEEVENT))
     {
       Prov_r1_1Eca0Ins (tuple);
@@ -326,38 +364,6 @@ Acquaintance::DemuxRecv (Ptr<Tuple> tuple)
   if (IsDeleteEvent (tuple, LIVE))
     {
       Prov_r1_1Eca3Del (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENTTEMP))
-    {
-      Prov_r1_2_ecaAdd (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENTTEMPDELETE))
-    {
-      Prov_r1_2_ecaDel (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENTTEMP))
-    {
-      Prov_r1_3_ecaAdd (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENTTEMPDELETE))
-    {
-      Prov_r1_3_ecaDel (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENT))
-    {
-      Prov_r1_4_ecaAdd (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENTDELETE))
-    {
-      Prov_r1_4_ecaDel (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENT))
-    {
-      Prov_r1_5_ecaAdd (tuple);
-    }
-  if (IsRecvEvent (tuple, EKNOWEVENTDELETE))
-    {
-      Prov_r1_5_ecaDel (tuple);
     }
   if (IsInsertEvent (tuple, LIKEEVENT))
     {
@@ -529,7 +535,15 @@ Acquaintance::DemuxRecv (Ptr<Tuple> tuple)
     }
   if (IsRecvEvent (tuple, ERULEQUERY))
     {
-      Idb6_eca (tuple);
+      Idb6a_eca (tuple);
+    }
+  if (IsRecvEvent (tuple, ERULEQUERY))
+    {
+      Idb6b_eca (tuple);
+    }
+  if (IsRecvEvent (tuple, ERULEQUERY))
+    {
+      Idb6c_eca (tuple);
     }
   if (IsRecvEvent (tuple, RRETURN))
     {
@@ -1318,13 +1332,11 @@ Acquaintance::Prov_rc_1Eca0Ins (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1362,7 +1374,6 @@ Acquaintance::Prov_rc_1Eca0Ins (Ptr<Tuple> knowEvent)
       "knowEvent_attr2",
       "knowEvent_attr3",
       "knowEvent_attr4",
-      "knowEvent_attr5",
       "RID",
       "RWeight",
       "R",
@@ -1377,7 +1388,6 @@ Acquaintance::Prov_rc_1Eca0Ins (Ptr<Tuple> knowEvent)
       "eknowTemp_attr7",
       "eknowTemp_attr8",
       "eknowTemp_attr9",
-      "eknowTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -1396,13 +1406,11 @@ Acquaintance::Prov_rc_1Eca0Del (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1440,7 +1448,6 @@ Acquaintance::Prov_rc_1Eca0Del (Ptr<Tuple> knowEvent)
       "knowEvent_attr2",
       "knowEvent_attr3",
       "knowEvent_attr4",
-      "knowEvent_attr5",
       "RID",
       "RWeight",
       "R",
@@ -1455,7 +1462,6 @@ Acquaintance::Prov_rc_1Eca0Del (Ptr<Tuple> knowEvent)
       "eknowTempDelete_attr7",
       "eknowTempDelete_attr8",
       "eknowTempDelete_attr9",
-      "eknowTempDelete_attr10",
       RN_DEST));
 
   Send (result);
@@ -1471,10 +1477,10 @@ Acquaintance::Prov_rc_2_ecaAdd (Ptr<Tuple> eknowTemp)
   result = result->Project (
     RULEEXEC,
     strlist ("eknowTemp_attr1",
+      "eknowTemp_attr6",
       "eknowTemp_attr7",
       "eknowTemp_attr8",
-      "eknowTemp_attr9",
-      "eknowTemp_attr10"),
+      "eknowTemp_attr9"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
@@ -1494,10 +1500,10 @@ Acquaintance::Prov_rc_2_ecaDel (Ptr<Tuple> eknowTempDelete)
   result = result->Project (
     RULEEXEC,
     strlist ("eknowTempDelete_attr1",
+      "eknowTempDelete_attr6",
       "eknowTempDelete_attr7",
       "eknowTempDelete_attr8",
-      "eknowTempDelete_attr9",
-      "eknowTempDelete_attr10"),
+      "eknowTempDelete_attr9"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
@@ -1525,7 +1531,6 @@ Acquaintance::Prov_rc_3_ecaAdd (Ptr<Tuple> eknowTemp)
       "eknowTemp_attr5",
       "eknowTemp_attr6",
       "eknowTemp_attr7",
-      "eknowTemp_attr8",
       "eknowTemp_attr1",
       "Local"),
     strlist ("eknow_attr1",
@@ -1535,7 +1540,6 @@ Acquaintance::Prov_rc_3_ecaAdd (Ptr<Tuple> eknowTemp)
       "eknow_attr5",
       "eknow_attr6",
       "eknow_attr7",
-      "eknow_attr8",
       RN_DEST));
 
   Send (result);
@@ -1559,7 +1563,6 @@ Acquaintance::Prov_rc_3_ecaDel (Ptr<Tuple> eknowTempDelete)
       "eknowTempDelete_attr5",
       "eknowTempDelete_attr6",
       "eknowTempDelete_attr7",
-      "eknowTempDelete_attr8",
       "eknowTempDelete_attr1",
       "Local"),
     strlist ("eknowDelete_attr1",
@@ -1569,7 +1572,6 @@ Acquaintance::Prov_rc_3_ecaDel (Ptr<Tuple> eknowTempDelete)
       "eknowDelete_attr5",
       "eknowDelete_attr6",
       "eknowDelete_attr7",
-      "eknowDelete_attr8",
       RN_DEST));
 
   Send (result);
@@ -1590,13 +1592,11 @@ Acquaintance::Prov_rc_4_ecaAdd (Ptr<Tuple> eknow)
     strlist ("Local",
       "eknow_attr2",
       "eknow_attr3",
-      "eknow_attr4",
-      "eknow_attr5"),
+      "eknow_attr4"),
     strlist ("know_attr1",
       "know_attr2",
       "know_attr3",
-      "know_attr4",
-      "know_attr5"));
+      "know_attr4"));
 
   Insert (result);
 }
@@ -1616,13 +1616,11 @@ Acquaintance::Prov_rc_4_ecaDel (Ptr<Tuple> eknowDelete)
     strlist ("Local",
       "eknowDelete_attr2",
       "eknowDelete_attr3",
-      "eknowDelete_attr4",
-      "eknowDelete_attr5"),
+      "eknowDelete_attr4"),
     strlist ("know_attr1",
       "know_attr2",
       "know_attr3",
-      "know_attr4",
-      "know_attr5"));
+      "know_attr4"));
 
   Delete (result);
 }
@@ -1640,13 +1638,11 @@ Acquaintance::Prov_rc_5_ecaAdd (Ptr<Tuple> eknow)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("eknow_attr1")),
-              VarExpr::New ("eknow_attr2")),
-            VarExpr::New ("eknow_attr3")),
-          VarExpr::New ("eknow_attr4")),
-        VarExpr::New ("eknow_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("eknow_attr1")),
+            VarExpr::New ("eknow_attr2")),
+          VarExpr::New ("eknow_attr3")),
+        VarExpr::New ("eknow_attr4")))));
 
   result->Assign (Assignor::New ("Score",
     ValueExpr::New (RealValue::New (-1))));
@@ -1658,8 +1654,8 @@ Acquaintance::Prov_rc_5_ecaAdd (Ptr<Tuple> eknow)
     PROV,
     strlist ("Local",
       "VID",
-      "eknow_attr6",
-      "eknow_attr8",
+      "eknow_attr5",
+      "eknow_attr7",
       "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
@@ -1683,13 +1679,11 @@ Acquaintance::Prov_rc_5_ecaDel (Ptr<Tuple> eknowDelete)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("eknowDelete_attr1")),
-              VarExpr::New ("eknowDelete_attr2")),
-            VarExpr::New ("eknowDelete_attr3")),
-          VarExpr::New ("eknowDelete_attr4")),
-        VarExpr::New ("eknowDelete_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("eknowDelete_attr1")),
+            VarExpr::New ("eknowDelete_attr2")),
+          VarExpr::New ("eknowDelete_attr3")),
+        VarExpr::New ("eknowDelete_attr4")))));
 
   result->Assign (Assignor::New ("Score",
     ValueExpr::New (RealValue::New (-1))));
@@ -1701,8 +1695,388 @@ Acquaintance::Prov_rc_5_ecaDel (Ptr<Tuple> eknowDelete)
     PROV,
     strlist ("Local",
       "VID",
-      "eknowDelete_attr6",
-      "eknowDelete_attr8",
+      "eknowDelete_attr5",
+      "eknowDelete_attr7",
+      "Score"),
+    strlist ("prov_attr1",
+      "prov_attr2",
+      "prov_attr3",
+      "prov_attr4",
+      "prov_attr5"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::Prov_rd_1Eca0Ins (Ptr<Tuple> relation)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_1Eca0Ins triggered");
+
+  Ptr<Tuple> result = relation;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            ValueExpr::New (StrValue::New ("relation")),
+            VarExpr::New ("relation_attr1")),
+          VarExpr::New ("relation_attr2")),
+        VarExpr::New ("relation_attr3")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("relation_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("rd"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    EKNOWEVENTTEMP,
+    strlist ("RLOC",
+      "Local",
+      "relation_attr2",
+      "relation_attr3",
+      "S",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eknowEventTemp_attr1",
+      "eknowEventTemp_attr2",
+      "eknowEventTemp_attr3",
+      "eknowEventTemp_attr4",
+      "eknowEventTemp_attr5",
+      "eknowEventTemp_attr6",
+      "eknowEventTemp_attr7",
+      "eknowEventTemp_attr8",
+      "eknowEventTemp_attr9",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_rd_1Eca0Del (Ptr<Tuple> relation)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_1Eca0Del triggered");
+
+  Ptr<Tuple> result = relation;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            ValueExpr::New (StrValue::New ("relation")),
+            VarExpr::New ("relation_attr1")),
+          VarExpr::New ("relation_attr2")),
+        VarExpr::New ("relation_attr3")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("S",
+    ValueExpr::New (Int32Value::New (1))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("relation_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("rd"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    EKNOWEVENTTEMPDELETE,
+    strlist ("RLOC",
+      "Local",
+      "relation_attr2",
+      "relation_attr3",
+      "S",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eknowEventTempDelete_attr1",
+      "eknowEventTempDelete_attr2",
+      "eknowEventTempDelete_attr3",
+      "eknowEventTempDelete_attr4",
+      "eknowEventTempDelete_attr5",
+      "eknowEventTempDelete_attr6",
+      "eknowEventTempDelete_attr7",
+      "eknowEventTempDelete_attr8",
+      "eknowEventTempDelete_attr9",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_rd_2_ecaAdd (Ptr<Tuple> eknowEventTemp)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_2_ecaAdd triggered");
+
+  Ptr<Tuple> result = eknowEventTemp;
+
+  result = result->Project (
+    RULEEXEC,
+    strlist ("eknowEventTemp_attr1",
+      "eknowEventTemp_attr6",
+      "eknowEventTemp_attr7",
+      "eknowEventTemp_attr8",
+      "eknowEventTemp_attr9"),
+    strlist ("ruleExec_attr1",
+      "ruleExec_attr2",
+      "ruleExec_attr3",
+      "ruleExec_attr4",
+      "ruleExec_attr5"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::Prov_rd_2_ecaDel (Ptr<Tuple> eknowEventTempDelete)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_2_ecaDel triggered");
+
+  Ptr<Tuple> result = eknowEventTempDelete;
+
+  result = result->Project (
+    RULEEXEC,
+    strlist ("eknowEventTempDelete_attr1",
+      "eknowEventTempDelete_attr6",
+      "eknowEventTempDelete_attr7",
+      "eknowEventTempDelete_attr8",
+      "eknowEventTempDelete_attr9"),
+    strlist ("ruleExec_attr1",
+      "ruleExec_attr2",
+      "ruleExec_attr3",
+      "ruleExec_attr4",
+      "ruleExec_attr5"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::Prov_rd_3_ecaAdd (Ptr<Tuple> eknowEventTemp)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_3_ecaAdd triggered");
+
+  Ptr<Tuple> result = eknowEventTemp;
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    EKNOWEVENT,
+    strlist ("Local",
+      "eknowEventTemp_attr3",
+      "eknowEventTemp_attr4",
+      "eknowEventTemp_attr5",
+      "eknowEventTemp_attr6",
+      "eknowEventTemp_attr7",
+      "eknowEventTemp_attr1",
+      "Local"),
+    strlist ("eknowEvent_attr1",
+      "eknowEvent_attr2",
+      "eknowEvent_attr3",
+      "eknowEvent_attr4",
+      "eknowEvent_attr5",
+      "eknowEvent_attr6",
+      "eknowEvent_attr7",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_rd_3_ecaDel (Ptr<Tuple> eknowEventTempDelete)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_3_ecaDel triggered");
+
+  Ptr<Tuple> result = eknowEventTempDelete;
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    EKNOWEVENTDELETE,
+    strlist ("Local",
+      "eknowEventTempDelete_attr3",
+      "eknowEventTempDelete_attr4",
+      "eknowEventTempDelete_attr5",
+      "eknowEventTempDelete_attr6",
+      "eknowEventTempDelete_attr7",
+      "eknowEventTempDelete_attr1",
+      "Local"),
+    strlist ("eknowEventDelete_attr1",
+      "eknowEventDelete_attr2",
+      "eknowEventDelete_attr3",
+      "eknowEventDelete_attr4",
+      "eknowEventDelete_attr5",
+      "eknowEventDelete_attr6",
+      "eknowEventDelete_attr7",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Prov_rd_4_ecaAdd (Ptr<Tuple> eknowEvent)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_4_ecaAdd triggered");
+
+  Ptr<Tuple> result = eknowEvent;
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    KNOWEVENT,
+    strlist ("Local",
+      "eknowEvent_attr2",
+      "eknowEvent_attr3",
+      "eknowEvent_attr4"),
+    strlist ("knowEvent_attr1",
+      "knowEvent_attr2",
+      "knowEvent_attr3",
+      "knowEvent_attr4"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::Prov_rd_4_ecaDel (Ptr<Tuple> eknowEventDelete)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_4_ecaDel triggered");
+
+  Ptr<Tuple> result = eknowEventDelete;
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    KNOWEVENT,
+    strlist ("Local",
+      "eknowEventDelete_attr2",
+      "eknowEventDelete_attr3",
+      "eknowEventDelete_attr4"),
+    strlist ("knowEvent_attr1",
+      "knowEvent_attr2",
+      "knowEvent_attr3",
+      "knowEvent_attr4"));
+
+  Delete (result);
+}
+
+void
+Acquaintance::Prov_rd_5_ecaAdd (Ptr<Tuple> eknowEvent)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_5_ecaAdd triggered");
+
+  Ptr<Tuple> result = eknowEvent;
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("eknowEvent_attr1")),
+            VarExpr::New ("eknowEvent_attr2")),
+          VarExpr::New ("eknowEvent_attr3")),
+        VarExpr::New ("eknowEvent_attr4")))));
+
+  result->Assign (Assignor::New ("Score",
+    ValueExpr::New (RealValue::New (-1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    PROV,
+    strlist ("Local",
+      "VID",
+      "eknowEvent_attr5",
+      "eknowEvent_attr7",
+      "Score"),
+    strlist ("prov_attr1",
+      "prov_attr2",
+      "prov_attr3",
+      "prov_attr4",
+      "prov_attr5"));
+
+  Insert (result);
+}
+
+void
+Acquaintance::Prov_rd_5_ecaDel (Ptr<Tuple> eknowEventDelete)
+{
+  RAPIDNET_LOG_INFO ("Prov_rd_5_ecaDel triggered");
+
+  Ptr<Tuple> result = eknowEventDelete;
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("eknowEventDelete_attr1")),
+            VarExpr::New ("eknowEventDelete_attr2")),
+          VarExpr::New ("eknowEventDelete_attr3")),
+        VarExpr::New ("eknowEventDelete_attr4")))));
+
+  result->Assign (Assignor::New ("Score",
+    ValueExpr::New (RealValue::New (-1))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    PROV,
+    strlist ("Local",
+      "VID",
+      "eknowEventDelete_attr5",
+      "eknowEventDelete_attr7",
       "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
@@ -1761,19 +2135,6 @@ Acquaintance::Prov_r1_1Eca0Ins (Ptr<Tuple> liveEvent)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("liveEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("live_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("liveEvent_attr1")));
 
@@ -1806,7 +2167,6 @@ Acquaintance::Prov_r1_1Eca0Ins (Ptr<Tuple> liveEvent)
       "liveEvent_attr2",
       "live_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -1821,7 +2181,6 @@ Acquaintance::Prov_r1_1Eca0Ins (Ptr<Tuple> liveEvent)
       "eknowEventTemp_attr7",
       "eknowEventTemp_attr8",
       "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -1875,19 +2234,6 @@ Acquaintance::Prov_r1_1Eca0Del (Ptr<Tuple> liveEvent)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("liveEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("live_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("liveEvent_attr1")));
 
@@ -1920,7 +2266,6 @@ Acquaintance::Prov_r1_1Eca0Del (Ptr<Tuple> liveEvent)
       "liveEvent_attr2",
       "live_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -1935,7 +2280,6 @@ Acquaintance::Prov_r1_1Eca0Del (Ptr<Tuple> liveEvent)
       "eknowEventTempDelete_attr7",
       "eknowEventTempDelete_attr8",
       "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10",
       RN_DEST));
 
   Send (result);
@@ -1989,19 +2333,6 @@ Acquaintance::Prov_r1_1Eca3Ins (Ptr<Tuple> live)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("liveEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("live_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("live_attr1")));
 
@@ -2034,7 +2365,6 @@ Acquaintance::Prov_r1_1Eca3Ins (Ptr<Tuple> live)
       "liveEvent_attr2",
       "live_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -2049,7 +2379,6 @@ Acquaintance::Prov_r1_1Eca3Ins (Ptr<Tuple> live)
       "eknowEventTemp_attr7",
       "eknowEventTemp_attr8",
       "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -2103,19 +2432,6 @@ Acquaintance::Prov_r1_1Eca3Del (Ptr<Tuple> live)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("liveEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("live_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("live_attr1")));
 
@@ -2148,7 +2464,6 @@ Acquaintance::Prov_r1_1Eca3Del (Ptr<Tuple> live)
       "liveEvent_attr2",
       "live_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -2163,262 +2478,9 @@ Acquaintance::Prov_r1_1Eca3Del (Ptr<Tuple> live)
       "eknowEventTempDelete_attr7",
       "eknowEventTempDelete_attr8",
       "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10",
       RN_DEST));
 
   Send (result);
-}
-
-void
-Acquaintance::Prov_r1_2_ecaAdd (Ptr<Tuple> eknowEventTemp)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_2_ecaAdd triggered");
-
-  Ptr<Tuple> result = eknowEventTemp;
-
-  result = result->Project (
-    RULEEXEC,
-    strlist ("eknowEventTemp_attr1",
-      "eknowEventTemp_attr7",
-      "eknowEventTemp_attr8",
-      "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10"),
-    strlist ("ruleExec_attr1",
-      "ruleExec_attr2",
-      "ruleExec_attr3",
-      "ruleExec_attr4",
-      "ruleExec_attr5"));
-
-  Insert (result);
-}
-
-void
-Acquaintance::Prov_r1_2_ecaDel (Ptr<Tuple> eknowEventTempDelete)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_2_ecaDel triggered");
-
-  Ptr<Tuple> result = eknowEventTempDelete;
-
-  result = result->Project (
-    RULEEXEC,
-    strlist ("eknowEventTempDelete_attr1",
-      "eknowEventTempDelete_attr7",
-      "eknowEventTempDelete_attr8",
-      "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10"),
-    strlist ("ruleExec_attr1",
-      "ruleExec_attr2",
-      "ruleExec_attr3",
-      "ruleExec_attr4",
-      "ruleExec_attr5"));
-
-  Delete (result);
-}
-
-void
-Acquaintance::Prov_r1_3_ecaAdd (Ptr<Tuple> eknowEventTemp)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_3_ecaAdd triggered");
-
-  Ptr<Tuple> result = eknowEventTemp;
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    EKNOWEVENT,
-    strlist ("Local",
-      "eknowEventTemp_attr3",
-      "eknowEventTemp_attr4",
-      "eknowEventTemp_attr5",
-      "eknowEventTemp_attr6",
-      "eknowEventTemp_attr7",
-      "eknowEventTemp_attr8",
-      "eknowEventTemp_attr1",
-      "Local"),
-    strlist ("eknowEvent_attr1",
-      "eknowEvent_attr2",
-      "eknowEvent_attr3",
-      "eknowEvent_attr4",
-      "eknowEvent_attr5",
-      "eknowEvent_attr6",
-      "eknowEvent_attr7",
-      "eknowEvent_attr8",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Acquaintance::Prov_r1_3_ecaDel (Ptr<Tuple> eknowEventTempDelete)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_3_ecaDel triggered");
-
-  Ptr<Tuple> result = eknowEventTempDelete;
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    EKNOWEVENTDELETE,
-    strlist ("Local",
-      "eknowEventTempDelete_attr3",
-      "eknowEventTempDelete_attr4",
-      "eknowEventTempDelete_attr5",
-      "eknowEventTempDelete_attr6",
-      "eknowEventTempDelete_attr7",
-      "eknowEventTempDelete_attr8",
-      "eknowEventTempDelete_attr1",
-      "Local"),
-    strlist ("eknowEventDelete_attr1",
-      "eknowEventDelete_attr2",
-      "eknowEventDelete_attr3",
-      "eknowEventDelete_attr4",
-      "eknowEventDelete_attr5",
-      "eknowEventDelete_attr6",
-      "eknowEventDelete_attr7",
-      "eknowEventDelete_attr8",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Acquaintance::Prov_r1_4_ecaAdd (Ptr<Tuple> eknowEvent)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_4_ecaAdd triggered");
-
-  Ptr<Tuple> result = eknowEvent;
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    KNOWEVENT,
-    strlist ("Local",
-      "eknowEvent_attr2",
-      "eknowEvent_attr3",
-      "eknowEvent_attr4",
-      "eknowEvent_attr5"),
-    strlist ("knowEvent_attr1",
-      "knowEvent_attr2",
-      "knowEvent_attr3",
-      "knowEvent_attr4",
-      "knowEvent_attr5"));
-
-  Insert (result);
-}
-
-void
-Acquaintance::Prov_r1_4_ecaDel (Ptr<Tuple> eknowEventDelete)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_4_ecaDel triggered");
-
-  Ptr<Tuple> result = eknowEventDelete;
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    KNOWEVENT,
-    strlist ("Local",
-      "eknowEventDelete_attr2",
-      "eknowEventDelete_attr3",
-      "eknowEventDelete_attr4",
-      "eknowEventDelete_attr5"),
-    strlist ("knowEvent_attr1",
-      "knowEvent_attr2",
-      "knowEvent_attr3",
-      "knowEvent_attr4",
-      "knowEvent_attr5"));
-
-  Delete (result);
-}
-
-void
-Acquaintance::Prov_r1_5_ecaAdd (Ptr<Tuple> eknowEvent)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_5_ecaAdd triggered");
-
-  Ptr<Tuple> result = eknowEvent;
-
-  result->Assign (Assignor::New ("VID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("eknowEvent_attr1")),
-              VarExpr::New ("eknowEvent_attr2")),
-            VarExpr::New ("eknowEvent_attr3")),
-          VarExpr::New ("eknowEvent_attr4")),
-        VarExpr::New ("eknowEvent_attr5")))));
-
-  result->Assign (Assignor::New ("Score",
-    ValueExpr::New (RealValue::New (-1))));
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    PROV,
-    strlist ("Local",
-      "VID",
-      "eknowEvent_attr6",
-      "eknowEvent_attr8",
-      "Score"),
-    strlist ("prov_attr1",
-      "prov_attr2",
-      "prov_attr3",
-      "prov_attr4",
-      "prov_attr5"));
-
-  Insert (result);
-}
-
-void
-Acquaintance::Prov_r1_5_ecaDel (Ptr<Tuple> eknowEventDelete)
-{
-  RAPIDNET_LOG_INFO ("Prov_r1_5_ecaDel triggered");
-
-  Ptr<Tuple> result = eknowEventDelete;
-
-  result->Assign (Assignor::New ("VID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("eknowEventDelete_attr1")),
-              VarExpr::New ("eknowEventDelete_attr2")),
-            VarExpr::New ("eknowEventDelete_attr3")),
-          VarExpr::New ("eknowEventDelete_attr4")),
-        VarExpr::New ("eknowEventDelete_attr5")))));
-
-  result->Assign (Assignor::New ("Score",
-    ValueExpr::New (RealValue::New (-1))));
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    PROV,
-    strlist ("Local",
-      "VID",
-      "eknowEventDelete_attr6",
-      "eknowEventDelete_attr8",
-      "Score"),
-    strlist ("prov_attr1",
-      "prov_attr2",
-      "prov_attr3",
-      "prov_attr4",
-      "prov_attr5"));
-
-  Delete (result);
 }
 
 void
@@ -2469,19 +2531,6 @@ Acquaintance::Prov_r2_1Eca0Ins (Ptr<Tuple> likeEvent)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("likeEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("like_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("likeEvent_attr1")));
 
@@ -2514,7 +2563,6 @@ Acquaintance::Prov_r2_1Eca0Ins (Ptr<Tuple> likeEvent)
       "likeEvent_attr2",
       "like_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -2529,7 +2577,6 @@ Acquaintance::Prov_r2_1Eca0Ins (Ptr<Tuple> likeEvent)
       "eknowEventTemp_attr7",
       "eknowEventTemp_attr8",
       "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -2583,19 +2630,6 @@ Acquaintance::Prov_r2_1Eca0Del (Ptr<Tuple> likeEvent)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("likeEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("like_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("likeEvent_attr1")));
 
@@ -2628,7 +2662,6 @@ Acquaintance::Prov_r2_1Eca0Del (Ptr<Tuple> likeEvent)
       "likeEvent_attr2",
       "like_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -2643,7 +2676,6 @@ Acquaintance::Prov_r2_1Eca0Del (Ptr<Tuple> likeEvent)
       "eknowEventTempDelete_attr7",
       "eknowEventTempDelete_attr8",
       "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10",
       RN_DEST));
 
   Send (result);
@@ -2697,19 +2729,6 @@ Acquaintance::Prov_r2_1Eca3Ins (Ptr<Tuple> like)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("likeEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("like_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("like_attr1")));
 
@@ -2742,7 +2761,6 @@ Acquaintance::Prov_r2_1Eca3Ins (Ptr<Tuple> like)
       "likeEvent_attr2",
       "like_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -2757,7 +2775,6 @@ Acquaintance::Prov_r2_1Eca3Ins (Ptr<Tuple> like)
       "eknowEventTemp_attr7",
       "eknowEventTemp_attr8",
       "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -2811,19 +2828,6 @@ Acquaintance::Prov_r2_1Eca3Del (Ptr<Tuple> like)
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
 
-  result->Assign (Assignor::New ("P1",
-    FAppend::New (
-      VarExpr::New ("likeEvent_attr2"))));
-
-  result->Assign (Assignor::New ("P2",
-    FAppend::New (
-      VarExpr::New ("like_attr2"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("P1"),
-      VarExpr::New ("P2"))));
-
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("like_attr1")));
 
@@ -2856,7 +2860,6 @@ Acquaintance::Prov_r2_1Eca3Del (Ptr<Tuple> like)
       "likeEvent_attr2",
       "like_attr2",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -2871,7 +2874,6 @@ Acquaintance::Prov_r2_1Eca3Del (Ptr<Tuple> like)
       "eknowEventTempDelete_attr7",
       "eknowEventTempDelete_attr8",
       "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10",
       RN_DEST));
 
   Send (result);
@@ -3458,13 +3460,11 @@ Acquaintance::Prov_r8_1Eca0Ins (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3476,13 +3476,11 @@ Acquaintance::Prov_r8_1Eca0Ins (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("knowEvent"))));
@@ -3491,12 +3489,10 @@ Acquaintance::Prov_r8_1Eca0Ins (Ptr<Tuple> knowEvent)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("knowEvent_attr2")),
-          VarExpr::New ("knowEvent_attr3")),
-        VarExpr::New ("knowEvent_attr4")),
-      VarExpr::New ("knowEvent_attr5"))));
+          VarExpr::New ("Name"),
+          VarExpr::New ("knowEvent_attr2")),
+        VarExpr::New ("knowEvent_attr3")),
+      VarExpr::New ("knowEvent_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("knowEvent_attr1")));
@@ -3555,13 +3551,11 @@ Acquaintance::Prov_r8_1Eca0Del (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3573,13 +3567,11 @@ Acquaintance::Prov_r8_1Eca0Del (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("knowEvent"))));
@@ -3588,12 +3580,10 @@ Acquaintance::Prov_r8_1Eca0Del (Ptr<Tuple> knowEvent)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("knowEvent_attr2")),
-          VarExpr::New ("knowEvent_attr3")),
-        VarExpr::New ("knowEvent_attr4")),
-      VarExpr::New ("knowEvent_attr5"))));
+          VarExpr::New ("Name"),
+          VarExpr::New ("knowEvent_attr2")),
+        VarExpr::New ("knowEvent_attr3")),
+      VarExpr::New ("knowEvent_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("knowEvent_attr1")));
@@ -4162,13 +4152,11 @@ Acquaintance::Prov_r12_1Eca0Ins (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("know_attr2")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4180,13 +4168,11 @@ Acquaintance::Prov_r12_1Eca0Ins (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("know_attr2")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("know"))));
@@ -4195,12 +4181,10 @@ Acquaintance::Prov_r12_1Eca0Ins (Ptr<Tuple> know)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("know_attr2")),
-          VarExpr::New ("know_attr3")),
-        VarExpr::New ("know_attr4")),
-      VarExpr::New ("know_attr5"))));
+          VarExpr::New ("Name"),
+          VarExpr::New ("know_attr2")),
+        VarExpr::New ("know_attr3")),
+      VarExpr::New ("know_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("know_attr1")));
@@ -4259,13 +4243,11 @@ Acquaintance::Prov_r12_1Eca0Del (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("know_attr2")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4277,13 +4259,11 @@ Acquaintance::Prov_r12_1Eca0Del (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("know_attr2")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("know"))));
@@ -4292,12 +4272,10 @@ Acquaintance::Prov_r12_1Eca0Del (Ptr<Tuple> know)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("know_attr2")),
-          VarExpr::New ("know_attr3")),
-        VarExpr::New ("know_attr4")),
-      VarExpr::New ("know_attr5"))));
+          VarExpr::New ("Name"),
+          VarExpr::New ("know_attr2")),
+        VarExpr::New ("know_attr3")),
+      VarExpr::New ("know_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("know_attr1")));
@@ -4361,13 +4339,11 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4379,13 +4355,11 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr3")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr3")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4398,20 +4372,6 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
 
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
-
-  result->Assign (Assignor::New ("Pt",
-    FRemoveLast::New (
-      VarExpr::New ("knowEvent_attr5"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("Pt"),
-      VarExpr::New ("know_attr5"))));
-
-  result->Assign (Assignor::New ("Pi",
-    FIntersect::New (
-      VarExpr::New ("knowEvent_attr5"),
-      VarExpr::New ("know_attr5"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("knowEvent_attr1")));
@@ -4458,18 +4418,6 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
       VarExpr::New ("know_attr4"),
       ValueExpr::New (Int32Value::New (1)))));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_LT,
-      FSize::New (
-        VarExpr::New ("P")),
-      ValueExpr::New (Int32Value::New (4)))));
-
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
-      FSize::New (
-        VarExpr::New ("Pi")),
-      ValueExpr::New (Int32Value::New (1)))));
-
   result = result->Project (
     EKNOWEVENTTEMP,
     strlist ("RLOC",
@@ -4477,7 +4425,6 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
       "knowEvent_attr2",
       "know_attr3",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -4492,7 +4439,6 @@ Acquaintance::Prov_r13_1Eca0Ins (Ptr<Tuple> knowEvent)
       "eknowEventTemp_attr7",
       "eknowEventTemp_attr8",
       "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -4516,13 +4462,11 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("knowEvent_attr3")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("knowEvent_attr3")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4534,13 +4478,11 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("knowEvent_attr1")),
-              VarExpr::New ("knowEvent_attr3")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("knowEvent_attr1")),
+            VarExpr::New ("knowEvent_attr3")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4553,20 +4495,6 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
 
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
-
-  result->Assign (Assignor::New ("Pt",
-    FRemoveLast::New (
-      VarExpr::New ("knowEvent_attr5"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("Pt"),
-      VarExpr::New ("know_attr5"))));
-
-  result->Assign (Assignor::New ("Pi",
-    FIntersect::New (
-      VarExpr::New ("knowEvent_attr5"),
-      VarExpr::New ("know_attr5"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("knowEvent_attr1")));
@@ -4613,18 +4541,6 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
       VarExpr::New ("know_attr4"),
       ValueExpr::New (Int32Value::New (1)))));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_LT,
-      FSize::New (
-        VarExpr::New ("P")),
-      ValueExpr::New (Int32Value::New (4)))));
-
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
-      FSize::New (
-        VarExpr::New ("Pi")),
-      ValueExpr::New (Int32Value::New (1)))));
-
   result = result->Project (
     EKNOWEVENTTEMPDELETE,
     strlist ("RLOC",
@@ -4632,7 +4548,6 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
       "knowEvent_attr2",
       "know_attr3",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -4647,7 +4562,6 @@ Acquaintance::Prov_r13_1Eca0Del (Ptr<Tuple> knowEvent)
       "eknowEventTempDelete_attr7",
       "eknowEventTempDelete_attr8",
       "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10",
       RN_DEST));
 
   Send (result);
@@ -4671,13 +4585,11 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("know_attr2")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("know_attr2")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4689,13 +4601,11 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("know_attr2")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4708,20 +4618,6 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
 
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
-
-  result->Assign (Assignor::New ("Pt",
-    FRemoveLast::New (
-      VarExpr::New ("knowEvent_attr5"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("Pt"),
-      VarExpr::New ("know_attr5"))));
-
-  result->Assign (Assignor::New ("Pi",
-    FIntersect::New (
-      VarExpr::New ("knowEvent_attr5"),
-      VarExpr::New ("know_attr5"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("know_attr1")));
@@ -4768,18 +4664,6 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
       VarExpr::New ("know_attr4"),
       ValueExpr::New (Int32Value::New (1)))));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_LT,
-      FSize::New (
-        VarExpr::New ("P")),
-      ValueExpr::New (Int32Value::New (4)))));
-
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
-      FSize::New (
-        VarExpr::New ("Pi")),
-      ValueExpr::New (Int32Value::New (1)))));
-
   result = result->Project (
     EKNOWEVENTTEMP,
     strlist ("RLOC",
@@ -4787,7 +4671,6 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
       "knowEvent_attr2",
       "know_attr3",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -4802,7 +4685,6 @@ Acquaintance::Prov_r13_1Eca3Ins (Ptr<Tuple> know)
       "eknowEventTemp_attr7",
       "eknowEventTemp_attr8",
       "eknowEventTemp_attr9",
-      "eknowEventTemp_attr10",
       RN_DEST));
 
   Send (result);
@@ -4826,13 +4708,11 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("knowEvent")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("knowEvent_attr2")),
-            VarExpr::New ("know_attr2")),
-          VarExpr::New ("knowEvent_attr4")),
-        VarExpr::New ("knowEvent_attr5")))));
+              ValueExpr::New (StrValue::New ("knowEvent")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("knowEvent_attr2")),
+          VarExpr::New ("know_attr2")),
+        VarExpr::New ("knowEvent_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4844,13 +4724,11 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("know")),
-                VarExpr::New ("know_attr1")),
-              VarExpr::New ("know_attr2")),
-            VarExpr::New ("know_attr3")),
-          VarExpr::New ("know_attr4")),
-        VarExpr::New ("know_attr5")))));
+              ValueExpr::New (StrValue::New ("know")),
+              VarExpr::New ("know_attr1")),
+            VarExpr::New ("know_attr2")),
+          VarExpr::New ("know_attr3")),
+        VarExpr::New ("know_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4863,20 +4741,6 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
 
   result->Assign (Assignor::New ("S",
     ValueExpr::New (Int32Value::New (1))));
-
-  result->Assign (Assignor::New ("Pt",
-    FRemoveLast::New (
-      VarExpr::New ("knowEvent_attr5"))));
-
-  result->Assign (Assignor::New ("P",
-    FConcat::New (
-      VarExpr::New ("Pt"),
-      VarExpr::New ("know_attr5"))));
-
-  result->Assign (Assignor::New ("Pi",
-    FIntersect::New (
-      VarExpr::New ("knowEvent_attr5"),
-      VarExpr::New ("know_attr5"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("know_attr1")));
@@ -4923,18 +4787,6 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
       VarExpr::New ("know_attr4"),
       ValueExpr::New (Int32Value::New (1)))));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_LT,
-      FSize::New (
-        VarExpr::New ("P")),
-      ValueExpr::New (Int32Value::New (4)))));
-
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
-      FSize::New (
-        VarExpr::New ("Pi")),
-      ValueExpr::New (Int32Value::New (1)))));
-
   result = result->Project (
     EKNOWEVENTTEMPDELETE,
     strlist ("RLOC",
@@ -4942,7 +4794,6 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
       "knowEvent_attr2",
       "know_attr3",
       "S",
-      "P",
       "RID",
       "RWeight",
       "R",
@@ -4957,7 +4808,6 @@ Acquaintance::Prov_r13_1Eca3Del (Ptr<Tuple> know)
       "eknowEventTempDelete_attr7",
       "eknowEventTempDelete_attr8",
       "eknowEventTempDelete_attr9",
-      "eknowEventTempDelete_attr10",
       RN_DEST));
 
   Send (result);
@@ -5257,11 +5107,11 @@ Acquaintance::Edb1_eca (Ptr<Tuple> provQuery)
 
   result = result->Project (
     PRETURN,
-    strlist ("provQuery_attr4",
+    strlist ("provQuery_attr5",
       "provQuery_attr2",
       "provQuery_attr3",
       "Prov",
-      "provQuery_attr4"),
+      "provQuery_attr5"),
     strlist ("pReturn_attr1",
       "pReturn_attr2",
       "pReturn_attr3",
@@ -5294,10 +5144,12 @@ Acquaintance::Idb1_eca (Ptr<Tuple> provQuery)
     PQLIST,
     strlist ("provQuery_attr1",
       "provQuery_attr2",
+      "provQuery_attr4",
       "list"),
     strlist ("pQList_attr1",
       "pQList_attr2",
-      "pQList_attr3"));
+      "pQList_attr3",
+      "pQList_attr4"));
 
   Insert (result);
 }
@@ -5317,7 +5169,7 @@ Acquaintance::Idb2_eca (Ptr<Tuple> provQuery)
     PRESULTTMP,
     strlist ("provQuery_attr1",
       "provQuery_attr2",
-      "provQuery_attr4",
+      "provQuery_attr5",
       "provQuery_attr3",
       "Buf"),
     strlist ("pResultTmp_attr1",
@@ -5343,10 +5195,12 @@ Acquaintance::Idb3_eca (Ptr<Tuple> provQuery)
     PITERATE,
     strlist ("provQuery_attr1",
       "provQuery_attr2",
-      "N"),
+      "N",
+      "provQuery_attr5"),
     strlist ("pIterate_attr1",
       "pIterate_attr2",
-      "pIterate_attr3"));
+      "pIterate_attr3",
+      "pIterate_attr4"));
 
   SendLocal (result);
 }
@@ -5372,16 +5226,18 @@ Acquaintance::Idb4_eca (Ptr<Tuple> pIterate)
     Operation::New (RN_LT,
       VarExpr::New ("pIterate_attr3"),
       FSize::New (
-        VarExpr::New ("pQList_attr3")))));
+        VarExpr::New ("pQList_attr4")))));
 
   result = result->Project (
     PITERATE,
     strlist ("pIterate_attr1",
       "pIterate_attr2",
-      "N"),
+      "N",
+      "pIterate_attr4"),
     strlist ("pIterate_attr1",
       "pIterate_attr2",
-      "pIterate_attr3"));
+      "pIterate_attr3",
+      "pIterate_attr4"));
 
   SendLocal (result);
 }
@@ -5400,7 +5256,7 @@ Acquaintance::Idb5_eca (Ptr<Tuple> pIterate)
 
   result->Assign (Assignor::New ("RID",
     FItem::New (
-      VarExpr::New ("pQList_attr3"),
+      VarExpr::New ("pQList_attr4"),
       VarExpr::New ("pIterate_attr3"))));
 
   result->Assign (Assignor::New ("NQID",
@@ -5415,43 +5271,159 @@ Acquaintance::Idb5_eca (Ptr<Tuple> pIterate)
     Operation::New (RN_LTE,
       VarExpr::New ("pIterate_attr3"),
       FSize::New (
-        VarExpr::New ("pQList_attr3")))));
+        VarExpr::New ("pQList_attr4")))));
 
   result = result->Project (
     ERULEQUERY,
     strlist ("pIterate_attr1",
       "NQID",
-      "RID"),
+      "pIterate_attr2",
+      "RID",
+      "pQList_attr3",
+      "pIterate_attr4"),
     strlist ("eRuleQuery_attr1",
       "eRuleQuery_attr2",
-      "eRuleQuery_attr3"));
+      "eRuleQuery_attr3",
+      "eRuleQuery_attr4",
+      "eRuleQuery_attr5",
+      "eRuleQuery_attr6"));
 
   SendLocal (result);
 }
 
 void
-Acquaintance::Idb6_eca (Ptr<Tuple> eRuleQuery)
+Acquaintance::Idb6a_eca (Ptr<Tuple> eRuleQuery)
 {
-  RAPIDNET_LOG_INFO ("Idb6_eca triggered");
+  RAPIDNET_LOG_INFO ("Idb6a_eca triggered");
 
   Ptr<RelationBase> result;
 
   result = GetRelation (PROV)->Join (
     eRuleQuery,
     strlist ("prov_attr3", "prov_attr1"),
-    strlist ("eRuleQuery_attr3", "eRuleQuery_attr1"));
+    strlist ("eRuleQuery_attr4", "eRuleQuery_attr1"));
+
+  result->Assign (Assignor::New ("P2",
+    FAppend::New (
+      VarExpr::New ("prov_attr2"))));
+
+  result->Assign (Assignor::New ("P",
+    FConcat::New (
+      VarExpr::New ("eRuleQuery_attr5"),
+      VarExpr::New ("P2"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_LTE,
+      FSize::New (
+        VarExpr::New ("eRuleQuery_attr5")),
+      ValueExpr::New (Int32Value::New (3)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      FMember::New (
+        VarExpr::New ("eRuleQuery_attr5"),
+        VarExpr::New ("prov_attr2")),
+      ValueExpr::New (Int32Value::New (0)))));
 
   result = result->Project (
     RULEQUERY,
     strlist ("prov_attr4",
       "eRuleQuery_attr2",
-      "eRuleQuery_attr3",
+      "eRuleQuery_attr4",
+      "P",
       "eRuleQuery_attr1",
       "prov_attr4"),
     strlist ("ruleQuery_attr1",
       "ruleQuery_attr2",
       "ruleQuery_attr3",
       "ruleQuery_attr4",
+      "ruleQuery_attr5",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Idb6b_eca (Ptr<Tuple> eRuleQuery)
+{
+  RAPIDNET_LOG_INFO ("Idb6b_eca triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (PROV)->Join (
+    eRuleQuery,
+    strlist ("prov_attr3", "prov_attr1"),
+    strlist ("eRuleQuery_attr4", "eRuleQuery_attr1"));
+
+  result->Assign (Assignor::New ("Prov",
+    FPEdb::New (
+      VarExpr::New ("prov_attr2"),
+      VarExpr::New ("eRuleQuery_attr1"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_GT,
+      FMember::New (
+        VarExpr::New ("eRuleQuery_attr5"),
+        VarExpr::New ("prov_attr2")),
+      ValueExpr::New (Int32Value::New (0)))));
+
+  result = result->Project (
+    PRETURN,
+    strlist ("eRuleQuery_attr6",
+      "eRuleQuery_attr3",
+      "prov_attr2",
+      "Prov",
+      "eRuleQuery_attr6"),
+    strlist ("pReturn_attr1",
+      "pReturn_attr2",
+      "pReturn_attr3",
+      "pReturn_attr4",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Acquaintance::Idb6c_eca (Ptr<Tuple> eRuleQuery)
+{
+  RAPIDNET_LOG_INFO ("Idb6c_eca triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (PROV)->Join (
+    eRuleQuery,
+    strlist ("prov_attr3", "prov_attr1"),
+    strlist ("eRuleQuery_attr4", "eRuleQuery_attr1"));
+
+  result->Assign (Assignor::New ("Prov",
+    FPEdb::New (
+      VarExpr::New ("prov_attr2"),
+      VarExpr::New ("eRuleQuery_attr1"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_GT,
+      FSize::New (
+        VarExpr::New ("eRuleQuery_attr5")),
+      ValueExpr::New (Int32Value::New (3)))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      FMember::New (
+        VarExpr::New ("eRuleQuery_attr5"),
+        VarExpr::New ("prov_attr2")),
+      ValueExpr::New (Int32Value::New (0)))));
+
+  result = result->Project (
+    PRETURN,
+    strlist ("eRuleQuery_attr6",
+      "eRuleQuery_attr3",
+      "prov_attr2",
+      "Prov",
+      "eRuleQuery_attr6"),
+    strlist ("pReturn_attr1",
+      "pReturn_attr2",
+      "pReturn_attr3",
+      "pReturn_attr4",
       RN_DEST));
 
   Send (result);
@@ -5521,7 +5493,7 @@ Acquaintance::Idb8Eca0Ins (Ptr<Tuple> pResultTmp)
       FSize::New (
         VarExpr::New ("pResultTmp_attr5")),
       FSize::New (
-        VarExpr::New ("pQList_attr3")))));
+        VarExpr::New ("pQList_attr4")))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_NEQ,
@@ -5556,7 +5528,7 @@ Acquaintance::Idb8Eca1Ins (Ptr<Tuple> pQList)
       FSize::New (
         VarExpr::New ("pResultTmp_attr5")),
       FSize::New (
-        VarExpr::New ("pQList_attr3")))));
+        VarExpr::New ("pQList_attr4")))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_NEQ,
@@ -5623,10 +5595,12 @@ Acquaintance::Rv1_eca (Ptr<Tuple> ruleQuery)
     RQLIST,
     strlist ("ruleQuery_attr1",
       "ruleQuery_attr2",
-      "ruleExec_attr5"),
+      "ruleExec_attr5",
+      "ruleQuery_attr4"),
     strlist ("rQList_attr1",
       "rQList_attr2",
-      "rQList_attr3"));
+      "rQList_attr3",
+      "rQList_attr4"));
 
   Insert (result);
 }
@@ -5646,7 +5620,7 @@ Acquaintance::Rv2_eca (Ptr<Tuple> ruleQuery)
     RRESULTTMP,
     strlist ("ruleQuery_attr1",
       "ruleQuery_attr2",
-      "ruleQuery_attr4",
+      "ruleQuery_attr5",
       "ruleQuery_attr3",
       "Buf"),
     strlist ("rResultTmp_attr1",
@@ -5744,10 +5718,12 @@ Acquaintance::Rv5_eca (Ptr<Tuple> rIterate)
     EPROVQUERY,
     strlist ("rIterate_attr1",
       "NQID",
-      "VID"),
+      "VID",
+      "rQList_attr4"),
     strlist ("eProvQuery_attr1",
       "eProvQuery_attr2",
-      "eProvQuery_attr3"));
+      "eProvQuery_attr3",
+      "eProvQuery_attr4"));
 
   SendLocal (result);
 }
@@ -5767,11 +5743,13 @@ Acquaintance::Rv6_eca (Ptr<Tuple> eProvQuery)
     strlist ("eProvQuery_attr1",
       "eProvQuery_attr2",
       "eProvQuery_attr3",
+      "eProvQuery_attr4",
       "$1"),
     strlist ("provQuery_attr1",
       "provQuery_attr2",
       "provQuery_attr3",
-      "provQuery_attr4"));
+      "provQuery_attr4",
+      "provQuery_attr5"));
 
   SendLocal (result);
 }

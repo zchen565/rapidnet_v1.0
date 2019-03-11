@@ -141,13 +141,11 @@ AcquaintanceQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                VarExpr::New ("tuple_attr2"),
-                VarExpr::New ("tuple_attr3")),
-              VarExpr::New ("tuple_attr4")),
-            VarExpr::New ("tuple_attr5")),
-          VarExpr::New ("tuple_attr6")),
-        VarExpr::New ("tuple_attr7")))));
+              VarExpr::New ("tuple_attr2"),
+              VarExpr::New ("tuple_attr3")),
+            VarExpr::New ("tuple_attr4")),
+          VarExpr::New ("tuple_attr5")),
+        VarExpr::New ("tuple_attr6")))));
 
   result->Assign (Assignor::New ("Time",
     FNow::New (
@@ -161,17 +159,23 @@ AcquaintanceQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
           VarExpr::New ("UID")),
         VarExpr::New ("Time")))));
 
+  result->Assign (Assignor::New ("P",
+    FAppend::New (
+      ValueExpr::New (StrValue::New ("")))));
+
   result = result->Project (
     PROVQUERY,
     strlist ("tuple_attr3",
       "QID",
       "UID",
+      "P",
       "q1_ecaperiodic_attr1",
       "tuple_attr3"),
     strlist ("provQuery_attr1",
       "provQuery_attr2",
       "provQuery_attr3",
       "provQuery_attr4",
+      "provQuery_attr5",
       RN_DEST));
 
   Send (result);

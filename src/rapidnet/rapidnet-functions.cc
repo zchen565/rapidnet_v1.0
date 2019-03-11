@@ -439,7 +439,7 @@ Ptr<Value>
 FPEdb::Eval(Ptr<Tuple> tuple)
 {
   string prov = m_prov->Eval (tuple)-> ToString();  
-  //cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<prov<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
+  // cout<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<prov<<"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"<<endl;
   int j = 0;
   bool numeric = true;
   while (j < prov.size())

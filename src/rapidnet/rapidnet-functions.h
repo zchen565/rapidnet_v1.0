@@ -88,6 +88,10 @@ protected:
   Ptr<Expression> m_head, m_tail;
 };
 
+
+/**
+ * find intersection union of two lists
+ */
 class FIntersect : public FunctionExpr
 {
 public:
