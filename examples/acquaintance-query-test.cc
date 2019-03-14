@@ -251,7 +251,7 @@ void Print(){
 
 	PrintRelation (queryapps, AcquaintanceQuery::TUPLE);
   	PrintRelation (queryapps, AcquaintanceQuery::RECORDS); //modify: add col tuple's vid (hash)
-    // PrintRelation (apps, Acquaintance::SHARESULT);
+	// PrintRelation (apps, Acquaintance::SHARESULT);
 }
 
 
@@ -267,9 +267,9 @@ void train(){
 int main(int argc, char *argv[]){
 
 	
-  LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
-  LogComponentEnable("AcquaintanceQuery", LOG_LEVEL_INFO);
-  LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
+  // LogComponentEnable("Acquaintance", LOG_LEVEL_INFO);
+  // LogComponentEnable("AcquaintanceQuery", LOG_LEVEL_INFO);
+  // LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
   
   	initApps();
 
