@@ -4,7 +4,8 @@ import pygraphviz as pgv
 
 ruleDic = {'r2': lambda s1,s2 : 'know'+s1[4]+s2[4],
            'r1': lambda s1,s2 : 'know'+s1[4]+s2[4],
-           'r13': lambda s1,s2 : 'know'+s1[4]+s2[5]}
+           'r13': lambda s1,s2 : 'know'+s1[4]+s2[5],
+           'rd': lambda s1 : 'know'+s[8]+s[9]}
 
 def parseFile(file_name):
   with open(file_name, 'r') as f:
@@ -22,7 +23,7 @@ def preprocess(s):
     s = s.replace('knowEvent', 'know')
     s = s.replace('liveEvent', 'live')
     s = s.replace('likeEvent', 'like')
-    s = s.replace('relation', 'know')
+    # s = s.replace('relation', 'know')
     return s
 
 def firstLastMatch(s):
@@ -165,6 +166,8 @@ def drawGraphWithObj(G, obj, name_dic):
         l.append(child)
  
   else:
+    if obj[:4]=='know':
+      obj = obj[:-1]
     node_name = giveNodeName(G, obj, name_dic)
     setTupleNode(G, node_name)
     l.append(node_name)
