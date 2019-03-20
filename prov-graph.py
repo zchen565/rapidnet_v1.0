@@ -2,14 +2,28 @@ import re
 import pygraphviz as pgv
 
 
+ruleDic = {'r2': lambda s1,s2 : 'know'+s1[4]+s2[4],
+           'r1': lambda s1,s2 : 'know'+s1[4]+s2[4],
+           'r13': lambda s1,s2 : 'know'+s1[4]+s2[5]}
+
 def parseFile(file_name):
   with open(file_name, 'r') as f:
     s = f.readline().strip()
-    # s = deleteRules(s)
-    # s = deleteRedundantBrackets(s)
+    s = preprocess(s)
     d = parse(s)
     return d
 
+
+def preprocess(s):
+    s = deleteRule(s, 'ra@n257')
+    s = deleteRule(s, 'rb@n257')
+    s = deleteRule(s, 'rc@n257')
+    # s = deleteRule(s, 'rd@n257') 
+    s = s.replace('knowEvent', 'know')
+    s = s.replace('liveEvent', 'live')
+    s = s.replace('likeEvent', 'like')
+    s = s.replace('relation', 'know')
+    return s
 
 def firstLastMatch(s):
   count = 0
@@ -21,6 +35,18 @@ def firstLastMatch(s):
       if count==0 and i<len(s)-1:
         return False
   return True
+
+def checkParentheses(s):
+  count = 0
+  for c in s:
+    if c=='(':
+      count += 1
+    elif c==')':
+      count -= 1
+  if count == 0:
+    return True 
+  else:
+    return False 
 
 
 def parse(s):
@@ -115,7 +141,6 @@ def giveNodeName(G, node_name, name_dic):
     name_dic[node_name] += 1
     return node_name+':'+str(name_dic[node_name]-1)
 
-
 def drawGraphWithObj(G, obj, name_dic):
   l = []
   if isinstance(obj, dict):
@@ -157,43 +182,71 @@ def drawGraph(file_name, save_name):
   G.draw(save_name, prog='dot')
 
 
-def deleteRules(s):
-  return s.replace('ra@n257', '').replace('rb@n257', ''). \
-            replace('rc@n257', '').replace('rd@n257', '')
+def deleteRule(s, rule):
+  n = len(rule)
+  ans = ''
+  i = 0
+  pre = 0
+  while i<len(s)-n:
+    if s[i:i+n]==rule:
+      ans += s[pre:i]
+      leftIndex = i+n
+      rightIndex = leftIndex
+      count = 0
+      for j in range(leftIndex, len(s)):
+        if s[j]=='(':
+          count += 1
+        elif s[j]==')':
+          count -= 1
+          if count==0:
+            rightIndex = j
+            break
+      tmp = deleteRule(s[leftIndex+1:rightIndex], rule)
+      ans += tmp
+      pre = rightIndex+1
+      i = rightIndex
+    i += 1
+  ans += s[pre:len(s)]
+  return ans
+
+
 
 def checkRedundancy(s):
   if s[0]=='(' and s[1]=='(' and \
-    s[-1]==')' and s[-2]==')':
+    s[-1]==')' and s[-2]==')' and \
+    firstLastMatch(s[1:-1]):
     return True
   return False
 
-
+'''
 def deleteRedundantBrackets(s):
+  if not s.startswith('('):
+    return s
   ans = ''
   i = 0
   count = 0
   pre = 0
   while i<len(s):
-    while i<len(s) and s[i]!='(':
+    while s[i]!='(':
       i += 1
     ans += s[pre:i]
     pre = i
-    if i==len(s):
-      return ans
-    if s[i]=='(':
-      count += 1
-    elif s[i]==')':
-      count -= 1
-      if count==0:
-        tmp = s[pre:i+1]
-        while checkRedundancy(tmp):
-          tmp = tmp[1:-1]
-        ans += tmp
+    while i<len(s):
+      if s[i]=='(':
+        count += 1
+      elif s[i]==')':
+        count -= 1
+        if count==0:
+          tmp = s[pre:i+1]
+          while checkRedundancy(tmp):
+            tmp = deleteRedundantBrackets(tmp[1:-1])
+          ans += tmp
+          pre = i+1
+      i += 1
     i += 1
-    pre = i
   return ans
-        
-        
+'''
+          
 
 if __name__ == '__main__':
   # d = parseFile('./data/prov/knows.txt')    
