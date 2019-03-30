@@ -9,9 +9,6 @@ def sample(data, sampled, iters, refer, num):
     l = np.array(data.index)
     np.random.shuffle(l)
     for i in range(num):
-      print l[i]
-      print data.loc[l[i]:l[i]+1]
-      print data
       tmp = tmp.append(data.loc[l[i]:l[i]+1])
       r = np.random.choice(tmp[['node1', 'node2']].values.reshape(-1))
       tmp = tmp.append(sample(data, tmp, iters-1, r, num))
@@ -20,7 +17,6 @@ def sample(data, sampled, iters, refer, num):
     ndata = data[data[key]==refer]
     l = np.array(ndata.index)
     np.random.shuffle(l)
-    print ndata, l
     for i in range(min(num, len(l))):
       tmp = tmp.append(ndata.loc[l[i]:l[i]+1])
       r = np.random.choice(sampled[['node1', 'node2']].values.reshape(-1))
