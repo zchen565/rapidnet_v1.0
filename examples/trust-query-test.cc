@@ -44,10 +44,6 @@ using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::trust;
 using namespace ns3::rapidnet::trustquery;
 
-map<string, int> people;
-map<string, int> cities;
-map<string, int> hobbies;
-
 ApplicationContainer apps;
 ApplicationContainer queryapps;
 
