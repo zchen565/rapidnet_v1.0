@@ -576,7 +576,7 @@ FPRule::Eval(Ptr<Tuple> tuple)
 
     uint32_t ipaddr = (rn_ipv4 (m_rloc->Eval (tuple))).Get ();
     ipaddr = (ipaddr / 256) % 65536;
-    ss << rule << "@n" << ipaddr << "(";
+    ss << '(' << rule << "@n" << ipaddr << "(";
   
     int index = 0;
 
@@ -586,7 +586,7 @@ FPRule::Eval(Ptr<Tuple> tuple)
       ss << (*it)->ToString ();
     }
 
-    ss << ")";
+    ss << "))";
 	
     return StrValue::New (ss.str ());
   }

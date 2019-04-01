@@ -188,6 +188,14 @@ protected:
 
   virtual void Prov_r2_1Eca3Del (Ptr<Tuple> like);
 
+  virtual void Prov_r3_1Eca0Ins (Ptr<Tuple> liveEvent);
+
+  virtual void Prov_r3_1Eca0Del (Ptr<Tuple> liveEvent);
+
+  virtual void Prov_r3_1Eca3Ins (Ptr<Tuple> live);
+
+  virtual void Prov_r3_1Eca3Del (Ptr<Tuple> live);
+
   virtual void Prov_r6_1Eca0Ins (Ptr<Tuple> liveEvent);
 
   virtual void Prov_r6_1Eca0Del (Ptr<Tuple> liveEvent);
@@ -254,7 +262,9 @@ protected:
 
   virtual void Edb1_eca (Ptr<Tuple> provQuery);
 
-  virtual void Idb1_eca (Ptr<Tuple> provQuery);
+  virtual void Idb1a_eca (Ptr<Tuple> provQuery);
+
+  virtual void Idb1b_eca (Ptr<Tuple> provQuery);
 
   virtual void Idb2_eca (Ptr<Tuple> provQuery);
 
@@ -265,10 +275,6 @@ protected:
   virtual void Idb5_eca (Ptr<Tuple> pIterate);
 
   virtual void Idb6a_eca (Ptr<Tuple> eRuleQuery);
-
-  virtual void Idb6b_eca (Ptr<Tuple> eRuleQuery);
-
-  virtual void Idb6c_eca (Ptr<Tuple> eRuleQuery);
 
   virtual void Idb7_eca (Ptr<Tuple> rReturn);
 

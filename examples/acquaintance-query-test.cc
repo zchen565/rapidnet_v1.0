@@ -60,24 +60,22 @@ attr ("knowEvent_attr2", Int32Value, person1), \
 attr ("knowEvent_attr3", Int32Value, person2), \
 attr ("knowEvent_attr4", Int32Value, state))
 
-#define relation(local, person1, person2) \
+#define relation(local, person1, person2, state) \
 tuple (Acquaintance::RELATION, \
 attr ("relation_attr1", Ipv4Value, local), \
 attr ("relation_attr2", Int32Value, person1), \
-attr ("relation_attr3", Int32Value, person2))
+attr ("relation_attr3", Int32Value, person2), \
+attr ("relation_attr4", Int32Value, state))
 
 
-#define insertknow(local, person1, person2) \
-app(local)->Insert(relation(addr(local), person1, person2)); \
+#define insertknow(local, person1, person2, state) \
+app(local)->Insert(relation(addr(local), person1, person2, state)); \
 
 #define insertlike(local, person, hobby) \
 app(local)->Insert(like(addr(local), person, hobby));
 
 #define insertlive(local, person, city) \
 app(local)->Insert(live(addr(local), person, city));
-
-#define insertrelation(local, person1, person2) \
-app(local)->Insert(relation(addr(local), person1, person2));
 
 //define the tuple you would like to query and how to insert it
 #define tupleQuery(loc, name, attr1, attr2, attr3, attr4) \
@@ -179,7 +177,7 @@ void parse(vector<string> know_obs,
 		Ptr<Value> p2 = (Ptr<Value>) Create<Int32Value>(people[person2]);
 		p.push_back(p1);
 		p.push_back(p2);
-		insertknow(1, people[person1], people[person2]);
+		insertknow(1, people[person1], people[person2], 1);
 	}	
 	cout << endl;
 
@@ -224,6 +222,9 @@ void parse(vector<string> know_obs,
 		cout << people[person] << ' ' << hobbies[hobby] << endl;
 		insertlike(1, people[person], hobbies[hobby]);
 	}
+
+  for(map<string, int>::iterator it=people.begin(); it!=people.end(); it++)
+    cout << it->first << ' ' <<  it->second << endl;
 }
 
 void
@@ -250,7 +251,7 @@ void Print(){
     // PrintRelation (apps, Acquaintance::PROV);
 
 	PrintRelation (queryapps, AcquaintanceQuery::TUPLE);
-  	PrintRelation (queryapps, AcquaintanceQuery::RECORDS); //modify: add col tuple's vid (hash)
+  PrintRelation (queryapps, AcquaintanceQuery::RECORDS); //modify: add col tuple's vid (hash)
 	// PrintRelation (apps, Acquaintance::SHARESULT);
 }
 
@@ -276,7 +277,7 @@ int main(int argc, char *argv[]){
 	apps.Start (Seconds (0.0));
 	apps.Stop (Seconds (10.0));
 	queryapps.Start (Seconds (0.0));
-  	queryapps.Stop (Seconds (10.0));
+  queryapps.Stop (Seconds (10.0));
 
 	schedule (1.0, TupleToQuery);	
 	schedule (2.0, train);

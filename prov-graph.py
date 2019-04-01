@@ -2,15 +2,36 @@ import re
 import pygraphviz as pgv
 
 
+
+def trustR2(s1, s2):
+  s1 = s1[5:] if s1.startswith('trust') else s1[10:]
+  s2 = s2[5:] if s2.startswith('trust') else s2[10:]
+  a1, a2 = s1.split('-')
+  a3, a4 = s2.split('-')
+  if a2==a3:
+    return 'trustPath'+a1+'-'+a4
+  else:
+    return 'trustPath'+a3+'-'+a2
+
 ruleDic = {'r2': lambda s1,s2 : 'know'+s1[4]+s2[4],
            'r1': lambda s1,s2 : 'know'+s1[4]+s2[4],
-           'r13': lambda s1,s2 : 'know'+s1[4]+s2[5],
-           'rd': lambda s1 : 'know'+s[8]+s[9]}
+           'r13': lambda s1,s2 : 'know'+s1[4]+s2[5] if s1[5]==s2[4] else 'know'+s2[4]+s1[5],
+           'rd': lambda s : 'know'+s[8]+s[9],
+           'r0': lambda s : s}
+
+trustDic = {'ra': lambda s: 'trustEvent'+s[10:],
+            'r1': lambda s1,s2: 'trustPath'+s[5:],
+            'r2': trustR2,
+            'r3': lambda s1,s2: 'mutualTrustPath'+s1[10:]}
+
+nameDic = {0: 'ben', 1: 'Elena', 2: 'Dhanya', 3: 'Alex', 4:'Arti',
+           5: 'Sabina', 6: 'Jay', 7: 'Steve'}
 
 def parseFile(file_name):
   with open(file_name, 'r') as f:
     s = f.readline().strip()
     s = preprocess(s)
+    print s
     d = parse(s)
     return d
 
@@ -19,11 +40,11 @@ def preprocess(s):
     s = deleteRule(s, 'ra@n257')
     s = deleteRule(s, 'rb@n257')
     s = deleteRule(s, 'rc@n257')
-    # s = deleteRule(s, 'rd@n257') 
+    s = deleteRule(s, 'rd@n257') 
     s = s.replace('knowEvent', 'know')
     s = s.replace('liveEvent', 'live')
     s = s.replace('likeEvent', 'like')
-    # s = s.replace('relation', 'know')
+    s = s.replace('relation', 'know')
     return s
 
 def firstLastMatch(s):
@@ -49,67 +70,70 @@ def checkParentheses(s):
   else:
     return False 
 
+def deleteParentheses(s):
+  while s.startswith('(') and firstLastMatch(s):
+    s = s[1:-1]
+  return s
 
 def parse(s):
   if s.startswith('(') and firstLastMatch(s):
     return parse(s[1:-1])
 
-  elif re.match(r'r.{1,2}@n257\(.+\)$', s):
-    rl = []
-    cl = []
+  rl, cl = splitRule(s)
 
-    i = 0
-    pre = 0
-    count = 0
-    while i<len(s):
-      if s[i]=='(':
-        count -= 1
-      elif s[i]==')':
-        count += 1
-        if count==0:
-          rule = s[pre:i+1]
-          rl.append(rule)
-          if i+1<len(s): 
-            cl.append(s[i+1])
-          else:
-            break
-          i += 1
-          pre = i+1
-      i += 1
-
-    if len(rl)==1:
-      dic = {}
-      rule_name, rule_body = ruleParse(rl[0])
-      dic[rule_name] = parse(rule_body)
-      return dic
-    elif '*' in cl:
-      l = []
-      for rule in rl:
-        l.append(parse(rule))
-      return l
-    else:
-      dic = {}
-      for rule in rl:
-        rule_name, rule_body = ruleParse(rule)
-        dic[rule_name] = parse(rule_body)
-      return dic
-
-  else:
+  if '*' in cl:
     l = []
-    if '*' in s:
-      i = s.index('*')
-      l.append(s[:i])
-      l.append(parse(s[i+1:]))
-    else:
-      l.append(s)
+    for rule in rl:
+      rule = deleteParentheses(rule)
+      if not re.match(r'r.{1,2}@n257\(.+\)$', rule) and len(splitRule(rule)[0])==1:
+        l.append(rule)
+      else:
+        l.append(parse(rule))
     return l
-      
+  else:
+    dic = {}
+    for rule in rl:
+      rule = deleteParentheses(rule)
+      rule_name, rule_body = ruleParse(rule)
+      if rule_name!='r0':
+          dic[rule_name] = parse(rule_body)
+      else:
+        if '*' not in rule:
+          dic[rule_name] = rule_body
+        else:
+          dic[rule_name] = parse(rule_body)
+    return dic
 
+
+def splitRule(s):
+  rl = []
+  cl = []
+  i = 0
+  pre = 0
+  count = 0
+  while i<len(s):
+    if s[i]=='*' or s[i]=='+':
+      if count==0:
+        cl.append(s[i])
+        rl.append(s[pre:i])
+        pre = i+1
+    if s[i]=='(':
+      count += 1
+    elif s[i]==')':
+      count -= 1
+    i += 1
+  rl.append(s[pre:i])
+  return rl, cl
 
 def ruleParse(rule):
-  rule_name = rule.split('@')[0]
-  pattern = re.search('r.{1,2}@n257\((.+)\)', rule)
-  rule_body = pattern.group(1)
+  if re.match(r'r.{1,2}@n257\(.+\)$', rule):
+    print rule
+    rule_name = rule.split('@')[0]
+    pattern = re.search('r.{1,2}@n257\((.+)\)', rule)
+    rule_body = pattern.group(1)
+  else:
+    rule_name = 'r0'
+    rule_body = rule
   return rule_name, rule_body
 
 
@@ -145,26 +169,31 @@ def giveNodeName(G, node_name, name_dic):
 def drawGraphWithObj(G, obj, name_dic):
   l = []
   if isinstance(obj, dict):
+    query_name = None
     for key in obj.keys():
       node_name = giveNodeName(G, key, name_dic)
       setRuleNode(G, node_name)
       children = drawGraphWithObj(G, obj[key], name_dic)
       for child in children:
         G.add_edge(node_name, child)
+      if key!='r0':
+        query_name = ruleDic[key](children[0], children[1])
+        query_name = giveNodeName(G, query_name, name_dic)
+      else:
+        query_name = ruleDic[key](children[0])
       l.append(node_name)
-    if len(l)>1:
-      node_name = giveNodeName(G, 'add', name_dic)
-      setTupleNode(G, node_name)
-      for rule in l:
-        G.add_edge(node_name, rule)
-      return [node_name]
+    node_name = giveNodeName(G, query_name, name_dic)
+    setTupleNode(G, node_name)
+    for rule in l:
+      G.add_edge(node_name, rule)
+    return [node_name]
 
   elif isinstance(obj, list):
     for o in obj:
       children = drawGraphWithObj(G, o, name_dic)
       for child in children:
         l.append(child)
- 
+
   else:
     if obj[:4]=='know':
       obj = obj[:-1]
