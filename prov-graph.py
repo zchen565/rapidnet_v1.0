@@ -4,8 +4,10 @@ import pygraphviz as pgv
 
 
 def trustR2(s1, s2):
-  s1 = s1[5:] if s1.startswith('trust') else s1[10:]
-  s2 = s2[5:] if s2.startswith('trust') else s2[10:]
+  s1 = s1[9:] if s1.startswith('trustPath') else s1[5:]
+  s2 = s2[9:] if s2.startswith('trustPath') else s2[5:]
+  s1 = s1.split(':')[0]
+  s2 = s2.split(':')[0]
   a1, a2 = s1.split('-')
   a3, a4 = s2.split('-')
   if a2==a3:
@@ -19,18 +21,23 @@ ruleDic = {'r2': lambda s1,s2 : 'know'+s1[4]+s2[4],
            'rd': lambda s : 'know'+s[8]+s[9],
            'r0': lambda s : s}
 
-trustDic = {'ra': lambda s: 'trustEvent'+s[10:],
-            'r1': lambda s1,s2: 'trustPath'+s[5:],
+trustDic = {'ra': lambda s: 'trustEvent'+s[9:].split(':')[0],
+            'r1': lambda s : 'trustPath'+s[5:].split(':')[0],
             'r2': trustR2,
-            'r3': lambda s1,s2: 'mutualTrustPath'+s1[10:]}
+            'r3': lambda s1,s2: 'mutualTrustPath'+s1[10:].split(':')[0],
+            'r0': lambda s: s.split(':')[0]}
 
 nameDic = {0: 'ben', 1: 'Elena', 2: 'Dhanya', 3: 'Alex', 4:'Arti',
            5: 'Sabina', 6: 'Jay', 7: 'Steve'}
 
+
+def argsNum(func):
+  return len(func.func_code.co_varnames)
+
 def parseFile(file_name):
   with open(file_name, 'r') as f:
     s = f.readline().strip()
-    s = preprocess(s)
+    # s = deleteRule(s, 'r0@n257')
     print s
     d = parse(s)
     return d
@@ -75,12 +82,12 @@ def deleteParentheses(s):
     s = s[1:-1]
   return s
 
+
 def parse(s):
   if s.startswith('(') and firstLastMatch(s):
     return parse(s[1:-1])
 
   rl, cl = splitRule(s)
-
   if '*' in cl:
     l = []
     for rule in rl:
@@ -90,15 +97,18 @@ def parse(s):
       else:
         l.append(parse(rule))
     return l
+
   else:
     dic = {}
     for rule in rl:
       rule = deleteParentheses(rule)
       rule_name, rule_body = ruleParse(rule)
-      if rule_name!='r0':
-          dic[rule_name] = parse(rule_body)
+      while rule_name in dic:
+        rule_name += '_1'
+      if not rule_name.startswith('r0'):
+        dic[rule_name] = parse(rule_body)
       else:
-        if '*' not in rule:
+        if len(splitRule(rule_body)[0])==1:
           dic[rule_name] = rule_body
         else:
           dic[rule_name] = parse(rule_body)
@@ -127,7 +137,6 @@ def splitRule(s):
 
 def ruleParse(rule):
   if re.match(r'r.{1,2}@n257\(.+\)$', rule):
-    print rule
     rule_name = rule.split('@')[0]
     pattern = re.search('r.{1,2}@n257\((.+)\)', rule)
     rule_body = pattern.group(1)
@@ -166,21 +175,18 @@ def giveNodeName(G, node_name, name_dic):
     name_dic[node_name] += 1
     return node_name+':'+str(name_dic[node_name]-1)
 
-def drawGraphWithObj(G, obj, name_dic):
+def drawGraphWithObj(G, obj, name_dic, func_dic):
   l = []
   if isinstance(obj, dict):
     query_name = None
     for key in obj.keys():
-      node_name = giveNodeName(G, key, name_dic)
+      rule = key.split('_')[0]
+      node_name = giveNodeName(G, rule, name_dic)
       setRuleNode(G, node_name)
-      children = drawGraphWithObj(G, obj[key], name_dic)
+      children = drawGraphWithObj(G, obj[key], name_dic, func_dic)
       for child in children:
         G.add_edge(node_name, child)
-      if key!='r0':
-        query_name = ruleDic[key](children[0], children[1])
-        query_name = giveNodeName(G, query_name, name_dic)
-      else:
-        query_name = ruleDic[key](children[0])
+      query_name = func_dic[rule](*(children[i] for i in range(func_dic[rule].func_code.co_argcount)))
       l.append(node_name)
     node_name = giveNodeName(G, query_name, name_dic)
     setTupleNode(G, node_name)
@@ -190,7 +196,7 @@ def drawGraphWithObj(G, obj, name_dic):
 
   elif isinstance(obj, list):
     for o in obj:
-      children = drawGraphWithObj(G, o, name_dic)
+      children = drawGraphWithObj(G, o, name_dic, func_dic)
       for child in children:
         l.append(child)
 
@@ -204,12 +210,11 @@ def drawGraphWithObj(G, obj, name_dic):
   return l
 
 
-def drawGraph(file_name, save_name):
+def drawGraph(file_name, save_name, func_dic):
   d = parseFile(file_name)
-  print d
   name_dic = {}
   G = pgv.AGraph(strict=True, directed=True)
-  drawGraphWithObj(G, d, name_dic)
+  drawGraphWithObj(G, d, name_dic, func_dic)
   G.layout()
   G.draw(save_name, prog='dot')
 
@@ -242,7 +247,6 @@ def deleteRule(s, rule):
   return ans
 
 
-
 def checkRedundancy(s):
   if s[0]=='(' and s[1]=='(' and \
     s[-1]==')' and s[-2]==')' and \
@@ -250,40 +254,8 @@ def checkRedundancy(s):
     return True
   return False
 
-'''
-def deleteRedundantBrackets(s):
-  if not s.startswith('('):
-    return s
-  ans = ''
-  i = 0
-  count = 0
-  pre = 0
-  while i<len(s):
-    while s[i]!='(':
-      i += 1
-    ans += s[pre:i]
-    pre = i
-    while i<len(s):
-      if s[i]=='(':
-        count += 1
-      elif s[i]==')':
-        count -= 1
-        if count==0:
-          tmp = s[pre:i+1]
-          while checkRedundancy(tmp):
-            tmp = deleteRedundantBrackets(tmp[1:-1])
-          ans += tmp
-          pre = i+1
-      i += 1
-    i += 1
-  return ans
-'''
-          
-
 if __name__ == '__main__':
-  # d = parseFile('./data/prov/knows.txt')    
-  # print d
-  drawGraph('./data/prov/knows.txt', './data/plot/knows.png')
+  drawGraph('./data/prov/trustPath45.txt', './data/plot/trustPath45.png', trustDic)
   '''
   G = pgv.AGraph(strict=True, directed=True)
   G.add_node(1)
