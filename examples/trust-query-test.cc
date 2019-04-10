@@ -137,7 +137,7 @@ void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "trustPath", 1, 4, 5);  
+  inserttuple(1, "mutualTrustPath", 1, 1, 6);  
 }
 
 void Print(){
