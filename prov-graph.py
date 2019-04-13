@@ -96,6 +96,8 @@ def parse(s):
     for rule in rl:
       rule = deleteParentheses(rule)
       if not re.match(r'r.{1,2}@n257\(.+\)$', rule) and len(splitRule(rule)[0])==1:
+        if rule=='1':
+          return []
         l.append(rule)
       else:
         l.append(parse(rule))
@@ -223,6 +225,9 @@ def drawGraphWithObj(G, obj, name_dic, func_dic):
 def drawGraph(file_name, save_name, func_dic):
   d = parseFile(file_name)
   print d
+  d = prune(d)
+  print d
+  print toString(d)
   name_dic = {}
   G = pgv.AGraph(strict=True, directed=True)
   G.graph_attr['rankdir'] = 'BT'
@@ -233,6 +238,47 @@ def drawGraph(file_name, save_name, func_dic):
   G.layout()
   G.draw(save_name, prog='dot')
 
+
+def prune(obj):
+  if isinstance(obj, dict):
+    d = {}
+    for key in obj.keys():
+      if obj[key]!=[]:
+        p = prune(obj[key])
+        if isinstance(p, list) and len(p)!=len(obj[key]):
+          continue
+        elif isinstance(p, dict) and len(p)==0:
+          continue
+        d[key] = p
+    return d
+  elif isinstance(obj, list):
+    l = []
+    for ele in obj:
+      ele = prune(ele)
+      if isinstance(ele, dict) and len(ele)==0:
+        continue
+      l.append(ele)
+    return l
+  else:
+    return obj
+
+
+def toString(obj):
+  if isinstance(obj, dict):
+    s = ''
+    for key in obj.keys():
+      s += '('+key.split('_')[0]+'@n257'+toString(obj[key])+')'+'+'
+    if len(obj)!=1:
+      return '('+s[:-1]+')'
+    else:
+      return s[:-1]
+  elif isinstance(obj, list):
+    for ele in obj:
+      s = '('+toString(obj[0])+'*'+toString(obj[1])+')'
+    return s
+  else:
+    return '('+obj+')'
+    
 
 def deleteRule(s, rule):
   n = len(rule)
