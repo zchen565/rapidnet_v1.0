@@ -16,6 +16,18 @@
 #define TrustTrain \
 "./data/trust/sample.csv"
 
+#define TrustTrain_5 \
+"./data/trust/sample_5.csv"
+
+#define TrustTrain_10 \
+"./data/trust/sample_10.csv"
+
+#define TrustTrain_20 \
+"./data/trust/sample_20.csv"
+
+#define TrustTrain_50 \
+"./data/trust/sample_50.csv"
+
 #define trust(local, person1, person2) \
 tuple (Trust::TRUST, \
 attr ("trust_attr1", Ipv4Value, local), \
@@ -137,21 +149,21 @@ void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "mutualTrustPath", 1, 1, 6);  
+  inserttuple(1, "mutualTrustPath", 1, 1, 2);  
 }
 
 void Print(){
-	PrintRelation(apps, Trust::TRUST);
-  PrintRelation(apps, Trust::TRUSTPATH);
+	// PrintRelation(apps, Trust::TRUST);
+  // PrintRelation(apps, Trust::TRUSTPATH);
   PrintRelation(apps, Trust::MUTUALTRUSTPATH);
 
-	PrintRelation (queryapps, TrustQuery::TUPLE);
+	// PrintRelation (queryapps, TrustQuery::TUPLE);
   PrintRelation (queryapps, TrustQuery::RECORDS); //modify: add col tuple's vid (hash)
 }
 
 
 void train(){
-	vector<string> trust_train = readFile(TrustTrain);
+	vector<string> trust_train = readFile(TrustTrain_50);
 	parse(trust_train);
 }
 

@@ -2,7 +2,6 @@ import re
 import pygraphviz as pgv
 
 
-
 def trustR2(s1, s2):
   s1 = s1[9:] if s1.startswith('trustPath') else s1[5:]
   s2 = s2[9:] if s2.startswith('trustPath') else s2[5:]
@@ -316,7 +315,8 @@ def checkRedundancy(s):
   return False
 
 if __name__ == '__main__':
-  drawGraph('./data/prov/mutualTrustPath1-6.txt', './data/plot/mutualTrustPath1-6.png', trustDic)
+  name = "mutualTrustPath1-2_50"
+  drawGraph('./data/prov/'+name+'.txt', './data/plot/'+name+'.png', trustDic)
   '''
   G = pgv.AGraph(strict=True, directed=True)
   G.add_node(1)
