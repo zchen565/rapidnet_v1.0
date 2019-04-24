@@ -514,8 +514,10 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
-      if (index++!=0) ss << "+";
-      ss << (*it)->ToString ();
+      if (!((*it)->ToString()=="1")) {
+        if (index++!=0) ss << "+";
+        ss << (*it)->ToString ();
+      }
     }
 
   //  string loc = m_loc->Eval (tuple)->ToString ();
@@ -525,6 +527,9 @@ FPIdb::Eval(Ptr<Tuple> tuple)
     {
 	  ss << ")";
     }
+
+    if (ss.str()=="()") 
+      return StrValue::New("1");
 
     return StrValue::New (ss.str ());
 	
@@ -582,6 +587,8 @@ FPRule::Eval(Ptr<Tuple> tuple)
 
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
+      if ((*it)->ToString()=="1")
+        return StrValue::New ("1");
       if (index++!=0) ss << "*";
       ss << (*it)->ToString ();
     }
