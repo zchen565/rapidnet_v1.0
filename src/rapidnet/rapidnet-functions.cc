@@ -491,8 +491,6 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 
   //cout<<"++++++++++++++++++++++++++"<<s<<"+++++++++++++++++++++++++++++++++"<<endl;
   if (numeric) {
-    cout << s << endl;
-    cout << "Idb" << endl;
     
 	int index = 0;
 	
@@ -532,10 +530,8 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 	  ss << ")";
     }
 
-    cout << ss.str() << endl;
 
     if (ss.str()=="()"||ss.str()=="") {
-      cout << "empty string" << tuple << endl;
       return StrValue::New("c");
     }
 
@@ -572,7 +568,6 @@ FPRule::Eval(Ptr<Tuple> tuple)
   }
   //cout<<"**************************************"<<s<<"*****************************"<<endl;
   if (numeric) {
-    cout << "fpRule" << endl;
     int index = 0;
     double product = 1.0;
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
