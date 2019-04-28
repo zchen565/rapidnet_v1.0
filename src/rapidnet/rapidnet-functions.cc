@@ -487,8 +487,12 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 	  j++;
 	}
   }
+  // numeric = false;
+
   //cout<<"++++++++++++++++++++++++++"<<s<<"+++++++++++++++++++++++++++++++++"<<endl;
   if (numeric) {
+    cout << s << endl;
+    cout << "Idb" << endl;
     
 	int index = 0;
 	
@@ -514,7 +518,7 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
-      if (!((*it)->ToString()=="1")) {
+      if (!((*it)->ToString()=="c")) {
         if (index++!=0) ss << "+";
         ss << (*it)->ToString ();
       }
@@ -528,8 +532,12 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 	  ss << ")";
     }
 
-    if (ss.str()=="()") 
-      return StrValue::New("1");
+    cout << ss.str() << endl;
+
+    if (ss.str()=="()"||ss.str()=="") {
+      cout << "empty string" << tuple << endl;
+      return StrValue::New("c");
+    }
 
     return StrValue::New (ss.str ());
 	
@@ -564,6 +572,7 @@ FPRule::Eval(Ptr<Tuple> tuple)
   }
   //cout<<"**************************************"<<s<<"*****************************"<<endl;
   if (numeric) {
+    cout << "fpRule" << endl;
     int index = 0;
     double product = 1.0;
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
@@ -585,16 +594,23 @@ FPRule::Eval(Ptr<Tuple> tuple)
   
     int index = 0;
 
+    bool valid = true;
+
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
-      if ((*it)->ToString()=="1")
-        return StrValue::New ("1");
+      if ((*it)->ToString()=="c"){
+        valid = false;
+      }
       if (index++!=0) ss << "*";
       ss << (*it)->ToString ();
     }
 
     ss << "))";
-	
+
+    if(!valid){
+      return StrValue::New ("c");
+    }
+
     return StrValue::New (ss.str ());
   }
   
