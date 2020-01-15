@@ -212,6 +212,7 @@ def drawGraphWithObj(G, obj, name_dic, func_dic):
 
 def drawGraph(file_name, save_name, func_dic):
   d = parseFile(file_name)
+  print d
   name_dic = {}
   G = pgv.AGraph(strict=True, directed=True)
   drawGraphWithObj(G, d, name_dic, func_dic)

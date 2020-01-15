@@ -40,27 +40,33 @@ materialize(rResultTmp,infinity,infinity,keys(1,2:cid)).
 /* EDB vertex */
 // should change in acquaintance-query
 edb1 pReturn(@Ret,QID,VID,Prov) :- provQuery(@X,QID,VID,P,Ret),
-       prov(@X,VID,RID,RLoc,Score), RID==VID, Prov:=f_pEDB(VID,X).
+       prov(@X,VID,RID,RLoc,Score), RID==VID,
+       shaResult(@X,VID,Content), Prov:=Content.
+//       Prov:=f_pEDB(VID,X).
 /* IDB vertex */
-idb1 pQList(@X,QID,P,a_LIST<RID>) :- provQuery(@X,QID,VID,P,Ret),
-       prov(@X,VID,RID,RLoc,Score), RID!=VID.
+idb1a pQList(@X,QID,P,a_LIST<RID>) :- provQuery(@X,QID,VID,P,Ret),
+       prov(@X,VID,RID,RLoc,Score), RID!=VID, f_member(P,VID)==0.
+idb1b pReturn(@Ret,QID,VID,Prov) :- provQuery(@X,QID,VID,P,Ret),
+       f_member(P,VID)>0,
+       shaResult(@X,VID,Content), Prov:=Content.
 idb2 pResultTmp(@X,QID,Ret,VID,Buf) :-
-       provQuery(@X,QID,VID,P,Ret), Buf:=f_empty().
+       provQuery(@X,QID,VID,P,Ret), Buf:=f_empty(), f_member(P,VID)==0.
 idb3 pIterate(@X,QID,N,Ret) :- provQuery(@X,QID,VID,P,Ret), N:=1.
 idb4 pIterate(@X,QID,N,Ret) :- pIterate(@X,QID,N1,Ret),
        pQList(@X,QID,P,List), N1<f_size(List), N:=N1+1.
 idb5 eRuleQuery(@X,NQID,QID,RID,P,Ret) :- pIterate(@X,QID,N,Ret),
        pQList(@X,QID,P,List), N<=f_size(List),
        RID:=f_item(List,N), NQID:=f_sha1(""+QID+RID).
-idb6a ruleQuery(@RLoc,QID,RID,P,X) :- eRuleQuery(@X,QID,OQID,RID,P1,Ret), f_size(P1)<=3,
-       prov(@X,VID,RID,RLoc,Score), f_member(P1,VID)==0,
+idb6a ruleQuery(@RLoc,QID,RID,P,X) :- eRuleQuery(@X,QID,OQID,RID,P1,Ret),
+       prov(@X,VID,RID,RLoc,Score),
        P2:=f_append(VID), P:=f_concat(P1,P2).
-idb6b pReturn(@Ret,OQID,VID,Prov) :- eRuleQuery(@X,QID,OQID,RID,P,Ret),
-       prov(@X,VID,RID,RLoc,Score), f_member(P,VID)>0,
-       Prov:=f_pEDB(VID,X).
-idb6c pReturn(@Ret,OQID,VID,Prov) :- eRuleQuery(@X,QID,OQID,RID,P,Ret), f_size(P)>3,
-       prov(@X,VID,RID,RLoc,Score), f_member(P,VID)==0,
-       Prov:=f_pEDB(VID,X).
+// idb6b pReturn(@Ret,OQID,VID,Prov) :- eRuleQuery(@X,QID,OQID,RID,P,Ret),
+//       prov(@X,VID,RID,RLoc,Score), f_member(P,VID)>0,
+//       shaResult(@X,VID,Content), Prov:=Content.
+//       Prov:=f_pEDB(VID,X).
+// idb6c pReturn(@Ret,OQID,VID,Prov) :- eRuleQuery(@X,QID,OQID,RID,P,Ret), f_size(P)>3,
+//       prov(@X,VID,RID,RLoc,Score), f_member(P,VID)==0,
+//       Prov:=f_pEDB(VID,X).
 idb7 pResultTmp(@X,QID,Ret,VID,Buf) :- rReturn(@X,NQID,RID,Prov),
        pResultTmp(@X,QID,Ret,VID,Buf1), NQID==f_sha1(""+QID+RID),
        Buf2:=f_append(Prov), Buf:=f_concat(Buf1,Buf2).
