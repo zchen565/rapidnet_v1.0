@@ -16,6 +16,39 @@
 #define TrustTrain \
 "./data/trust/sample.csv"
 
+#define TrustTrain_5 \
+"./data/trust/sample_5.csv"
+
+#define TrustTrain_10 \
+"./data/trust/sample_10.csv"
+
+#define TrustTrain_20 \
+"./data/trust/sample_20.csv"
+
+#define TrustTrain_30 \
+"./data/trust/sample_30.csv"
+
+#define TrustTrain_40 \
+"./data/trust/sample_40.csv"
+
+#define TrustTrain_50 \
+"./data/trust/sample_50.csv"
+
+#define TrustTrain_60 \
+"./data/trust/sample_60.csv"
+
+#define TrustTrain_70 \
+"./data/trust/sample_70.csv"
+
+#define TrustTrain_80 \
+"./data/trust/sample_80.csv"
+
+#define TrustTrain_90 \
+"./data/trust/sample_90.csv"
+
+#define TrustTrain_100 \
+"./data/trust/sample_100.csv"
+
 #define trust(local, person1, person2) \
 tuple (Trust::TRUST, \
 attr ("trust_attr1", Ipv4Value, local), \
@@ -126,7 +159,6 @@ void parse(vector<string> trust_obs)
 
     int p1 = stringToInt(person1);
     int p2 = stringToInt(person2);
-    cout << p1 << ' ' << p2 << ' ' << weight << endl;
 
 		inserttrust(1, p1, p2);
 	}	
@@ -137,21 +169,22 @@ void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "trustPath", 1, 4, 5);  
+  inserttuple(1, "mutualTrustPath", 1, 1, 2);  
 }
 
 void Print(){
-	PrintRelation(apps, Trust::TRUST);
-  PrintRelation(apps, Trust::TRUSTPATH);
+	// PrintRelation(apps, Trust::TRUST);
+  // PrintRelation(apps, Trust::TRUSTPATH);
   PrintRelation(apps, Trust::MUTUALTRUSTPATH);
 
-	PrintRelation (queryapps, TrustQuery::TUPLE);
+
+	// PrintRelation (queryapps, TrustQuery::TUPLE);
   PrintRelation (queryapps, TrustQuery::RECORDS); //modify: add col tuple's vid (hash)
 }
 
 
 void train(){
-	vector<string> trust_train = readFile(TrustTrain);
+	vector<string> trust_train = readFile(TrustTrain_70);
 	parse(trust_train);
 }
 
@@ -163,21 +196,22 @@ int main(int argc, char *argv[]){
   // LogComponentEnable("Trust", LOG_LEVEL_INFO);
   // LogComponentEnable("TrustQuery", LOG_LEVEL_INFO);
   // LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
-  
-  	initApps();
+  // for (int i=0; i<2; i++){
+    
+    initApps();
 
-	apps.Start (Seconds (0.0));
-	apps.Stop (Seconds (10.0));
-	queryapps.Start (Seconds (0.0));
-  queryapps.Stop (Seconds (10.0));
+    apps.Start (Seconds (0.0));
+    apps.Stop (Seconds (10.0));
+    queryapps.Start (Seconds (0.0));
+    queryapps.Stop (Seconds (10.0));
 
-	schedule (1.0, TupleToQuery);	
-	schedule (2.0, train);
-	schedule (5.0, Print);
+    schedule (1.0, TupleToQuery);	
+    schedule (2.0, train);
+    schedule (5.0, Print);
 
-	Simulator::Run ();
-	Simulator::Destroy ();
+    Simulator::Run ();
+    Simulator::Destroy ();
 
-	return 0;
-
+  // }
+  return 0;
 }

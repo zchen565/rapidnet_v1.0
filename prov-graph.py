@@ -2,7 +2,6 @@ import re
 import pygraphviz as pgv
 
 
-
 def trustR2(s1, s2):
   s1 = s1[9:] if s1.startswith('trustPath') else s1[5:]
   s2 = s2[9:] if s2.startswith('trustPath') else s2[5:]
@@ -15,16 +14,17 @@ def trustR2(s1, s2):
   else:
     return 'trustPath'+a3+'-'+a2
 
-ruleDic = {'r2': lambda s1,s2 : 'know'+s1[4]+s2[4],
+
+knowsDic = {'r2': lambda s1,s2 : 'know'+s1[4]+s2[4],
            'r1': lambda s1,s2 : 'know'+s1[4]+s2[4],
            'r13': lambda s1,s2 : 'know'+s1[4]+s2[5] if s1[5]==s2[4] else 'know'+s2[4]+s1[5],
            'rd': lambda s : 'know'+s[8]+s[9],
-           'r0': lambda s : s}
+           'r0': lambda s : s[:-1]}
 
 trustDic = {'ra': lambda s: 'trustEvent'+s[9:].split(':')[0],
             'r1': lambda s : 'trustPath'+s[5:].split(':')[0],
             'r2': trustR2,
-            'r3': lambda s1,s2: 'mutualTrustPath'+s1[10:].split(':')[0],
+            'r3': lambda s1, s2 : s2.replace('trustPath', 'mutualTrustPath').split(':')[0],
             'r0': lambda s: s.split(':')[0]}
 
 nameDic = {0: 'ben', 1: 'Elena', 2: 'Dhanya', 3: 'Alex', 4:'Arti',
@@ -37,6 +37,8 @@ def argsNum(func):
 def parseFile(file_name):
   with open(file_name, 'r') as f:
     s = f.readline().strip()
+    s = deleteRule(s, 'ra@n257')
+    # s = preprocess(s)
     # s = deleteRule(s, 'r0@n257')
     print s
     d = parse(s)
@@ -93,6 +95,8 @@ def parse(s):
     for rule in rl:
       rule = deleteParentheses(rule)
       if not re.match(r'r.{1,2}@n257\(.+\)$', rule) and len(splitRule(rule)[0])==1:
+        if rule=='1':
+          return []
         l.append(rule)
       else:
         l.append(parse(rule))
@@ -176,22 +180,29 @@ def giveNodeName(G, node_name, name_dic):
     return node_name+':'+str(name_dic[node_name]-1)
 
 def drawGraphWithObj(G, obj, name_dic, func_dic):
+
   l = []
   if isinstance(obj, dict):
     query_name = None
     for key in obj.keys():
       rule = key.split('_')[0]
+      # in case of r0
+      if rule=='r0':
+        node_name = giveNodeName(G, func_dic[rule](obj[key]), name_dic)
+        setTupleNode(G, node_name)
+        l.append(node_name)
+        return l
       node_name = giveNodeName(G, rule, name_dic)
       setRuleNode(G, node_name)
       children = drawGraphWithObj(G, obj[key], name_dic, func_dic)
       for child in children:
-        G.add_edge(node_name, child)
+        G.add_edge(child, node_name)
       query_name = func_dic[rule](*(children[i] for i in range(func_dic[rule].func_code.co_argcount)))
       l.append(node_name)
     node_name = giveNodeName(G, query_name, name_dic)
     setTupleNode(G, node_name)
     for rule in l:
-      G.add_edge(node_name, rule)
+      G.add_edge(rule, node_name)
     return [node_name]
 
   elif isinstance(obj, list):
@@ -213,12 +224,60 @@ def drawGraphWithObj(G, obj, name_dic, func_dic):
 def drawGraph(file_name, save_name, func_dic):
   d = parseFile(file_name)
   print d
+  d = prune(d)
+  print d
+  print toString(d)
   name_dic = {}
   G = pgv.AGraph(strict=True, directed=True)
+  G.graph_attr['rankdir'] = 'BT'
+  G.graph_attr['margin'] = 0.1
+  G.graph_attr['mclimit'] = 0.1
+  G.graph_attr['nodesep'] = 0.1
   drawGraphWithObj(G, d, name_dic, func_dic)
   G.layout()
   G.draw(save_name, prog='dot')
 
+
+def prune(obj):
+  if isinstance(obj, dict):
+    d = {}
+    for key in obj.keys():
+      if obj[key]!=[]:
+        p = prune(obj[key])
+        if isinstance(p, list) and len(p)!=len(obj[key]):
+          continue
+        elif isinstance(p, dict) and len(p)==0:
+          continue
+        d[key] = p
+    return d
+  elif isinstance(obj, list):
+    l = []
+    for ele in obj:
+      ele = prune(ele)
+      if isinstance(ele, dict) and len(ele)==0:
+        continue
+      l.append(ele)
+    return l
+  else:
+    return obj
+
+
+def toString(obj):
+  if isinstance(obj, dict):
+    s = ''
+    for key in obj.keys():
+      s += '('+key.split('_')[0]+'@n257'+toString(obj[key])+')'+'+'
+    if len(obj)!=1:
+      return '('+s[:-1]+')'
+    else:
+      return s[:-1]
+  elif isinstance(obj, list):
+    for ele in obj:
+      s = '('+toString(obj[0])+'*'+toString(obj[1])+')'
+    return s
+  else:
+    return '('+obj+')'
+    
 
 def deleteRule(s, rule):
   n = len(rule)
@@ -256,7 +315,8 @@ def checkRedundancy(s):
   return False
 
 if __name__ == '__main__':
-  drawGraph('./data/prov/trustPath45.txt', './data/plot/trustPath45.png', trustDic)
+  name = "mutualTrustPath1-2_50"
+  drawGraph('./data/prov/'+name+'.txt', './data/plot/'+name+'.png', trustDic)
   '''
   G = pgv.AGraph(strict=True, directed=True)
   G.add_node(1)

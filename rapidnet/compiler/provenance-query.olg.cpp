@@ -49,6 +49,7 @@ idb1a pQList(@X,QID,P,a_LIST<RID>) :- provQuery(@X,QID,VID,P,Ret),
 idb1b pReturn(@Ret,QID,VID,Prov) :- provQuery(@X,QID,VID,P,Ret),
        f_member(P,VID)>0,
        shaResult(@X,VID,Content), Prov:=Content.
+       shaResult(@X,VID,Content), Prov:="1".
 idb2 pResultTmp(@X,QID,Ret,VID,Buf) :-
        provQuery(@X,QID,VID,P,Ret), Buf:=f_empty(), f_member(P,VID)==0.
 idb3 pIterate(@X,QID,N,Ret) :- provQuery(@X,QID,VID,P,Ret), N:=1.

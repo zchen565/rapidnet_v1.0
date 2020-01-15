@@ -487,6 +487,8 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 	  j++;
 	}
   }
+  // numeric = false;
+
   //cout<<"++++++++++++++++++++++++++"<<s<<"+++++++++++++++++++++++++++++++++"<<endl;
   if (numeric) {
     
@@ -514,8 +516,10 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
-      if (index++!=0) ss << "+";
-      ss << (*it)->ToString ();
+      if (!((*it)->ToString()=="c")) {
+        if (index++!=0) ss << "+";
+        ss << (*it)->ToString ();
+      }
     }
 
   //  string loc = m_loc->Eval (tuple)->ToString ();
@@ -524,6 +528,11 @@ FPIdb::Eval(Ptr<Tuple> tuple)
     if (provList.size() != 1) 
     {
 	  ss << ")";
+    }
+
+
+    if (ss.str()=="()"||ss.str()=="") {
+      return StrValue::New("c");
     }
 
     return StrValue::New (ss.str ());
@@ -580,14 +589,23 @@ FPRule::Eval(Ptr<Tuple> tuple)
   
     int index = 0;
 
+    bool valid = true;
+
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
+      if ((*it)->ToString()=="c"){
+        valid = false;
+      }
       if (index++!=0) ss << "*";
       ss << (*it)->ToString ();
     }
 
     ss << "))";
-	
+
+    if(!valid){
+      return StrValue::New ("c");
+    }
+
     return StrValue::New (ss.str ());
   }
   
