@@ -101,10 +101,6 @@ protected:
 
   virtual void Prov_r1a_5_ecaDel (Ptr<Tuple> ecancerDelete);
 
-  virtual void Prov_r1b_1Eca0Ins (Ptr<Tuple> smokeEvent);
-
-  virtual void Prov_r1b_1Eca0Del (Ptr<Tuple> smokeEvent);
-
   virtual void Prov_r2_1Eca0Ins (Ptr<Tuple> friends);
 
   virtual void Prov_r2_1Eca0Del (Ptr<Tuple> friends);
@@ -136,6 +132,10 @@ protected:
   virtual void Prov_r3_1Eca3Ins (Ptr<Tuple> smokeEvent);
 
   virtual void Prov_r3_1Eca3Del (Ptr<Tuple> smokeEvent);
+
+  virtual void Prov_r4_1Eca0Ins (Ptr<Tuple> smokeEvent);
+
+  virtual void Prov_r4_1Eca0Del (Ptr<Tuple> smokeEvent);
 
   virtual void Prov_r11_1Eca0Ins (Ptr<Tuple> smoke);
 
@@ -179,9 +179,7 @@ protected:
 
   virtual void Edb1_eca (Ptr<Tuple> provQuery);
 
-  virtual void Idb1a_eca (Ptr<Tuple> provQuery);
-
-  virtual void Idb1b_eca (Ptr<Tuple> provQuery);
+  virtual void Idb1_eca (Ptr<Tuple> provQuery);
 
   virtual void Idb2_eca (Ptr<Tuple> provQuery);
 
@@ -191,7 +189,7 @@ protected:
 
   virtual void Idb5_eca (Ptr<Tuple> pIterate);
 
-  virtual void Idb6a_eca (Ptr<Tuple> eRuleQuery);
+  virtual void Idb6_eca (Ptr<Tuple> eRuleQuery);
 
   virtual void Idb7_eca (Ptr<Tuple> rReturn);
 

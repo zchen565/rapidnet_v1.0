@@ -211,6 +211,8 @@ def build(bld):
     obj = bld.create_ns3_program('vqap-query-test')
     obj.source = 'vqap-query-test.cc'
    
-
+    obj = bld.create_ns3_program('smoke-test')
+    obj.source = 'smoke-test.cc'
     
-   
+    obj = bld.create_ns3_program('smoke-query-test')
+    obj.source = 'smoke-query-test.cc'

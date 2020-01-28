@@ -21,6 +21,7 @@
 #include "ns3/values-module.h"
 #include "ns3/helper-module.h"
 #include "ns3/smoke-module.h"
+#include "ns3/smoke-query-module.h"
 #include "ns3/list-value.h"
 #include <fstream>
 #include <string>
@@ -69,15 +70,66 @@ app(local)->Insert(friends(addr(local), person1, person2))
 
 
 
+
+#define tupleQuery(local, name, attr1, attr2) \
+tuple (SmokeQuery::TUPLE, \
+attr ("tuple_attr1", Ipv4Value, local), \
+attr ("tuple_attr2", StrValue, name), \
+attr ("tuple_attr3", Ipv4Value, attr1), \
+attr ("tuple_attr4", Int32Value, attr2) \
+)
+
+#define inserttuple(local, name, attr1, attr2) \
+queryNode->Insert(tupleQuery(queryNode->GetAddress(), name, addr(attr1), attr2))
+
+
+
+
 using namespace std;
 using namespace ns3;
 using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::smoke;
+using namespace ns3::rapidnet::smokequery;
 
 
 ApplicationContainer apps;
+ApplicationContainer queryapps;
+
 map<string, int> people;
 
+
+void initApps()
+{
+	NodeContainer mainAppNodes;
+	mainAppNodes.Create (3);
+
+	NodeContainer queryAppNodes;
+	queryAppNodes.Create (1);
+
+  NodeContainer csmaNodes;
+  csmaNodes.Add(mainAppNodes);
+  csmaNodes.Add(queryAppNodes);
+
+  CsmaHelper csma;
+
+  NetDeviceContainer csmaDevices;
+  csmaDevices = csma.Install (csmaNodes);
+
+  InternetStackHelper stack;
+  stack.Install (csmaNodes);
+
+  Ipv4AddressHelper address;
+  Ipv4Address base = "10.1.1.0";
+
+  address.SetBase (base, "255.255.255.0");
+  address.Assign (csmaDevices);
+
+  apps.Add(Create<SmokeHelper>()->Install(mainAppNodes));
+  queryapps.Add(Create<SmokeQueryHelper>()->Install(queryAppNodes));
+
+  SetMaxJitter (apps, 0.001);
+  SetMaxJitter (queryapps, 0.001);
+}
 
 
 void parseLine(const string& line) {
@@ -121,7 +173,7 @@ void parseLine(const string& line) {
 
 
 void train() {
-  ifstream fp(SmokeTrain);
+  ifstream fp(SmokeTest);
   string line;
 
   while (getline(fp, line)) {
@@ -152,25 +204,35 @@ void Print() {
   PrintRelation(apps, Smoke::FRIENDS);
   PrintRelation(apps, Smoke::SMOKE);
   PrintRelation(apps, Smoke::CANCER);
+  PrintRelation(queryapps, SmokeQuery::TUPLE);
+  PrintRelation(queryapps, SmokeQuery::RECORDS);
+}
+
+
+
+void TupleToQuery() {
+  Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
+  inserttuple(1, "cancer", 1, 2);
 }
 
 
 int main(int argc, char *argv[]){
+  
+  initApps();
 
-	apps = InitRapidNetApps (3, Create<SmokeHelper> ());
-	SetMaxJitter (apps, 0.001);
+  apps.Start (Seconds (0.0));
+  apps.Stop (Seconds (10.0));
+  queryapps.Start (Seconds (0.0));
+  queryapps.Stop (Seconds (10.0));
 
-	apps.Start (Seconds (0.0));
-	apps.Stop (Seconds (10.0));
-
-	schedule (2.0, train);
+  schedule (1.0, TupleToQuery);	
+  schedule (2.0, train);
   schedule (5.0, Print);
 
-	Simulator::Run ();
-	Simulator::Destroy ();
-
-	return 0;
-
+  Simulator::Run ();
+  Simulator::Destroy ();
+  
+  return 0;
 }
 	
 

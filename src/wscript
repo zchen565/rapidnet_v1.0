@@ -68,7 +68,8 @@ all_modules = (
     'applications/trust-query',
     'applications/vqap',
     'applications/vqap-query',
-    'applications/smoke'    
+    'applications/smoke',
+    'applications/smoke-query'
     )
 
 def set_options(opt):

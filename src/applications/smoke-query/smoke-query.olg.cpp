@@ -31,16 +31,7 @@
    synchronized with ISO/IEC 10646:2014, plus Amendment 1 (published
    2015-05-15).  */
 /* We do not support C11 <threads.h>.  */
-materialize(smoke, infinity, infinity, keys(1, 2:int32)).
-materialize(smokeEvent, infinity, infinity, keys(1, 2:int32)).
-materialize(cancer, infinity, infinity, keys(1, 2:int32)).
-materialize(friends, infinity, infinity, keys(1, 2:int32, 3:int32)).
-materialize(shaResult, infinity, infinity, keys(1, 2:cid, 3:str)).
-r1a 0.89 cancer(@Local, P) :- smoke(@Local, P).
-r2 0.44 smoke(@Local, A) :- friends(@Local, A, B), smokeEvent(@Local, B), A!=B.
-r3 0.44 smoke(@Local, B) :- friends(@Local, A, B), smokeEvent(@Local, A), A!=B.
-r4 smoke(@Local, P) :- smokeEvent(@Local, P).
-r11 shaResult(@Local, VID, Content) :- smoke(@Local, P), VID:=f_sha1("smoke"+Local+P), Name:="smoke", Content:=Name+P.
-r12 shaResult(@Local, VID, Content) :- cancer(@Local, P), VID:=f_sha1("cancer"+Local+P), Name:="cancer", Content:=Name+P.
-r13 shaResult(@Local, VID, Content) :- friends(@Local, A, B), VID:=f_sha1("friends"+Local+A+B), Name:="friends", Content:=Name+A+"_"+B.
-r14 shaResult(@Local, VID, Content) :- smokeEvent(@Local, P), VID:=f_sha1("smokeEvent"+Local+P), Name:="smokeEvent", Content:=Name+P.
+materialize(records,infinity,infinity,keys(1,2:cid,3:cid)).
+materialize(tuple, infinity, infinity, keys(1,2:str)).
+q1 provQuery(@Loc, QID, UID, ME):- periodic(@ME,E,4,2), tuple(@ME, Name, Loc, X), UID:=f_sha1(Name+Loc+X), Time := f_now(), QID:=f_sha1(""+UID+Time), P:=f_append("").
+q2 records(@ME, QID, RID, Prov) :- pReturn(@ME, QID, RID, Prov).

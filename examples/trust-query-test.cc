@@ -184,7 +184,7 @@ void Print(){
 
 
 void train(){
-	vector<string> trust_train = readFile(TrustTrain_70);
+	vector<string> trust_train = readFile(TrustTrain_30);
 	parse(trust_train);
 }
 
