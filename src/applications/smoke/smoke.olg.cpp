@@ -36,7 +36,7 @@ materialize(smokeEvent, infinity, infinity, keys(1, 2:int32)).
 materialize(cancer, infinity, infinity, keys(1, 2:int32)).
 materialize(friends, infinity, infinity, keys(1, 2:int32, 3:int32)).
 materialize(shaResult, infinity, infinity, keys(1, 2:cid, 3:str)).
-r1a 0.89 cancer(@Local, P) :- smoke(@Local, P).
+r1 0.89 cancer(@Local, P) :- smoke(@Local, P).
 r2 0.44 smoke(@Local, A) :- friends(@Local, A, B), smokeEvent(@Local, B), A!=B.
 r3 0.44 smoke(@Local, B) :- friends(@Local, A, B), smokeEvent(@Local, A), A!=B.
 r4 smoke(@Local, P) :- smokeEvent(@Local, P).

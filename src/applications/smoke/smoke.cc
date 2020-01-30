@@ -160,43 +160,43 @@ Smoke::DemuxRecv (Ptr<Tuple> tuple)
 
   if (IsInsertEvent (tuple, SMOKE))
     {
-      Prov_r1a_1Eca0Ins (tuple);
+      Prov_r1_1Eca0Ins (tuple);
     }
   if (IsDeleteEvent (tuple, SMOKE))
     {
-      Prov_r1a_1Eca0Del (tuple);
+      Prov_r1_1Eca0Del (tuple);
     }
   if (IsRecvEvent (tuple, ECANCERTEMP))
     {
-      Prov_r1a_2_ecaAdd (tuple);
+      Prov_r1_2_ecaAdd (tuple);
     }
   if (IsRecvEvent (tuple, ECANCERTEMPDELETE))
     {
-      Prov_r1a_2_ecaDel (tuple);
+      Prov_r1_2_ecaDel (tuple);
     }
   if (IsRecvEvent (tuple, ECANCERTEMP))
     {
-      Prov_r1a_3_ecaAdd (tuple);
+      Prov_r1_3_ecaAdd (tuple);
     }
   if (IsRecvEvent (tuple, ECANCERTEMPDELETE))
     {
-      Prov_r1a_3_ecaDel (tuple);
+      Prov_r1_3_ecaDel (tuple);
     }
   if (IsRecvEvent (tuple, ECANCER))
     {
-      Prov_r1a_4_ecaAdd (tuple);
+      Prov_r1_4_ecaAdd (tuple);
     }
   if (IsRecvEvent (tuple, ECANCERDELETE))
     {
-      Prov_r1a_4_ecaDel (tuple);
+      Prov_r1_4_ecaDel (tuple);
     }
   if (IsRecvEvent (tuple, ECANCER))
     {
-      Prov_r1a_5_ecaAdd (tuple);
+      Prov_r1_5_ecaAdd (tuple);
     }
   if (IsRecvEvent (tuple, ECANCERDELETE))
     {
-      Prov_r1a_5_ecaDel (tuple);
+      Prov_r1_5_ecaDel (tuple);
     }
   if (IsInsertEvent (tuple, FRIENDS))
     {
@@ -437,9 +437,9 @@ Smoke::DemuxRecv (Ptr<Tuple> tuple)
 }
 
 void
-Smoke::Prov_r1a_1Eca0Ins (Ptr<Tuple> smoke)
+Smoke::Prov_r1_1Eca0Ins (Ptr<Tuple> smoke)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_1Eca0Ins triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_1Eca0Ins triggered");
 
   Ptr<Tuple> result = smoke;
 
@@ -462,7 +462,7 @@ Smoke::Prov_r1a_1Eca0Ins (Ptr<Tuple> smoke)
     ValueExpr::New (RealValue::New (0.89))));
 
   result->Assign (Assignor::New ("R",
-    ValueExpr::New (StrValue::New ("r1a"))));
+    ValueExpr::New (StrValue::New ("r1"))));
 
   result->Assign (Assignor::New ("RID",
     FSha1::New (
@@ -498,9 +498,9 @@ Smoke::Prov_r1a_1Eca0Ins (Ptr<Tuple> smoke)
 }
 
 void
-Smoke::Prov_r1a_1Eca0Del (Ptr<Tuple> smoke)
+Smoke::Prov_r1_1Eca0Del (Ptr<Tuple> smoke)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_1Eca0Del triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_1Eca0Del triggered");
 
   Ptr<Tuple> result = smoke;
 
@@ -523,7 +523,7 @@ Smoke::Prov_r1a_1Eca0Del (Ptr<Tuple> smoke)
     ValueExpr::New (RealValue::New (0.89))));
 
   result->Assign (Assignor::New ("R",
-    ValueExpr::New (StrValue::New ("r1a"))));
+    ValueExpr::New (StrValue::New ("r1"))));
 
   result->Assign (Assignor::New ("RID",
     FSha1::New (
@@ -559,9 +559,9 @@ Smoke::Prov_r1a_1Eca0Del (Ptr<Tuple> smoke)
 }
 
 void
-Smoke::Prov_r1a_2_ecaAdd (Ptr<Tuple> ecancerTemp)
+Smoke::Prov_r1_2_ecaAdd (Ptr<Tuple> ecancerTemp)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_2_ecaAdd triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_2_ecaAdd triggered");
 
   Ptr<Tuple> result = ecancerTemp;
 
@@ -582,9 +582,9 @@ Smoke::Prov_r1a_2_ecaAdd (Ptr<Tuple> ecancerTemp)
 }
 
 void
-Smoke::Prov_r1a_2_ecaDel (Ptr<Tuple> ecancerTempDelete)
+Smoke::Prov_r1_2_ecaDel (Ptr<Tuple> ecancerTempDelete)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_2_ecaDel triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_2_ecaDel triggered");
 
   Ptr<Tuple> result = ecancerTempDelete;
 
@@ -605,9 +605,9 @@ Smoke::Prov_r1a_2_ecaDel (Ptr<Tuple> ecancerTempDelete)
 }
 
 void
-Smoke::Prov_r1a_3_ecaAdd (Ptr<Tuple> ecancerTemp)
+Smoke::Prov_r1_3_ecaAdd (Ptr<Tuple> ecancerTemp)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_3_ecaAdd triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_3_ecaAdd triggered");
 
   Ptr<Tuple> result = ecancerTemp;
 
@@ -633,9 +633,9 @@ Smoke::Prov_r1a_3_ecaAdd (Ptr<Tuple> ecancerTemp)
 }
 
 void
-Smoke::Prov_r1a_3_ecaDel (Ptr<Tuple> ecancerTempDelete)
+Smoke::Prov_r1_3_ecaDel (Ptr<Tuple> ecancerTempDelete)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_3_ecaDel triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_3_ecaDel triggered");
 
   Ptr<Tuple> result = ecancerTempDelete;
 
@@ -661,9 +661,9 @@ Smoke::Prov_r1a_3_ecaDel (Ptr<Tuple> ecancerTempDelete)
 }
 
 void
-Smoke::Prov_r1a_4_ecaAdd (Ptr<Tuple> ecancer)
+Smoke::Prov_r1_4_ecaAdd (Ptr<Tuple> ecancer)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_4_ecaAdd triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_4_ecaAdd triggered");
 
   Ptr<Tuple> result = ecancer;
 
@@ -681,9 +681,9 @@ Smoke::Prov_r1a_4_ecaAdd (Ptr<Tuple> ecancer)
 }
 
 void
-Smoke::Prov_r1a_4_ecaDel (Ptr<Tuple> ecancerDelete)
+Smoke::Prov_r1_4_ecaDel (Ptr<Tuple> ecancerDelete)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_4_ecaDel triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_4_ecaDel triggered");
 
   Ptr<Tuple> result = ecancerDelete;
 
@@ -701,9 +701,9 @@ Smoke::Prov_r1a_4_ecaDel (Ptr<Tuple> ecancerDelete)
 }
 
 void
-Smoke::Prov_r1a_5_ecaAdd (Ptr<Tuple> ecancer)
+Smoke::Prov_r1_5_ecaAdd (Ptr<Tuple> ecancer)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_5_ecaAdd triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_5_ecaAdd triggered");
 
   Ptr<Tuple> result = ecancer;
 
@@ -738,9 +738,9 @@ Smoke::Prov_r1a_5_ecaAdd (Ptr<Tuple> ecancer)
 }
 
 void
-Smoke::Prov_r1a_5_ecaDel (Ptr<Tuple> ecancerDelete)
+Smoke::Prov_r1_5_ecaDel (Ptr<Tuple> ecancerDelete)
 {
-  RAPIDNET_LOG_INFO ("Prov_r1a_5_ecaDel triggered");
+  RAPIDNET_LOG_INFO ("Prov_r1_5_ecaDel triggered");
 
   Ptr<Tuple> result = ecancerDelete;
 
@@ -3240,10 +3240,20 @@ Smoke::Idb9_eca (Ptr<Tuple> ePReturn)
     strlist ("pResultTmp_attr2", "pResultTmp_attr1"),
     strlist ("ePReturn_attr2", "ePReturn_attr1"));
 
-  result->Assign (Assignor::New ("Prov",
+  result = GetRelation (SHARESULT)->Join (
+    result,
+    strlist ("shaResult_attr2", "shaResult_attr1"),
+    strlist ("pResultTmp_attr4", "ePReturn_attr1"));
+
+  result->Assign (Assignor::New ("Prov1",
     FPIdb::New (
       VarExpr::New ("pResultTmp_attr5"),
       VarExpr::New ("ePReturn_attr1"))));
+
+  result->Assign (Assignor::New ("Prov",
+    Operation::New (RN_PLUS,
+      VarExpr::New ("shaResult_attr3"),
+      VarExpr::New ("Prov1"))));
 
   result = result->Project (
     PRETURN,

@@ -38,7 +38,9 @@ idb8 ePReturn(@X,QID) :- pResultTmp(@X,QID,Ret,VID,Buf),
        f_size(Buf)==f_size(List), f_size(Buf)!=0.
 
 idb9 pReturn(@Ret,QID,VID,Prov) :- ePReturn(@X,QID),
-       pResultTmp(@X,QID,Ret,VID,Buf), Prov:=f_pIDB(Buf,X).
+       pResultTmp(@X,QID,Ret,VID,Buf), Prov1:=f_pIDB(Buf,X),
+       shaResult(@X, VID, Content),
+       Prov:=Content+Prov1.
 
 /* Rule Vertex */
 rv1 rQList(@X,QID,List) :- ruleQuery(@X,QID,RID,Ret),

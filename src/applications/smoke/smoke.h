@@ -81,25 +81,25 @@ protected:
 
   virtual void DemuxRecv (Ptr<Tuple> tuple);
 
-  virtual void Prov_r1a_1Eca0Ins (Ptr<Tuple> smoke);
+  virtual void Prov_r1_1Eca0Ins (Ptr<Tuple> smoke);
 
-  virtual void Prov_r1a_1Eca0Del (Ptr<Tuple> smoke);
+  virtual void Prov_r1_1Eca0Del (Ptr<Tuple> smoke);
 
-  virtual void Prov_r1a_2_ecaAdd (Ptr<Tuple> ecancerTemp);
+  virtual void Prov_r1_2_ecaAdd (Ptr<Tuple> ecancerTemp);
 
-  virtual void Prov_r1a_2_ecaDel (Ptr<Tuple> ecancerTempDelete);
+  virtual void Prov_r1_2_ecaDel (Ptr<Tuple> ecancerTempDelete);
 
-  virtual void Prov_r1a_3_ecaAdd (Ptr<Tuple> ecancerTemp);
+  virtual void Prov_r1_3_ecaAdd (Ptr<Tuple> ecancerTemp);
 
-  virtual void Prov_r1a_3_ecaDel (Ptr<Tuple> ecancerTempDelete);
+  virtual void Prov_r1_3_ecaDel (Ptr<Tuple> ecancerTempDelete);
 
-  virtual void Prov_r1a_4_ecaAdd (Ptr<Tuple> ecancer);
+  virtual void Prov_r1_4_ecaAdd (Ptr<Tuple> ecancer);
 
-  virtual void Prov_r1a_4_ecaDel (Ptr<Tuple> ecancerDelete);
+  virtual void Prov_r1_4_ecaDel (Ptr<Tuple> ecancerDelete);
 
-  virtual void Prov_r1a_5_ecaAdd (Ptr<Tuple> ecancer);
+  virtual void Prov_r1_5_ecaAdd (Ptr<Tuple> ecancer);
 
-  virtual void Prov_r1a_5_ecaDel (Ptr<Tuple> ecancerDelete);
+  virtual void Prov_r1_5_ecaDel (Ptr<Tuple> ecancerDelete);
 
   virtual void Prov_r2_1Eca0Ins (Ptr<Tuple> friends);
 
