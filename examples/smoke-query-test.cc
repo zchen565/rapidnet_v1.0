@@ -173,7 +173,7 @@ void parseLine(const string& line) {
 
 
 void train() {
-  ifstream fp(SmokeTest);
+  ifstream fp(SmokeTrain);
   string line;
 
   while (getline(fp, line)) {

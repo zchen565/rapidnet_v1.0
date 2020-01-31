@@ -372,7 +372,11 @@ Smoke::DemuxRecv (Ptr<Tuple> tuple)
     }
   if (IsRecvEvent (tuple, EPRETURN))
     {
-      Idb9_eca (tuple);
+      Idb9a_eca (tuple);
+    }
+  if (IsRecvEvent (tuple, EPRETURN))
+    {
+      Idb9b_eca (tuple);
     }
   if (IsRecvEvent (tuple, RULEQUERY))
     {
@@ -2476,7 +2480,7 @@ Smoke::Idb1b_eca (Ptr<Tuple> provQuery)
     strlist ("provQuery_attr3", "provQuery_attr1"));
 
   result->Assign (Assignor::New ("Prov",
-    VarExpr::New ("shaResult_attr3")));
+    ValueExpr::New (StrValue::New ("c"))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_GT,
@@ -2620,14 +2624,12 @@ Smoke::Idb5_eca (Ptr<Tuple> pIterate)
     ERULEQUERY,
     strlist ("pIterate_attr1",
       "NQID",
-      "pIterate_attr2",
       "RID",
       "pQList_attr3"),
     strlist ("eRuleQuery_attr1",
       "eRuleQuery_attr2",
       "eRuleQuery_attr3",
-      "eRuleQuery_attr4",
-      "eRuleQuery_attr5"));
+      "eRuleQuery_attr4"));
 
   SendLocal (result);
 }
@@ -2642,7 +2644,7 @@ Smoke::Idb6_eca (Ptr<Tuple> eRuleQuery)
   result = GetRelation (PROV)->Join (
     eRuleQuery,
     strlist ("prov_attr3", "prov_attr1"),
-    strlist ("eRuleQuery_attr4", "eRuleQuery_attr1"));
+    strlist ("eRuleQuery_attr3", "eRuleQuery_attr1"));
 
   result->Assign (Assignor::New ("P2",
     FAppend::New (
@@ -2650,14 +2652,14 @@ Smoke::Idb6_eca (Ptr<Tuple> eRuleQuery)
 
   result->Assign (Assignor::New ("P",
     FConcat::New (
-      VarExpr::New ("eRuleQuery_attr5"),
+      VarExpr::New ("eRuleQuery_attr4"),
       VarExpr::New ("P2"))));
 
   result = result->Project (
     RULEQUERY,
     strlist ("prov_attr4",
       "eRuleQuery_attr2",
-      "eRuleQuery_attr4",
+      "eRuleQuery_attr3",
       "P",
       "eRuleQuery_attr1",
       "prov_attr4"),
@@ -2789,9 +2791,9 @@ Smoke::Idb8Eca1Ins (Ptr<Tuple> pQList)
 }
 
 void
-Smoke::Idb9_eca (Ptr<Tuple> ePReturn)
+Smoke::Idb9a_eca (Ptr<Tuple> ePReturn)
 {
-  RAPIDNET_LOG_INFO ("Idb9_eca triggered");
+  RAPIDNET_LOG_INFO ("Idb9a_eca triggered");
 
   Ptr<RelationBase> result;
 
@@ -2814,6 +2816,57 @@ Smoke::Idb9_eca (Ptr<Tuple> ePReturn)
     Operation::New (RN_PLUS,
       VarExpr::New ("shaResult_attr3"),
       VarExpr::New ("Prov1"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("Prov1"),
+      ValueExpr::New (StrValue::New ("c")))));
+
+  result = result->Project (
+    PRETURN,
+    strlist ("pResultTmp_attr3",
+      "ePReturn_attr2",
+      "pResultTmp_attr4",
+      "Prov",
+      "pResultTmp_attr3"),
+    strlist ("pReturn_attr1",
+      "pReturn_attr2",
+      "pReturn_attr3",
+      "pReturn_attr4",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Smoke::Idb9b_eca (Ptr<Tuple> ePReturn)
+{
+  RAPIDNET_LOG_INFO ("Idb9b_eca triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (PRESULTTMP)->Join (
+    ePReturn,
+    strlist ("pResultTmp_attr2", "pResultTmp_attr1"),
+    strlist ("ePReturn_attr2", "ePReturn_attr1"));
+
+  result = GetRelation (SHARESULT)->Join (
+    result,
+    strlist ("shaResult_attr2", "shaResult_attr1"),
+    strlist ("pResultTmp_attr4", "ePReturn_attr1"));
+
+  result->Assign (Assignor::New ("Prov1",
+    FPIdb::New (
+      VarExpr::New ("pResultTmp_attr5"),
+      VarExpr::New ("ePReturn_attr1"))));
+
+  result->Assign (Assignor::New ("Prov",
+    VarExpr::New ("shaResult_attr3")));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("Prov1"),
+      ValueExpr::New (StrValue::New ("c")))));
 
   result = result->Project (
     PRETURN,

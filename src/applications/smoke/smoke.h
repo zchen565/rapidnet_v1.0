@@ -187,7 +187,9 @@ protected:
 
   virtual void Idb8Eca1Ins (Ptr<Tuple> pQList);
 
-  virtual void Idb9_eca (Ptr<Tuple> ePReturn);
+  virtual void Idb9a_eca (Ptr<Tuple> ePReturn);
+
+  virtual void Idb9b_eca (Ptr<Tuple> ePReturn);
 
   virtual void Rv1_eca (Ptr<Tuple> ruleQuery);
 
