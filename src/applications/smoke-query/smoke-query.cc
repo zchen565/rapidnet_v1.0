@@ -164,12 +164,14 @@ SmokeQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
     strlist ("tuple_attr3",
       "QID",
       "UID",
+      "P",
       "q1_ecaperiodic_attr1",
       "tuple_attr3"),
     strlist ("provQuery_attr1",
       "provQuery_attr2",
       "provQuery_attr3",
       "provQuery_attr4",
+      "provQuery_attr5",
       RN_DEST));
 
   Send (result);

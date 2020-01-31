@@ -7,9 +7,8 @@ materialize(shaResult, infinity, infinity, keys(1, 2:cid, 3:str)).
 
 
 r1 0.89 cancer(@Local, P) :- smoke(@Local, P).
-r2 0.44 smoke(@Local, A) :- friends(@Local, A, B), smokeEvent(@Local, B), A!=B.
-r3 0.44 smoke(@Local, B) :- friends(@Local, A, B), smokeEvent(@Local, A), A!=B.
-r4 smoke(@Local, P) :- smokeEvent(@Local, P).
+r2 0.88 smoke(@Local, A) :- friends(@Local, A, B), smoke(@Local, B), A!=B.
+// r3 0.88 smoke(@Local, B) :- friends(@Local, A, B), smoke(@Local, A), A!=B.
 
 
 r11 shaResult(@Local, VID, Content) :- smoke(@Local, P), VID:=f_sha1("smoke"+Local+P), Name:="smoke", Content:=Name+P.

@@ -39,9 +39,9 @@
 
 
 #define smoke(local, person) \
-tuple (Smoke::SMOKEEVENT, \
-attr ("smokeEvent_attr1", Ipv4Value, local), \
-attr ("smokeEvent_attr2", Int32Value, person) \
+tuple (Smoke::SMOKE, \
+attr ("smoke_attr1", Ipv4Value, local), \
+attr ("smoke_attr2", Int32Value, person) \
 )
 
 #define cancer(local, person) \
@@ -212,7 +212,7 @@ void Print() {
 
 void TupleToQuery() {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "cancer", 1, 2);
+  inserttuple(1, "cancer", 1, 1);
 }
 
 
