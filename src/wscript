@@ -69,7 +69,9 @@ all_modules = (
     'applications/vqap',
     'applications/vqap-query',
     'applications/smoke',
-    'applications/smoke-query'
+    'applications/smoke-query',
+    'applications/hyper-text-class',
+    'applications/hyper-text-class-query'
     )
 
 def set_options(opt):

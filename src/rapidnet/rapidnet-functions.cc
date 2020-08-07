@@ -165,6 +165,7 @@ FMember::Eval (Ptr<Tuple> tuple)
 {
   Ptr<ListValue> lstVal = DynamicCast<ListValue, Value> (m_lst->Eval (tuple));
   // Seems P2 does not support "true" and "false" as keywords. So use int32 for now
+  // cout << lstVal << endl;
   return Int32Value::New (lstVal->Contains (m_item->Eval (tuple)));
 }
 
@@ -231,6 +232,8 @@ FSize::Eval (Ptr<Tuple> tuple)
   Ptr<Value> lstVal = m_listAttrName->Eval (tuple);
   NS_ASSERT_MSG (V_InstanceOf (lstVal, ListValue),
     "f_last can only be applied to a list type attribute.");
+
+  // cout << Int32Value::New ((DynamicCast<ListValue, Value> (lstVal))->Size()) << endl;
 
   return Int32Value::New ((DynamicCast<ListValue, Value> (lstVal))->Size ());
 }
@@ -532,8 +535,11 @@ FPIdb::Eval(Ptr<Tuple> tuple)
 	  ss << ")";
     }
 
+    // cout << "IDB " << ss.str() << endl;
+
 
     if (ss.str()=="()"||ss.str()=="") {
+      // cout << "invalid" << endl;
       return StrValue::New("c");
     }
 
@@ -606,6 +612,7 @@ FPRule::Eval(Ptr<Tuple> tuple)
     ss << "))";
 
     if(!valid){
+      // cout << "invalid " << ss.str() << endl;
       return StrValue::New ("c");
     }
 

@@ -144,7 +144,10 @@ void parseLine(const string& line) {
   }
 
   string predicate = words[0];
-  if (predicate=="Friends") {
+  if (predicate=="//") {
+    return;
+  }
+  else if (predicate=="Friends") {
     string person1 = words[1];
     string person2 = words[2];
     if (people.find(person1)==people.end()) {
@@ -153,6 +156,7 @@ void parseLine(const string& line) {
     if (people.find(person2)==people.end()) {
       people[person2] = people.size();
     }
+    cout << "friends" << people[person1] << '_' << people[person2] << " 1" << endl;
     insertfriends(1, people[person1], people[person2]);
   }
   else if (predicate=="Smokes") {
@@ -160,6 +164,7 @@ void parseLine(const string& line) {
     if (people.find(person)==people.end()) {
       people[person] = people.size();
     }
+    cout << "smoke" << people[person] << " 1" << endl;
     insertsmoke(1, people[person]);
   }
   else if (predicate=="Cancer") {
@@ -167,13 +172,14 @@ void parseLine(const string& line) {
     if (people.find(person)==people.end()) {
       people[person] = people.size();
     }
+    cout << "cancer" << people[person] << " 1" << endl;
     insertcancer(1, people[person]);
   }
 }
 
 
 void train() {
-  ifstream fp(SmokeTrain);
+  ifstream fp(SmokeTest);
   string line;
 
   while (getline(fp, line)) {
@@ -209,11 +215,16 @@ void Print() {
 }
 
 
+int n=1;
+
 
 void TupleToQuery() {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "cancer", 1, 1);
+  // inserttuple(1, "cancer", 1, 2);
+  inserttuple(1, "cancer", 1, 6);
+  n++;
 }
+
 
 
 int main(int argc, char *argv[]){
@@ -221,13 +232,21 @@ int main(int argc, char *argv[]){
   initApps();
 
   apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (10.0));
+  apps.Stop (Seconds (100.0));
   queryapps.Start (Seconds (0.0));
-  queryapps.Stop (Seconds (10.0));
+  queryapps.Stop (Seconds (100.0));
 
-  schedule (1.0, TupleToQuery);	
+  /*
   schedule (2.0, train);
-  schedule (5.0, Print);
+  for (int i=0; i<8; i++) {
+    schedule (5+i*5.0, TupleToQuery);
+    schedule (5+i*5.0+3, Print);
+  }
+  */
+
+  schedule(1.0, train);
+  schedule(2.0, TupleToQuery);
+  schedule(5.0, Print);
 
   Simulator::Run ();
   Simulator::Destroy ();

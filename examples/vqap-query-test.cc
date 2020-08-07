@@ -53,35 +53,35 @@
 "./data/vqa/learn/hasimgans_targets.txt"
 
 
-#define word(local, object, score) \
+#define word(local, object) \
 tuple (Vqap::WORD, \
 attr ("word_attr1", Ipv4Value, local), \
-attr ("word_attr2", StrValue, object), \
-attr ("word_attr3", RealValue, score))
+attr ("word_attr2", StrValue, object) \
+)
 
-#define hasImg(local, object1, relation, object2, score) \
+#define hasImg(local, object1, relation, object2) \
 tuple (Vqap::HASIMG, \
 attr ("hasImg_attr1", Ipv4Value, local), \
 attr ("hasImg_attr2", StrValue, object1), \
 attr ("hasImg_attr3", StrValue, relation), \
-attr ("hasImg_attr4", StrValue, object2), \
-attr ("hasImg_attr5", RealValue, score))
+attr ("hasImg_attr4", StrValue, object2) \
+)
 
-#define hasQ(local, object1, relation, object2, score) \
+#define hasQ(local, object1, relation, object2) \
 tuple (Vqap::HASQ, \
 attr ("hasQ_attr1", Ipv4Value, local), \
 attr ("hasQ_attr2", StrValue, object1), \
 attr ("hasQ_attr3", StrValue, relation), \
-attr ("hasQ_attr4", StrValue, object2), \
-attr ("hasQ_attr5", RealValue, score))
+attr ("hasQ_attr4", StrValue, object2) \
+)
 
-#define sim(local, object1, object2, score) \
+#define sim(local, object1, object2) \
 tuple (Vqap::SIM, \
 attr ("sim_attr1", Ipv4Value, local), \
 attr ("sim_attr2", StrValue, object1), \
-attr ("sim_attr3", StrValue, object2), \
-attr ("sim_attr4", RealValue, score))
-/*
+attr ("sim_attr3", StrValue, object2) \
+)
+
 #define candidate(local, candidate) \
 tuple (Vqap::CANDIDATE, \
 attr ("candidate_attr1", Ipv4Value, local), \
@@ -99,7 +99,6 @@ attr ("hasImgAns_attr5", StrValue, object2))
 tuple (Vqap::ANS, \
 attr ("ans_attr1", Ipv4Value, local), \
 attr ("ans_attr2", StrValue, answer))
-*/
 /*
 #define sharesult(local, vid, content) \
 tuple (Vqap::SHARESULT, \
@@ -108,17 +107,17 @@ attr ("shaResult_attr2", IdValue, vid), \
 attr ("shaResult_attr3", StrValue, content))
 */
 
-#define insertword(local, object, score) \
-app(local)->Insert(word(addr(local), object, score));
+#define insertword(local, object) \
+app(local)->Insert(word(addr(local), object));
 
-#define inserthasImg(local, object1, relation, object2, score) \
-app(local)->Insert(hasImg(addr(local), object1, relation, object2, score));
+#define inserthasImg(local, object1, relation, object2) \
+app(local)->Insert(hasImg(addr(local), object1, relation, object2));
 
-#define inserthasQ(local, object1, relation, object2, score) \
-app(local)->Insert(hasQ(addr(local), object1, relation, object2, score));
+#define inserthasQ(local, object1, relation, object2) \
+app(local)->Insert(hasQ(addr(local), object1, relation, object2));
 
-#define insertsim(local, object1, object2, score) \
-app(local)->Insert(sim(addr(local), object1, object2, score));
+#define insertsim(local, object1, object2) \
+app(local)->Insert(sim(addr(local), object1, object2));
 
 #define insertcandidate(local, candidate) \
 app(local)->Insert(candidate(addr(local), candidate));
@@ -224,7 +223,7 @@ parse(vector<string> word_obs, vector<string> hasImg_obs, vector<string> hasQ_ob
 		if(line.size() == 0) continue;
 		vector<string> tokens = split(line, '\t');
 		double p = atof(tokens.back().c_str());
-		insertword(1, tokens[0], p);
+		insertword(1, tokens[0]);
 	}	
 
 	// parse hasImg_obs
@@ -240,7 +239,7 @@ parse(vector<string> word_obs, vector<string> hasImg_obs, vector<string> hasQ_ob
         	tokens.push_back(intermediate); 
     	}
 		double p = atof(tokens.back().c_str());
-		inserthasImg(1, tokens[0], tokens[1], tokens[2], p);
+		inserthasImg(1, tokens[0], tokens[1], tokens[2]);
 	}
 
 	//parse hasQ_obs
@@ -248,9 +247,10 @@ parse(vector<string> word_obs, vector<string> hasImg_obs, vector<string> hasQ_ob
 	for(int i = 0; i < hasQ_obs.size(); i++){
 		string line = hasQ_obs[i];
 		if(line.size()==0) continue;
-		vector<string> tokens = split(line, '	');
+		vector<string> tokens = split(line, ' ');
+    cout << tokens[0] << endl;
 		double p = atof(tokens.back().c_str());
-		inserthasQ(1, tokens[0], tokens[1], tokens[2], p);
+		inserthasQ(1, tokens[0], tokens[1], tokens[2]);
 	}
 
 	//parse sim_obs
@@ -260,7 +260,7 @@ parse(vector<string> word_obs, vector<string> hasImg_obs, vector<string> hasQ_ob
 		if(line.size()==0) continue;
 		vector<string> tokens = split(line, '	');
 		double p = atof(tokens.back().c_str());
-		insertsim(1, tokens[0], tokens[1], p);	
+		insertsim(1, tokens[0], tokens[1]);	
 	}
 }
 
@@ -270,29 +270,47 @@ Train(){
 	vector<string> hasImg_obs = readFile(HasImgObs);
 	vector<string> hasQ_obs = readFile(HasQObs);
 	vector<string> sim_obs = readFile(SimObs);
+  // vector<string> hasImg_obs, hasQ_obs, sim_obs;
 	parse(word_obs, hasImg_obs, hasQ_obs, sim_obs);
 }
+
+
+vector<string> answers = readFile(AnsTar);
+int n = 0;
+
 
 void
 TupleToQuery ()
 {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "ans", 1, "barn");   
+  inserttuple(1, "ans", 1, answers[n]);
+  n++;
+}
+
+
+void
+SingleTupleToQuery () {
+  Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
+  inserttuple(1, "ans", 1, "horse");
 }
 
 
 void 
 Print(){
-	//PrintRelation(apps, Vqap::WORD);
-	//PrintRelation(apps, Vqap::SIM);
-	//PrintRelation(apps, Vqap::HASIMG);
-	//PrintRelation(apps, Vqap::HASQ);
+	PrintRelation(apps, Vqap::WORD);
+	PrintRelation(apps, Vqap::SIM);
+	PrintRelation(apps, Vqap::HASIMG);
+	PrintRelation(apps, Vqap::HASQ);
 	PrintRelation(apps, Vqap::ANS);
-	//PrintRelation(apps, Vqap::SHARESULT);
+  PrintRelation(apps, Vqap::CANDIDATE);
+  PrintRelation(apps, Vqap::RRETURN);
+	// PrintRelation(apps, Vqap::SHARESULT);
 
-	//PrintRelation(apps, Vqap::PROV);
-	// PrintRelation(queryapps, VqapQuery::TUPLE);
-  // PrintRelation(queryapps, VqapQuery::RECORDS);
+	// PrintRelation(apps, Vqap::PROV);
+	PrintRelation(queryapps, VqapQuery::TUPLE);
+  PrintRelation(queryapps, VqapQuery::TEMP);
+  PrintRelation(apps, Vqap::PROVQUERY);
+  PrintRelation(queryapps, VqapQuery::RECORDS);
 }
 
 
@@ -308,10 +326,13 @@ main(int argc, char *argv[]){
 	apps.Start (Seconds (0.0));
 	apps.Stop (Seconds (100.0));
 	queryapps.Start (Seconds (0.0));
-  	queryapps.Stop (Seconds (100.0));
+  queryapps.Stop (Seconds (100.0));
 
-	schedule (1.0, TupleToQuery);	
 	schedule (2.0, Train);
+  for (int i=0; i<answers.size()-1; i++) {
+  schedule (5.0+i, TupleToQuery);
+  }
+  // schedule (5.0, SingleTupleToQuery);
 	schedule (90.0, Print);
 
 	Simulator::Run ();

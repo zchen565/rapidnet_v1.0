@@ -133,8 +133,7 @@ Vqap::InitDatabase ()
     attrdef ("hasImg_attr1", IPV4),
     attrdef ("hasImg_attr2", IPV4),
     attrdef ("hasImg_attr3", IPV4),
-    attrdef ("hasImg_attr4", IPV4),
-    attrdef ("hasImg_attr5", IPV4)));
+    attrdef ("hasImg_attr4", IPV4)));
 
   AddRelationWithKeys (HASIMGANS, attrdeflist (
     attrdef ("hasImgAns_attr1", IPV4),
@@ -147,8 +146,7 @@ Vqap::InitDatabase ()
     attrdef ("hasQ_attr1", IPV4),
     attrdef ("hasQ_attr2", IPV4),
     attrdef ("hasQ_attr3", IPV4),
-    attrdef ("hasQ_attr4", IPV4),
-    attrdef ("hasQ_attr5", IPV4)));
+    attrdef ("hasQ_attr4", IPV4)));
 
   AddRelationWithKeys (PQLIST, attrdeflist (
     attrdef ("pQList_attr1", IPV4),
@@ -183,25 +181,21 @@ Vqap::InitDatabase ()
   AddRelationWithKeys (SIM, attrdeflist (
     attrdef ("sim_attr1", IPV4),
     attrdef ("sim_attr2", IPV4),
-    attrdef ("sim_attr3", IPV4),
-    attrdef ("sim_attr4", IPV4)));
+    attrdef ("sim_attr3", IPV4)));
 
   AddRelationWithKeys (SIMREP1, attrdeflist (
     attrdef ("simRep1_attr1", IPV4),
     attrdef ("simRep1_attr2", IPV4),
-    attrdef ("simRep1_attr3", IPV4),
-    attrdef ("simRep1_attr4", IPV4)));
+    attrdef ("simRep1_attr3", IPV4)));
 
   AddRelationWithKeys (SIMREP2, attrdeflist (
     attrdef ("simRep2_attr1", IPV4),
     attrdef ("simRep2_attr2", IPV4),
-    attrdef ("simRep2_attr3", IPV4),
-    attrdef ("simRep2_attr4", IPV4)));
+    attrdef ("simRep2_attr3", IPV4)));
 
   AddRelationWithKeys (WORD, attrdeflist (
     attrdef ("word_attr1", IPV4),
-    attrdef ("word_attr2", IPV4),
-    attrdef ("word_attr3", IPV4)));
+    attrdef ("word_attr2", IPV4)));
 
 }
 
@@ -658,6 +652,30 @@ Vqap::DemuxRecv (Ptr<Tuple> tuple)
     {
       Prov_r12_1Eca0Del (tuple);
     }
+  if (IsInsertEvent (tuple, ANS))
+    {
+      Prov_r13_1Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, ANS))
+    {
+      Prov_r13_1Eca0Del (tuple);
+    }
+  if (IsInsertEvent (tuple, CANDIDATE))
+    {
+      Prov_r14_1Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, CANDIDATE))
+    {
+      Prov_r14_1Eca0Del (tuple);
+    }
+  if (IsInsertEvent (tuple, HASIMGANS))
+    {
+      Prov_r15_1Eca0Ins (tuple);
+    }
+  if (IsDeleteEvent (tuple, HASIMGANS))
+    {
+      Prov_r15_1Eca0Del (tuple);
+    }
   if (IsInsertEvent (tuple, HASIMG))
     {
       Prov_edb_1Eca1Ins (tuple);
@@ -720,7 +738,7 @@ Vqap::DemuxRecv (Ptr<Tuple> tuple)
     }
   if (IsRecvEvent (tuple, ERULEQUERY))
     {
-      Idb6a_eca (tuple);
+      Idb6_eca (tuple);
     }
   if (IsRecvEvent (tuple, RRETURN))
     {
@@ -736,7 +754,7 @@ Vqap::DemuxRecv (Ptr<Tuple> tuple)
     }
   if (IsRecvEvent (tuple, EPRETURN))
     {
-      Idb9_eca (tuple);
+      Idb9a_eca (tuple);
     }
   if (IsRecvEvent (tuple, RULEQUERY))
     {
@@ -792,12 +810,10 @@ Vqap::Prov_ra_1Eca0Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -829,7 +845,6 @@ Vqap::Prov_ra_1Eca0Ins (Ptr<Tuple> sim)
       "Local",
       "sim_attr2",
       "sim_attr3",
-      "sim_attr4",
       "RID",
       "RWeight",
       "R",
@@ -843,7 +858,6 @@ Vqap::Prov_ra_1Eca0Ins (Ptr<Tuple> sim)
       "esimRep1Temp_attr6",
       "esimRep1Temp_attr7",
       "esimRep1Temp_attr8",
-      "esimRep1Temp_attr9",
       RN_DEST));
 
   Send (result);
@@ -861,12 +875,10 @@ Vqap::Prov_ra_1Eca0Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -898,7 +910,6 @@ Vqap::Prov_ra_1Eca0Del (Ptr<Tuple> sim)
       "Local",
       "sim_attr2",
       "sim_attr3",
-      "sim_attr4",
       "RID",
       "RWeight",
       "R",
@@ -912,7 +923,6 @@ Vqap::Prov_ra_1Eca0Del (Ptr<Tuple> sim)
       "esimRep1TempDelete_attr6",
       "esimRep1TempDelete_attr7",
       "esimRep1TempDelete_attr8",
-      "esimRep1TempDelete_attr9",
       RN_DEST));
 
   Send (result);
@@ -928,10 +938,10 @@ Vqap::Prov_ra_2_ecaAdd (Ptr<Tuple> esimRep1Temp)
   result = result->Project (
     RULEEXEC,
     strlist ("esimRep1Temp_attr1",
+      "esimRep1Temp_attr5",
       "esimRep1Temp_attr6",
       "esimRep1Temp_attr7",
-      "esimRep1Temp_attr8",
-      "esimRep1Temp_attr9"),
+      "esimRep1Temp_attr8"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
@@ -951,10 +961,10 @@ Vqap::Prov_ra_2_ecaDel (Ptr<Tuple> esimRep1TempDelete)
   result = result->Project (
     RULEEXEC,
     strlist ("esimRep1TempDelete_attr1",
+      "esimRep1TempDelete_attr5",
       "esimRep1TempDelete_attr6",
       "esimRep1TempDelete_attr7",
-      "esimRep1TempDelete_attr8",
-      "esimRep1TempDelete_attr9"),
+      "esimRep1TempDelete_attr8"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
@@ -981,7 +991,6 @@ Vqap::Prov_ra_3_ecaAdd (Ptr<Tuple> esimRep1Temp)
       "esimRep1Temp_attr4",
       "esimRep1Temp_attr5",
       "esimRep1Temp_attr6",
-      "esimRep1Temp_attr7",
       "esimRep1Temp_attr1",
       "Local"),
     strlist ("esimRep1_attr1",
@@ -990,7 +999,6 @@ Vqap::Prov_ra_3_ecaAdd (Ptr<Tuple> esimRep1Temp)
       "esimRep1_attr4",
       "esimRep1_attr5",
       "esimRep1_attr6",
-      "esimRep1_attr7",
       RN_DEST));
 
   Send (result);
@@ -1013,7 +1021,6 @@ Vqap::Prov_ra_3_ecaDel (Ptr<Tuple> esimRep1TempDelete)
       "esimRep1TempDelete_attr4",
       "esimRep1TempDelete_attr5",
       "esimRep1TempDelete_attr6",
-      "esimRep1TempDelete_attr7",
       "esimRep1TempDelete_attr1",
       "Local"),
     strlist ("esimRep1Delete_attr1",
@@ -1022,7 +1029,6 @@ Vqap::Prov_ra_3_ecaDel (Ptr<Tuple> esimRep1TempDelete)
       "esimRep1Delete_attr4",
       "esimRep1Delete_attr5",
       "esimRep1Delete_attr6",
-      "esimRep1Delete_attr7",
       RN_DEST));
 
   Send (result);
@@ -1042,12 +1048,10 @@ Vqap::Prov_ra_4_ecaAdd (Ptr<Tuple> esimRep1)
     SIMREP1,
     strlist ("Local",
       "esimRep1_attr2",
-      "esimRep1_attr3",
-      "esimRep1_attr4"),
+      "esimRep1_attr3"),
     strlist ("simRep1_attr1",
       "simRep1_attr2",
-      "simRep1_attr3",
-      "simRep1_attr4"));
+      "simRep1_attr3"));
 
   Insert (result);
 }
@@ -1066,12 +1070,10 @@ Vqap::Prov_ra_4_ecaDel (Ptr<Tuple> esimRep1Delete)
     SIMREP1,
     strlist ("Local",
       "esimRep1Delete_attr2",
-      "esimRep1Delete_attr3",
-      "esimRep1Delete_attr4"),
+      "esimRep1Delete_attr3"),
     strlist ("simRep1_attr1",
       "simRep1_attr2",
-      "simRep1_attr3",
-      "simRep1_attr4"));
+      "simRep1_attr3"));
 
   Delete (result);
 }
@@ -1088,12 +1090,10 @@ Vqap::Prov_ra_5_ecaAdd (Ptr<Tuple> esimRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("esimRep1_attr1")),
-            VarExpr::New ("esimRep1_attr2")),
-          VarExpr::New ("esimRep1_attr3")),
-        VarExpr::New ("esimRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("esimRep1_attr1")),
+          VarExpr::New ("esimRep1_attr2")),
+        VarExpr::New ("esimRep1_attr3")))));
 
   result->Assign (Assignor::New ("Score",
     ValueExpr::New (RealValue::New (-1))));
@@ -1105,8 +1105,8 @@ Vqap::Prov_ra_5_ecaAdd (Ptr<Tuple> esimRep1)
     PROV,
     strlist ("Local",
       "VID",
-      "esimRep1_attr5",
-      "esimRep1_attr7",
+      "esimRep1_attr4",
+      "esimRep1_attr6",
       "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
@@ -1129,12 +1129,10 @@ Vqap::Prov_ra_5_ecaDel (Ptr<Tuple> esimRep1Delete)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("esimRep1Delete_attr1")),
-            VarExpr::New ("esimRep1Delete_attr2")),
-          VarExpr::New ("esimRep1Delete_attr3")),
-        VarExpr::New ("esimRep1Delete_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("esimRep1Delete_attr1")),
+          VarExpr::New ("esimRep1Delete_attr2")),
+        VarExpr::New ("esimRep1Delete_attr3")))));
 
   result->Assign (Assignor::New ("Score",
     ValueExpr::New (RealValue::New (-1))));
@@ -1146,8 +1144,8 @@ Vqap::Prov_ra_5_ecaDel (Ptr<Tuple> esimRep1Delete)
     PROV,
     strlist ("Local",
       "VID",
-      "esimRep1Delete_attr5",
-      "esimRep1Delete_attr7",
+      "esimRep1Delete_attr4",
+      "esimRep1Delete_attr6",
       "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
@@ -1170,12 +1168,10 @@ Vqap::Prov_rb_1Eca0Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1207,7 +1203,6 @@ Vqap::Prov_rb_1Eca0Ins (Ptr<Tuple> sim)
       "Local",
       "sim_attr2",
       "sim_attr3",
-      "sim_attr4",
       "RID",
       "RWeight",
       "R",
@@ -1221,7 +1216,6 @@ Vqap::Prov_rb_1Eca0Ins (Ptr<Tuple> sim)
       "esimRep2Temp_attr6",
       "esimRep2Temp_attr7",
       "esimRep2Temp_attr8",
-      "esimRep2Temp_attr9",
       RN_DEST));
 
   Send (result);
@@ -1239,12 +1233,10 @@ Vqap::Prov_rb_1Eca0Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1276,7 +1268,6 @@ Vqap::Prov_rb_1Eca0Del (Ptr<Tuple> sim)
       "Local",
       "sim_attr2",
       "sim_attr3",
-      "sim_attr4",
       "RID",
       "RWeight",
       "R",
@@ -1290,7 +1281,6 @@ Vqap::Prov_rb_1Eca0Del (Ptr<Tuple> sim)
       "esimRep2TempDelete_attr6",
       "esimRep2TempDelete_attr7",
       "esimRep2TempDelete_attr8",
-      "esimRep2TempDelete_attr9",
       RN_DEST));
 
   Send (result);
@@ -1306,10 +1296,10 @@ Vqap::Prov_rb_2_ecaAdd (Ptr<Tuple> esimRep2Temp)
   result = result->Project (
     RULEEXEC,
     strlist ("esimRep2Temp_attr1",
+      "esimRep2Temp_attr5",
       "esimRep2Temp_attr6",
       "esimRep2Temp_attr7",
-      "esimRep2Temp_attr8",
-      "esimRep2Temp_attr9"),
+      "esimRep2Temp_attr8"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
@@ -1329,10 +1319,10 @@ Vqap::Prov_rb_2_ecaDel (Ptr<Tuple> esimRep2TempDelete)
   result = result->Project (
     RULEEXEC,
     strlist ("esimRep2TempDelete_attr1",
+      "esimRep2TempDelete_attr5",
       "esimRep2TempDelete_attr6",
       "esimRep2TempDelete_attr7",
-      "esimRep2TempDelete_attr8",
-      "esimRep2TempDelete_attr9"),
+      "esimRep2TempDelete_attr8"),
     strlist ("ruleExec_attr1",
       "ruleExec_attr2",
       "ruleExec_attr3",
@@ -1359,7 +1349,6 @@ Vqap::Prov_rb_3_ecaAdd (Ptr<Tuple> esimRep2Temp)
       "esimRep2Temp_attr4",
       "esimRep2Temp_attr5",
       "esimRep2Temp_attr6",
-      "esimRep2Temp_attr7",
       "esimRep2Temp_attr1",
       "Local"),
     strlist ("esimRep2_attr1",
@@ -1368,7 +1357,6 @@ Vqap::Prov_rb_3_ecaAdd (Ptr<Tuple> esimRep2Temp)
       "esimRep2_attr4",
       "esimRep2_attr5",
       "esimRep2_attr6",
-      "esimRep2_attr7",
       RN_DEST));
 
   Send (result);
@@ -1391,7 +1379,6 @@ Vqap::Prov_rb_3_ecaDel (Ptr<Tuple> esimRep2TempDelete)
       "esimRep2TempDelete_attr4",
       "esimRep2TempDelete_attr5",
       "esimRep2TempDelete_attr6",
-      "esimRep2TempDelete_attr7",
       "esimRep2TempDelete_attr1",
       "Local"),
     strlist ("esimRep2Delete_attr1",
@@ -1400,7 +1387,6 @@ Vqap::Prov_rb_3_ecaDel (Ptr<Tuple> esimRep2TempDelete)
       "esimRep2Delete_attr4",
       "esimRep2Delete_attr5",
       "esimRep2Delete_attr6",
-      "esimRep2Delete_attr7",
       RN_DEST));
 
   Send (result);
@@ -1420,12 +1406,10 @@ Vqap::Prov_rb_4_ecaAdd (Ptr<Tuple> esimRep2)
     SIMREP2,
     strlist ("Local",
       "esimRep2_attr2",
-      "esimRep2_attr3",
-      "esimRep2_attr4"),
+      "esimRep2_attr3"),
     strlist ("simRep2_attr1",
       "simRep2_attr2",
-      "simRep2_attr3",
-      "simRep2_attr4"));
+      "simRep2_attr3"));
 
   Insert (result);
 }
@@ -1444,12 +1428,10 @@ Vqap::Prov_rb_4_ecaDel (Ptr<Tuple> esimRep2Delete)
     SIMREP2,
     strlist ("Local",
       "esimRep2Delete_attr2",
-      "esimRep2Delete_attr3",
-      "esimRep2Delete_attr4"),
+      "esimRep2Delete_attr3"),
     strlist ("simRep2_attr1",
       "simRep2_attr2",
-      "simRep2_attr3",
-      "simRep2_attr4"));
+      "simRep2_attr3"));
 
   Delete (result);
 }
@@ -1466,12 +1448,10 @@ Vqap::Prov_rb_5_ecaAdd (Ptr<Tuple> esimRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("esimRep2_attr1")),
-            VarExpr::New ("esimRep2_attr2")),
-          VarExpr::New ("esimRep2_attr3")),
-        VarExpr::New ("esimRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("esimRep2_attr1")),
+          VarExpr::New ("esimRep2_attr2")),
+        VarExpr::New ("esimRep2_attr3")))));
 
   result->Assign (Assignor::New ("Score",
     ValueExpr::New (RealValue::New (-1))));
@@ -1483,8 +1463,8 @@ Vqap::Prov_rb_5_ecaAdd (Ptr<Tuple> esimRep2)
     PROV,
     strlist ("Local",
       "VID",
-      "esimRep2_attr5",
-      "esimRep2_attr7",
+      "esimRep2_attr4",
+      "esimRep2_attr6",
       "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
@@ -1507,12 +1487,10 @@ Vqap::Prov_rb_5_ecaDel (Ptr<Tuple> esimRep2Delete)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("esimRep2Delete_attr1")),
-            VarExpr::New ("esimRep2Delete_attr2")),
-          VarExpr::New ("esimRep2Delete_attr3")),
-        VarExpr::New ("esimRep2Delete_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("esimRep2Delete_attr1")),
+          VarExpr::New ("esimRep2Delete_attr2")),
+        VarExpr::New ("esimRep2Delete_attr3")))));
 
   result->Assign (Assignor::New ("Score",
     ValueExpr::New (RealValue::New (-1))));
@@ -1524,8 +1502,8 @@ Vqap::Prov_rb_5_ecaDel (Ptr<Tuple> esimRep2Delete)
     PROV,
     strlist ("Local",
       "VID",
-      "esimRep2Delete_attr5",
-      "esimRep2Delete_attr7",
+      "esimRep2Delete_attr4",
+      "esimRep2Delete_attr6",
       "Score"),
     strlist ("prov_attr1",
       "prov_attr2",
@@ -1562,11 +1540,9 @@ Vqap::Prov_r1_1Eca0Ins (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1578,13 +1554,11 @@ Vqap::Prov_r1_1Eca0Ins (Ptr<Tuple> word)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("word_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("word_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -1600,12 +1574,10 @@ Vqap::Prov_r1_1Eca0Ins (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -1621,12 +1593,10 @@ Vqap::Prov_r1_1Eca0Ins (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -1711,11 +1681,9 @@ Vqap::Prov_r1_1Eca0Del (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1727,13 +1695,11 @@ Vqap::Prov_r1_1Eca0Del (Ptr<Tuple> word)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("word_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("word_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -1749,12 +1715,10 @@ Vqap::Prov_r1_1Eca0Del (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -1770,12 +1734,10 @@ Vqap::Prov_r1_1Eca0Del (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -1860,11 +1822,9 @@ Vqap::Prov_r1_1Eca3Ins (Ptr<Tuple> hasImg)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("hasImg_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("hasImg_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -1876,13 +1836,11 @@ Vqap::Prov_r1_1Eca3Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -1898,12 +1856,10 @@ Vqap::Prov_r1_1Eca3Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -1919,12 +1875,10 @@ Vqap::Prov_r1_1Eca3Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -2009,11 +1963,9 @@ Vqap::Prov_r1_1Eca3Del (Ptr<Tuple> hasImg)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("hasImg_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("hasImg_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -2025,13 +1977,11 @@ Vqap::Prov_r1_1Eca3Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -2047,12 +1997,10 @@ Vqap::Prov_r1_1Eca3Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -2068,12 +2016,10 @@ Vqap::Prov_r1_1Eca3Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("word_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("word_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -2158,11 +2104,9 @@ Vqap::Prov_r1_1Eca7Ins (Ptr<Tuple> sim)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("sim_attr1")),
-          VarExpr::New ("sim_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("sim_attr1")),
+        VarExpr::New ("sim_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -2174,13 +2118,11 @@ Vqap::Prov_r1_1Eca7Ins (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("sim_attr3")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("sim_attr3")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -2196,12 +2138,10 @@ Vqap::Prov_r1_1Eca7Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -2217,12 +2157,10 @@ Vqap::Prov_r1_1Eca7Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -2307,11 +2245,9 @@ Vqap::Prov_r1_1Eca7Del (Ptr<Tuple> sim)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("sim_attr1")),
-          VarExpr::New ("sim_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("sim_attr1")),
+        VarExpr::New ("sim_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -2323,13 +2259,11 @@ Vqap::Prov_r1_1Eca7Del (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("sim_attr3")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("sim_attr3")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -2345,12 +2279,10 @@ Vqap::Prov_r1_1Eca7Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -2366,12 +2298,10 @@ Vqap::Prov_r1_1Eca7Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -2456,11 +2386,9 @@ Vqap::Prov_r1_1Eca11Ins (Ptr<Tuple> simRep1)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("simRep1_attr1")),
-          VarExpr::New ("simRep1_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("simRep1_attr1")),
+        VarExpr::New ("simRep1_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -2472,13 +2400,11 @@ Vqap::Prov_r1_1Eca11Ins (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -2494,12 +2420,10 @@ Vqap::Prov_r1_1Eca11Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -2515,12 +2439,10 @@ Vqap::Prov_r1_1Eca11Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -2605,11 +2527,9 @@ Vqap::Prov_r1_1Eca11Del (Ptr<Tuple> simRep1)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("simRep1_attr1")),
-          VarExpr::New ("simRep1_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("simRep1_attr1")),
+        VarExpr::New ("simRep1_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -2621,13 +2541,11 @@ Vqap::Prov_r1_1Eca11Del (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -2643,12 +2561,10 @@ Vqap::Prov_r1_1Eca11Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -2664,12 +2580,10 @@ Vqap::Prov_r1_1Eca11Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -2991,11 +2905,9 @@ Vqap::Prov_r2_1Eca0Ins (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3054,11 +2966,9 @@ Vqap::Prov_r2_1Eca0Del (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3358,11 +3268,9 @@ Vqap::Prov_r3_1Eca0Ins (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3374,13 +3282,11 @@ Vqap::Prov_r3_1Eca0Ins (Ptr<Tuple> word)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("word_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("word_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -3419,12 +3325,10 @@ Vqap::Prov_r3_1Eca0Ins (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -3440,12 +3344,10 @@ Vqap::Prov_r3_1Eca0Ins (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -3461,12 +3363,10 @@ Vqap::Prov_r3_1Eca0Ins (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -3555,11 +3455,9 @@ Vqap::Prov_r3_1Eca0Del (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3571,13 +3469,11 @@ Vqap::Prov_r3_1Eca0Del (Ptr<Tuple> word)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("word_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("word_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -3616,12 +3512,10 @@ Vqap::Prov_r3_1Eca0Del (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -3637,12 +3531,10 @@ Vqap::Prov_r3_1Eca0Del (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -3658,12 +3550,10 @@ Vqap::Prov_r3_1Eca0Del (Ptr<Tuple> word)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("word_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("word_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -3752,11 +3642,9 @@ Vqap::Prov_r3_1Eca3Ins (Ptr<Tuple> hasQ)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("hasQ_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("hasQ_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3768,13 +3656,11 @@ Vqap::Prov_r3_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -3813,12 +3699,10 @@ Vqap::Prov_r3_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -3834,12 +3718,10 @@ Vqap::Prov_r3_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -3855,12 +3737,10 @@ Vqap::Prov_r3_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -3949,11 +3829,9 @@ Vqap::Prov_r3_1Eca3Del (Ptr<Tuple> hasQ)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("hasQ_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("hasQ_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -3965,13 +3843,11 @@ Vqap::Prov_r3_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4010,12 +3886,10 @@ Vqap::Prov_r3_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -4031,12 +3905,10 @@ Vqap::Prov_r3_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -4052,12 +3924,10 @@ Vqap::Prov_r3_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -4146,11 +4016,9 @@ Vqap::Prov_r3_1Eca7Ins (Ptr<Tuple> hasImgAns)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("hasImgAns_attr1")),
-          VarExpr::New ("hasImgAns_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("hasImgAns_attr1")),
+        VarExpr::New ("hasImgAns_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4162,13 +4030,11 @@ Vqap::Prov_r3_1Eca7Ins (Ptr<Tuple> hasImgAns)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImgAns_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImgAns_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4207,12 +4073,10 @@ Vqap::Prov_r3_1Eca7Ins (Ptr<Tuple> hasImgAns)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImgAns_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImgAns_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -4228,12 +4092,10 @@ Vqap::Prov_r3_1Eca7Ins (Ptr<Tuple> hasImgAns)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasImgAns_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasImgAns_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -4249,12 +4111,10 @@ Vqap::Prov_r3_1Eca7Ins (Ptr<Tuple> hasImgAns)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasImgAns_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasImgAns_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -4343,11 +4203,9 @@ Vqap::Prov_r3_1Eca7Del (Ptr<Tuple> hasImgAns)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("hasImgAns_attr1")),
-          VarExpr::New ("hasImgAns_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("hasImgAns_attr1")),
+        VarExpr::New ("hasImgAns_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4359,13 +4217,11 @@ Vqap::Prov_r3_1Eca7Del (Ptr<Tuple> hasImgAns)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImgAns_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImgAns_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4404,12 +4260,10 @@ Vqap::Prov_r3_1Eca7Del (Ptr<Tuple> hasImgAns)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImgAns_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImgAns_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -4425,12 +4279,10 @@ Vqap::Prov_r3_1Eca7Del (Ptr<Tuple> hasImgAns)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasImgAns_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasImgAns_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -4446,12 +4298,10 @@ Vqap::Prov_r3_1Eca7Del (Ptr<Tuple> hasImgAns)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasImgAns_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasImgAns_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -4540,11 +4390,9 @@ Vqap::Prov_r3_1Eca11Ins (Ptr<Tuple> sim)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("sim_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("sim_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4556,13 +4404,11 @@ Vqap::Prov_r3_1Eca11Ins (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4601,12 +4447,10 @@ Vqap::Prov_r3_1Eca11Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -4622,12 +4466,10 @@ Vqap::Prov_r3_1Eca11Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -4643,12 +4485,10 @@ Vqap::Prov_r3_1Eca11Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -4737,11 +4577,9 @@ Vqap::Prov_r3_1Eca11Del (Ptr<Tuple> sim)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("sim_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("sim_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4753,13 +4591,11 @@ Vqap::Prov_r3_1Eca11Del (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4798,12 +4634,10 @@ Vqap::Prov_r3_1Eca11Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -4819,12 +4653,10 @@ Vqap::Prov_r3_1Eca11Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -4840,12 +4672,10 @@ Vqap::Prov_r3_1Eca11Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -4934,11 +4764,9 @@ Vqap::Prov_r3_1Eca15Ins (Ptr<Tuple> simRep1)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("simRep1_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("simRep1_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -4950,13 +4778,11 @@ Vqap::Prov_r3_1Eca15Ins (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("simRep1_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("simRep1_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -4995,12 +4821,10 @@ Vqap::Prov_r3_1Eca15Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -5016,12 +4840,10 @@ Vqap::Prov_r3_1Eca15Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -5037,12 +4859,10 @@ Vqap::Prov_r3_1Eca15Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -5131,11 +4951,9 @@ Vqap::Prov_r3_1Eca15Del (Ptr<Tuple> simRep1)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("simRep1_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("simRep1_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -5147,13 +4965,11 @@ Vqap::Prov_r3_1Eca15Del (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("simRep1_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("simRep1_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -5192,12 +5008,10 @@ Vqap::Prov_r3_1Eca15Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -5213,12 +5027,10 @@ Vqap::Prov_r3_1Eca15Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -5234,12 +5046,10 @@ Vqap::Prov_r3_1Eca15Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("hasQ_attr4")),
-          VarExpr::New ("hasImgAns_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("hasQ_attr4")),
+        VarExpr::New ("hasImgAns_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -5328,11 +5138,9 @@ Vqap::Prov_r3_1Eca19Ins (Ptr<Tuple> simRep2)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("simRep2_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("simRep2_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -5344,13 +5152,11 @@ Vqap::Prov_r3_1Eca19Ins (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep2_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("simRep2_attr2")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep2_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("simRep2_attr2")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -5389,12 +5195,10 @@ Vqap::Prov_r3_1Eca19Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -5410,12 +5214,10 @@ Vqap::Prov_r3_1Eca19Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -5431,12 +5233,10 @@ Vqap::Prov_r3_1Eca19Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -5525,11 +5325,9 @@ Vqap::Prov_r3_1Eca19Del (Ptr<Tuple> simRep2)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("simRep2_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("simRep2_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -5541,13 +5339,11 @@ Vqap::Prov_r3_1Eca19Del (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep2_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("simRep2_attr2")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep2_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("simRep2_attr2")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -5586,12 +5382,10 @@ Vqap::Prov_r3_1Eca19Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImgAns_attr4")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImgAns_attr4")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -5607,12 +5401,10 @@ Vqap::Prov_r3_1Eca19Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImgAns_attr5")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -5628,12 +5420,10 @@ Vqap::Prov_r3_1Eca19Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -5721,13 +5511,11 @@ Vqap::Prov_r4_1Eca0Ins (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -5744,13 +5532,11 @@ Vqap::Prov_r4_1Eca0Ins (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("candidate_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("candidate_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -5843,13 +5629,11 @@ Vqap::Prov_r4_1Eca0Del (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -5866,13 +5650,11 @@ Vqap::Prov_r4_1Eca0Del (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("candidate_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("candidate_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -5965,13 +5747,11 @@ Vqap::Prov_r4_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -5988,13 +5768,11 @@ Vqap::Prov_r4_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("candidate_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("candidate_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -6087,13 +5865,11 @@ Vqap::Prov_r4_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -6110,13 +5886,11 @@ Vqap::Prov_r4_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("candidate_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("candidate_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -6209,13 +5983,11 @@ Vqap::Prov_r4_1Eca8Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr4")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr4")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -6232,13 +6004,11 @@ Vqap::Prov_r4_1Eca8Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -6331,13 +6101,11 @@ Vqap::Prov_r4_1Eca8Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr4")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr4")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -6354,13 +6122,11 @@ Vqap::Prov_r4_1Eca8Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -6674,13 +6440,11 @@ Vqap::Prov_r5_1Eca0Ins (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -6697,13 +6461,11 @@ Vqap::Prov_r5_1Eca0Ins (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -6719,12 +6481,10 @@ Vqap::Prov_r5_1Eca0Ins (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -6822,13 +6582,11 @@ Vqap::Prov_r5_1Eca0Del (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -6845,13 +6603,11 @@ Vqap::Prov_r5_1Eca0Del (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -6867,12 +6623,10 @@ Vqap::Prov_r5_1Eca0Del (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -6970,13 +6724,11 @@ Vqap::Prov_r5_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -6993,13 +6745,11 @@ Vqap::Prov_r5_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7015,12 +6765,10 @@ Vqap::Prov_r5_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7118,13 +6866,11 @@ Vqap::Prov_r5_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -7141,13 +6887,11 @@ Vqap::Prov_r5_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7163,12 +6907,10 @@ Vqap::Prov_r5_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7266,13 +7008,11 @@ Vqap::Prov_r5_1Eca8Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr4")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr4")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -7289,13 +7029,11 @@ Vqap::Prov_r5_1Eca8Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7311,12 +7049,10 @@ Vqap::Prov_r5_1Eca8Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7414,13 +7150,11 @@ Vqap::Prov_r5_1Eca8Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr4")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr4")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -7437,13 +7171,11 @@ Vqap::Prov_r5_1Eca8Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7459,12 +7191,10 @@ Vqap::Prov_r5_1Eca8Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7562,13 +7292,11 @@ Vqap::Prov_r5_1Eca12Ins (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -7585,13 +7313,11 @@ Vqap::Prov_r5_1Eca12Ins (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("sim_attr3")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("sim_attr3")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7607,12 +7333,10 @@ Vqap::Prov_r5_1Eca12Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7710,13 +7434,11 @@ Vqap::Prov_r5_1Eca12Del (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -7733,13 +7455,11 @@ Vqap::Prov_r5_1Eca12Del (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("sim_attr3")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr2")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("sim_attr3")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr2")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7755,12 +7475,10 @@ Vqap::Prov_r5_1Eca12Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7868,13 +7586,11 @@ Vqap::Prov_r6_1Eca0Ins (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -7891,13 +7607,11 @@ Vqap::Prov_r6_1Eca0Ins (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -7913,12 +7627,10 @@ Vqap::Prov_r6_1Eca0Ins (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -7934,12 +7646,10 @@ Vqap::Prov_r6_1Eca0Ins (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -7955,12 +7665,10 @@ Vqap::Prov_r6_1Eca0Ins (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -8068,13 +7776,11 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -8091,13 +7797,11 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("candidate_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("candidate_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -8113,12 +7817,10 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -8134,12 +7836,10 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -8155,12 +7855,10 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("candidate_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("candidate_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -8215,6 +7913,7 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
       "eansTempDelete_attr7",
       RN_DEST));
 
+
   Send (result);
 }
 
@@ -8268,13 +7967,11 @@ Vqap::Prov_r6_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -8291,13 +7988,11 @@ Vqap::Prov_r6_1Eca3Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -8313,12 +8008,10 @@ Vqap::Prov_r6_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -8334,12 +8027,10 @@ Vqap::Prov_r6_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -8355,12 +8046,10 @@ Vqap::Prov_r6_1Eca3Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -8468,13 +8157,11 @@ Vqap::Prov_r6_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -8491,13 +8178,11 @@ Vqap::Prov_r6_1Eca3Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -8513,12 +8198,10 @@ Vqap::Prov_r6_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -8534,12 +8217,10 @@ Vqap::Prov_r6_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -8555,12 +8236,10 @@ Vqap::Prov_r6_1Eca3Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasQ_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasQ_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -8668,13 +8347,11 @@ Vqap::Prov_r6_1Eca8Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -8691,13 +8368,11 @@ Vqap::Prov_r6_1Eca8Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -8713,12 +8388,10 @@ Vqap::Prov_r6_1Eca8Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -8734,12 +8407,10 @@ Vqap::Prov_r6_1Eca8Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -8755,12 +8426,10 @@ Vqap::Prov_r6_1Eca8Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -8868,13 +8537,11 @@ Vqap::Prov_r6_1Eca8Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -8891,13 +8558,11 @@ Vqap::Prov_r6_1Eca8Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -8913,12 +8578,10 @@ Vqap::Prov_r6_1Eca8Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -8934,12 +8597,10 @@ Vqap::Prov_r6_1Eca8Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -8955,12 +8616,10 @@ Vqap::Prov_r6_1Eca8Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("hasImg_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("hasImg_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -9068,13 +8727,11 @@ Vqap::Prov_r6_1Eca12Ins (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -9091,13 +8748,11 @@ Vqap::Prov_r6_1Eca12Ins (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("sim_attr3")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("sim_attr3")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -9113,12 +8768,10 @@ Vqap::Prov_r6_1Eca12Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -9134,12 +8787,10 @@ Vqap::Prov_r6_1Eca12Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -9155,12 +8806,10 @@ Vqap::Prov_r6_1Eca12Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -9268,13 +8917,11 @@ Vqap::Prov_r6_1Eca12Del (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -9291,13 +8938,11 @@ Vqap::Prov_r6_1Eca12Del (Ptr<Tuple> sim)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("sim_attr1")),
-              VarExpr::New ("sim_attr3")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("sim_attr1")),
+            VarExpr::New ("sim_attr3")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -9313,12 +8958,10 @@ Vqap::Prov_r6_1Eca12Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -9334,12 +8977,10 @@ Vqap::Prov_r6_1Eca12Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -9355,12 +8996,10 @@ Vqap::Prov_r6_1Eca12Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -9468,13 +9107,11 @@ Vqap::Prov_r6_1Eca16Ins (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -9491,13 +9128,11 @@ Vqap::Prov_r6_1Eca16Ins (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("simRep1_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("simRep1_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -9513,12 +9148,10 @@ Vqap::Prov_r6_1Eca16Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -9534,12 +9167,10 @@ Vqap::Prov_r6_1Eca16Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -9555,12 +9186,10 @@ Vqap::Prov_r6_1Eca16Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -9668,13 +9297,11 @@ Vqap::Prov_r6_1Eca16Del (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -9691,13 +9318,11 @@ Vqap::Prov_r6_1Eca16Del (Ptr<Tuple> simRep1)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("simRep1_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("simRep1_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("simRep1_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("simRep1_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -9713,12 +9338,10 @@ Vqap::Prov_r6_1Eca16Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -9734,12 +9357,10 @@ Vqap::Prov_r6_1Eca16Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -9755,12 +9376,10 @@ Vqap::Prov_r6_1Eca16Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("hasQ_attr2")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("hasQ_attr2")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -9868,13 +9487,11 @@ Vqap::Prov_r6_1Eca20Ins (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep2_attr1")),
-              VarExpr::New ("simRep2_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep2_attr1")),
+            VarExpr::New ("simRep2_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -9891,13 +9508,11 @@ Vqap::Prov_r6_1Eca20Ins (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("simRep2_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("simRep2_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -9913,12 +9528,10 @@ Vqap::Prov_r6_1Eca20Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -9934,12 +9547,10 @@ Vqap::Prov_r6_1Eca20Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -9955,12 +9566,10 @@ Vqap::Prov_r6_1Eca20Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -10068,13 +9677,11 @@ Vqap::Prov_r6_1Eca20Del (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("simRep2_attr1")),
-              VarExpr::New ("simRep2_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("simRep2_attr1")),
+            VarExpr::New ("simRep2_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List2",
     FAppend::New (
@@ -10091,13 +9698,11 @@ Vqap::Prov_r6_1Eca20Del (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("simRep2_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("simRep2_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List3",
     FAppend::New (
@@ -10113,12 +9718,10 @@ Vqap::Prov_r6_1Eca20Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("candidate_attr2")),
-          VarExpr::New ("hasImg_attr2")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("candidate_attr2")),
+        VarExpr::New ("hasImg_attr2")))));
 
   result->Assign (Assignor::New ("List4",
     FAppend::New (
@@ -10134,12 +9737,10 @@ Vqap::Prov_r6_1Eca20Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasImg_attr3")))));
 
   result->Assign (Assignor::New ("List5",
     FAppend::New (
@@ -10155,12 +9756,10 @@ Vqap::Prov_r6_1Eca20Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List6",
     FAppend::New (
@@ -10229,11 +9828,9 @@ Vqap::Prov_r7_1Eca0Ins (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -10243,11 +9840,9 @@ Vqap::Prov_r7_1Eca0Ins (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("word"))));
@@ -10256,8 +9851,8 @@ Vqap::Prov_r7_1Eca0Ins (Ptr<Tuple> word)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         VarExpr::New ("Name"),
-        VarExpr::New ("word_attr2")),
-      VarExpr::New ("word_attr3"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("word_attr2"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("word_attr1")));
@@ -10314,11 +9909,9 @@ Vqap::Prov_r7_1Eca0Del (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -10328,11 +9921,9 @@ Vqap::Prov_r7_1Eca0Del (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("word"))));
@@ -10341,8 +9932,8 @@ Vqap::Prov_r7_1Eca0Del (Ptr<Tuple> word)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         VarExpr::New ("Name"),
-        VarExpr::New ("word_attr2")),
-      VarExpr::New ("word_attr3"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("word_attr2"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("word_attr1")));
@@ -10629,13 +10220,11 @@ Vqap::Prov_r8_1Eca0Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -10647,13 +10236,11 @@ Vqap::Prov_r8_1Eca0Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("hasImg"))));
@@ -10663,11 +10250,15 @@ Vqap::Prov_r8_1Eca0Ins (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("hasImg_attr2")),
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                VarExpr::New ("Name"),
+                ValueExpr::New (StrValue::New ("_"))),
+              VarExpr::New ("hasImg_attr2")),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("hasImg_attr4")),
-      VarExpr::New ("hasImg_attr5"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("hasImg_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("hasImg_attr1")));
@@ -10726,13 +10317,11 @@ Vqap::Prov_r8_1Eca0Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -10744,13 +10333,11 @@ Vqap::Prov_r8_1Eca0Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("hasImg"))));
@@ -10760,11 +10347,15 @@ Vqap::Prov_r8_1Eca0Del (Ptr<Tuple> hasImg)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("hasImg_attr2")),
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                VarExpr::New ("Name"),
+                ValueExpr::New (StrValue::New ("_"))),
+              VarExpr::New ("hasImg_attr2")),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("hasImg_attr3")),
-        VarExpr::New ("hasImg_attr4")),
-      VarExpr::New ("hasImg_attr5"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("hasImg_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("hasImg_attr1")));
@@ -10823,13 +10414,11 @@ Vqap::Prov_r9_1Eca0Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -10841,13 +10430,11 @@ Vqap::Prov_r9_1Eca0Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("hasQ"))));
@@ -10857,11 +10444,15 @@ Vqap::Prov_r9_1Eca0Ins (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("hasQ_attr2")),
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                VarExpr::New ("Name"),
+                ValueExpr::New (StrValue::New ("_"))),
+              VarExpr::New ("hasQ_attr2")),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("hasQ_attr3")),
-        VarExpr::New ("hasQ_attr4")),
-      VarExpr::New ("hasQ_attr5"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("hasQ_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("hasQ_attr1")));
@@ -10920,13 +10511,11 @@ Vqap::Prov_r9_1Eca0Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -10938,13 +10527,11 @@ Vqap::Prov_r9_1Eca0Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("hasQ"))));
@@ -10954,11 +10541,15 @@ Vqap::Prov_r9_1Eca0Del (Ptr<Tuple> hasQ)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            VarExpr::New ("Name"),
-            VarExpr::New ("hasQ_attr2")),
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                VarExpr::New ("Name"),
+                ValueExpr::New (StrValue::New ("_"))),
+              VarExpr::New ("hasQ_attr2")),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("hasQ_attr3")),
-        VarExpr::New ("hasQ_attr4")),
-      VarExpr::New ("hasQ_attr5"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("hasQ_attr4"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("hasQ_attr1")));
@@ -11016,12 +10607,10 @@ Vqap::Prov_r10_1Eca0Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -11032,12 +10621,10 @@ Vqap::Prov_r10_1Eca0Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("sim"))));
@@ -11046,10 +10633,12 @@ Vqap::Prov_r10_1Eca0Ins (Ptr<Tuple> sim)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("sim_attr2")),
-        VarExpr::New ("sim_attr3")),
-      VarExpr::New ("sim_attr4"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("sim_attr3"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("sim_attr1")));
@@ -11107,12 +10696,10 @@ Vqap::Prov_r10_1Eca0Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -11123,12 +10710,10 @@ Vqap::Prov_r10_1Eca0Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("sim"))));
@@ -11137,10 +10722,12 @@ Vqap::Prov_r10_1Eca0Del (Ptr<Tuple> sim)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("sim_attr2")),
-        VarExpr::New ("sim_attr3")),
-      VarExpr::New ("sim_attr4"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("sim_attr3"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("sim_attr1")));
@@ -11198,12 +10785,10 @@ Vqap::Prov_r11_1Eca0Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -11214,12 +10799,10 @@ Vqap::Prov_r11_1Eca0Ins (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("simRep1"))));
@@ -11228,10 +10811,12 @@ Vqap::Prov_r11_1Eca0Ins (Ptr<Tuple> simRep1)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("simRep1_attr2")),
-        VarExpr::New ("simRep1_attr3")),
-      VarExpr::New ("simRep1_attr4"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("simRep1_attr3"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("simRep1_attr1")));
@@ -11289,12 +10874,10 @@ Vqap::Prov_r11_1Eca0Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -11305,12 +10888,10 @@ Vqap::Prov_r11_1Eca0Del (Ptr<Tuple> simRep1)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep1")),
-              VarExpr::New ("simRep1_attr1")),
-            VarExpr::New ("simRep1_attr2")),
-          VarExpr::New ("simRep1_attr3")),
-        VarExpr::New ("simRep1_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep1")),
+            VarExpr::New ("simRep1_attr1")),
+          VarExpr::New ("simRep1_attr2")),
+        VarExpr::New ("simRep1_attr3")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("simRep1"))));
@@ -11319,10 +10900,12 @@ Vqap::Prov_r11_1Eca0Del (Ptr<Tuple> simRep1)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("simRep1_attr2")),
-        VarExpr::New ("simRep1_attr3")),
-      VarExpr::New ("simRep1_attr4"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("simRep1_attr3"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("simRep1_attr1")));
@@ -11380,12 +10963,10 @@ Vqap::Prov_r12_1Eca0Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -11396,12 +10977,10 @@ Vqap::Prov_r12_1Eca0Ins (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
 
   result->Assign (Assignor::New ("Name",
     ValueExpr::New (StrValue::New ("simRep2"))));
@@ -11410,10 +10989,12 @@ Vqap::Prov_r12_1Eca0Ins (Ptr<Tuple> simRep2)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("simRep2_attr2")),
-        VarExpr::New ("simRep2_attr3")),
-      VarExpr::New ("simRep2_attr4"))));
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("simRep2_attr3"))));
 
   result->Assign (Assignor::New ("RLOC",
     VarExpr::New ("simRep2_attr1")));
@@ -11471,12 +11052,427 @@ Vqap::Prov_r12_1Eca0Del (Ptr<Tuple> simRep2)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            ValueExpr::New (StrValue::New ("simRep2")),
+            VarExpr::New ("simRep2_attr1")),
+          VarExpr::New ("simRep2_attr2")),
+        VarExpr::New ("simRep2_attr3")))));
+
+  result->Assign (Assignor::New ("Name",
+    ValueExpr::New (StrValue::New ("simRep2"))));
+
+  result->Assign (Assignor::New ("Content",
+    Operation::New (RN_PLUS,
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
+          VarExpr::New ("simRep2_attr2")),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("simRep2_attr3"))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("simRep2_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r12"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    ESHARESULTTEMPDELETE,
+    strlist ("RLOC",
+      "Local",
+      "VID",
+      "Content",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eshaResultTempDelete_attr1",
+      "eshaResultTempDelete_attr2",
+      "eshaResultTempDelete_attr3",
+      "eshaResultTempDelete_attr4",
+      "eshaResultTempDelete_attr5",
+      "eshaResultTempDelete_attr6",
+      "eshaResultTempDelete_attr7",
+      "eshaResultTempDelete_attr8",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Prov_r13_1Eca0Ins (Ptr<Tuple> ans)
+{
+  RAPIDNET_LOG_INFO ("Prov_r13_1Eca0Ins triggered");
+
+  Ptr<Tuple> result = ans;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("ans")),
+          VarExpr::New ("ans_attr1")),
+        VarExpr::New ("ans_attr2")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("ans")),
+          VarExpr::New ("ans_attr1")),
+        VarExpr::New ("ans_attr2")))));
+
+  result->Assign (Assignor::New ("Name",
+    ValueExpr::New (StrValue::New ("ans"))));
+
+  result->Assign (Assignor::New ("Content",
+    Operation::New (RN_PLUS,
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("ans_attr2"))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("ans_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r13"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    ESHARESULTTEMP,
+    strlist ("RLOC",
+      "Local",
+      "VID",
+      "Content",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eshaResultTemp_attr1",
+      "eshaResultTemp_attr2",
+      "eshaResultTemp_attr3",
+      "eshaResultTemp_attr4",
+      "eshaResultTemp_attr5",
+      "eshaResultTemp_attr6",
+      "eshaResultTemp_attr7",
+      "eshaResultTemp_attr8",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Prov_r13_1Eca0Del (Ptr<Tuple> ans)
+{
+  RAPIDNET_LOG_INFO ("Prov_r13_1Eca0Del triggered");
+
+  Ptr<Tuple> result = ans;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("ans")),
+          VarExpr::New ("ans_attr1")),
+        VarExpr::New ("ans_attr2")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("ans")),
+          VarExpr::New ("ans_attr1")),
+        VarExpr::New ("ans_attr2")))));
+
+  result->Assign (Assignor::New ("Name",
+    ValueExpr::New (StrValue::New ("ans"))));
+
+  result->Assign (Assignor::New ("Content",
+    Operation::New (RN_PLUS,
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("ans_attr2"))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("ans_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r13"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    ESHARESULTTEMPDELETE,
+    strlist ("RLOC",
+      "Local",
+      "VID",
+      "Content",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eshaResultTempDelete_attr1",
+      "eshaResultTempDelete_attr2",
+      "eshaResultTempDelete_attr3",
+      "eshaResultTempDelete_attr4",
+      "eshaResultTempDelete_attr5",
+      "eshaResultTempDelete_attr6",
+      "eshaResultTempDelete_attr7",
+      "eshaResultTempDelete_attr8",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Prov_r14_1Eca0Ins (Ptr<Tuple> candidate)
+{
+  RAPIDNET_LOG_INFO ("Prov_r14_1Eca0Ins triggered");
+
+  Ptr<Tuple> result = candidate;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("candidate")),
+          VarExpr::New ("candidate_attr1")),
+        VarExpr::New ("candidate_attr2")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("candidate")),
+          VarExpr::New ("candidate_attr1")),
+        VarExpr::New ("candidate_attr2")))));
+
+  result->Assign (Assignor::New ("Name",
+    ValueExpr::New (StrValue::New ("candidate"))));
+
+  result->Assign (Assignor::New ("Content",
+    Operation::New (RN_PLUS,
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("candidate_attr2"))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("candidate_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r14"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    ESHARESULTTEMP,
+    strlist ("RLOC",
+      "Local",
+      "VID",
+      "Content",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eshaResultTemp_attr1",
+      "eshaResultTemp_attr2",
+      "eshaResultTemp_attr3",
+      "eshaResultTemp_attr4",
+      "eshaResultTemp_attr5",
+      "eshaResultTemp_attr6",
+      "eshaResultTemp_attr7",
+      "eshaResultTemp_attr8",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Prov_r14_1Eca0Del (Ptr<Tuple> candidate)
+{
+  RAPIDNET_LOG_INFO ("Prov_r14_1Eca0Del triggered");
+
+  Ptr<Tuple> result = candidate;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("candidate")),
+          VarExpr::New ("candidate_attr1")),
+        VarExpr::New ("candidate_attr2")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          ValueExpr::New (StrValue::New ("candidate")),
+          VarExpr::New ("candidate_attr1")),
+        VarExpr::New ("candidate_attr2")))));
+
+  result->Assign (Assignor::New ("Name",
+    ValueExpr::New (StrValue::New ("candidate"))));
+
+  result->Assign (Assignor::New ("Content",
+    Operation::New (RN_PLUS,
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("candidate_attr2"))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("candidate_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r14"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    ESHARESULTTEMPDELETE,
+    strlist ("RLOC",
+      "Local",
+      "VID",
+      "Content",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eshaResultTempDelete_attr1",
+      "eshaResultTempDelete_attr2",
+      "eshaResultTempDelete_attr3",
+      "eshaResultTempDelete_attr4",
+      "eshaResultTempDelete_attr5",
+      "eshaResultTempDelete_attr6",
+      "eshaResultTempDelete_attr7",
+      "eshaResultTempDelete_attr8",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Prov_r15_1Eca0Ins (Ptr<Tuple> hasImgAns)
+{
+  RAPIDNET_LOG_INFO ("Prov_r15_1Eca0Ins triggered");
+
+  Ptr<Tuple> result = hasImgAns;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+              Operation::New (RN_PLUS,
+                ValueExpr::New (StrValue::New ("hasImgAns")),
+                VarExpr::New ("hasImgAns_attr1")),
+              VarExpr::New ("hasImgAns_attr2")),
+            VarExpr::New ("hasImgAns_attr3")),
+          VarExpr::New ("hasImgAns_attr4")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("List",
     FAppend::New (
@@ -11488,32 +11484,149 @@ Vqap::Prov_r12_1Eca0Del (Ptr<Tuple> simRep2)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("simRep2")),
-              VarExpr::New ("simRep2_attr1")),
-            VarExpr::New ("simRep2_attr2")),
-          VarExpr::New ("simRep2_attr3")),
-        VarExpr::New ("simRep2_attr4")))));
+              Operation::New (RN_PLUS,
+                ValueExpr::New (StrValue::New ("hasImgAns")),
+                VarExpr::New ("hasImgAns_attr1")),
+              VarExpr::New ("hasImgAns_attr2")),
+            VarExpr::New ("hasImgAns_attr3")),
+          VarExpr::New ("hasImgAns_attr4")),
+        VarExpr::New ("hasImgAns_attr5")))));
 
   result->Assign (Assignor::New ("Name",
-    ValueExpr::New (StrValue::New ("simRep2"))));
+    ValueExpr::New (StrValue::New ("hasImgAns"))));
 
   result->Assign (Assignor::New ("Content",
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
-          VarExpr::New ("simRep2_attr2")),
-        VarExpr::New ("simRep2_attr3")),
-      VarExpr::New ("simRep2_attr4"))));
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                Operation::New (RN_PLUS,
+                  Operation::New (RN_PLUS,
+                    VarExpr::New ("Name"),
+                    ValueExpr::New (StrValue::New ("_"))),
+                  VarExpr::New ("hasImgAns_attr2")),
+                ValueExpr::New (StrValue::New ("_"))),
+              VarExpr::New ("hasImgAns_attr3")),
+            ValueExpr::New (StrValue::New ("_"))),
+          VarExpr::New ("hasImgAns_attr4")),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("hasImgAns_attr5"))));
 
   result->Assign (Assignor::New ("RLOC",
-    VarExpr::New ("simRep2_attr1")));
+    VarExpr::New ("hasImgAns_attr1")));
 
   result->Assign (Assignor::New ("RWeight",
     ValueExpr::New (RealValue::New (1))));
 
   result->Assign (Assignor::New ("R",
-    ValueExpr::New (StrValue::New ("r12"))));
+    ValueExpr::New (StrValue::New ("r15"))));
+
+  result->Assign (Assignor::New ("RID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          VarExpr::New ("R"),
+          VarExpr::New ("RLOC")),
+        VarExpr::New ("List")))));
+
+  result->Assign (Assignor::New ("Local",
+    LOCAL_ADDRESS));
+
+  result = result->Project (
+    ESHARESULTTEMP,
+    strlist ("RLOC",
+      "Local",
+      "VID",
+      "Content",
+      "RID",
+      "RWeight",
+      "R",
+      "List",
+      "RLOC"),
+    strlist ("eshaResultTemp_attr1",
+      "eshaResultTemp_attr2",
+      "eshaResultTemp_attr3",
+      "eshaResultTemp_attr4",
+      "eshaResultTemp_attr5",
+      "eshaResultTemp_attr6",
+      "eshaResultTemp_attr7",
+      "eshaResultTemp_attr8",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Prov_r15_1Eca0Del (Ptr<Tuple> hasImgAns)
+{
+  RAPIDNET_LOG_INFO ("Prov_r15_1Eca0Del triggered");
+
+  Ptr<Tuple> result = hasImgAns;
+
+  result->Assign (Assignor::New ("PID1",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                ValueExpr::New (StrValue::New ("hasImgAns")),
+                VarExpr::New ("hasImgAns_attr1")),
+              VarExpr::New ("hasImgAns_attr2")),
+            VarExpr::New ("hasImgAns_attr3")),
+          VarExpr::New ("hasImgAns_attr4")),
+        VarExpr::New ("hasImgAns_attr5")))));
+
+  result->Assign (Assignor::New ("List",
+    FAppend::New (
+      VarExpr::New ("PID1"))));
+
+  result->Assign (Assignor::New ("VID",
+    FSha1::New (
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                ValueExpr::New (StrValue::New ("hasImgAns")),
+                VarExpr::New ("hasImgAns_attr1")),
+              VarExpr::New ("hasImgAns_attr2")),
+            VarExpr::New ("hasImgAns_attr3")),
+          VarExpr::New ("hasImgAns_attr4")),
+        VarExpr::New ("hasImgAns_attr5")))));
+
+  result->Assign (Assignor::New ("Name",
+    ValueExpr::New (StrValue::New ("hasImgAns"))));
+
+  result->Assign (Assignor::New ("Content",
+    Operation::New (RN_PLUS,
+      Operation::New (RN_PLUS,
+        Operation::New (RN_PLUS,
+          Operation::New (RN_PLUS,
+            Operation::New (RN_PLUS,
+              Operation::New (RN_PLUS,
+                Operation::New (RN_PLUS,
+                  Operation::New (RN_PLUS,
+                    VarExpr::New ("Name"),
+                    ValueExpr::New (StrValue::New ("_"))),
+                  VarExpr::New ("hasImgAns_attr2")),
+                ValueExpr::New (StrValue::New ("_"))),
+              VarExpr::New ("hasImgAns_attr3")),
+            ValueExpr::New (StrValue::New ("_"))),
+          VarExpr::New ("hasImgAns_attr4")),
+        ValueExpr::New (StrValue::New ("_"))),
+      VarExpr::New ("hasImgAns_attr5"))));
+
+  result->Assign (Assignor::New ("RLOC",
+    VarExpr::New ("hasImgAns_attr1")));
+
+  result->Assign (Assignor::New ("RWeight",
+    ValueExpr::New (RealValue::New (1))));
+
+  result->Assign (Assignor::New ("R",
+    ValueExpr::New (StrValue::New ("r15"))));
 
   result->Assign (Assignor::New ("RID",
     FSha1::New (
@@ -11566,19 +11679,17 @@ Vqap::Prov_edb_1Eca1Ins (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("hasImg_attr5")));
+    VarExpr::New ("hasImg_attr4")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11615,19 +11726,17 @@ Vqap::Prov_edb_1Eca1Del (Ptr<Tuple> hasImg)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasImg")),
-                VarExpr::New ("hasImg_attr1")),
-              VarExpr::New ("hasImg_attr2")),
-            VarExpr::New ("hasImg_attr3")),
-          VarExpr::New ("hasImg_attr4")),
-        VarExpr::New ("hasImg_attr5")))));
+              ValueExpr::New (StrValue::New ("hasImg")),
+              VarExpr::New ("hasImg_attr1")),
+            VarExpr::New ("hasImg_attr2")),
+          VarExpr::New ("hasImg_attr3")),
+        VarExpr::New ("hasImg_attr4")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("hasImg_attr5")));
+    VarExpr::New ("hasImg_attr4")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11664,19 +11773,17 @@ Vqap::Prov_edb_2Eca1Ins (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("hasQ_attr5")));
+    VarExpr::New ("hasQ_attr4")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11713,19 +11820,17 @@ Vqap::Prov_edb_2Eca1Del (Ptr<Tuple> hasQ)
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
             Operation::New (RN_PLUS,
-              Operation::New (RN_PLUS,
-                ValueExpr::New (StrValue::New ("hasQ")),
-                VarExpr::New ("hasQ_attr1")),
-              VarExpr::New ("hasQ_attr2")),
-            VarExpr::New ("hasQ_attr3")),
-          VarExpr::New ("hasQ_attr4")),
-        VarExpr::New ("hasQ_attr5")))));
+              ValueExpr::New (StrValue::New ("hasQ")),
+              VarExpr::New ("hasQ_attr1")),
+            VarExpr::New ("hasQ_attr2")),
+          VarExpr::New ("hasQ_attr3")),
+        VarExpr::New ("hasQ_attr4")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("hasQ_attr5")));
+    VarExpr::New ("hasQ_attr4")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11761,18 +11866,16 @@ Vqap::Prov_edb_3Eca1Ins (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("sim_attr4")));
+    VarExpr::New ("sim_attr3")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11808,18 +11911,16 @@ Vqap::Prov_edb_3Eca1Del (Ptr<Tuple> sim)
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
           Operation::New (RN_PLUS,
-            Operation::New (RN_PLUS,
-              ValueExpr::New (StrValue::New ("sim")),
-              VarExpr::New ("sim_attr1")),
-            VarExpr::New ("sim_attr2")),
-          VarExpr::New ("sim_attr3")),
-        VarExpr::New ("sim_attr4")))));
+            ValueExpr::New (StrValue::New ("sim")),
+            VarExpr::New ("sim_attr1")),
+          VarExpr::New ("sim_attr2")),
+        VarExpr::New ("sim_attr3")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("sim_attr4")));
+    VarExpr::New ("sim_attr3")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11854,17 +11955,15 @@ Vqap::Prov_edb_4Eca1Ins (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("word_attr3")));
+    VarExpr::New ("word_attr2")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -11899,17 +11998,15 @@ Vqap::Prov_edb_4Eca1Del (Ptr<Tuple> word)
     FSha1::New (
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          Operation::New (RN_PLUS,
-            ValueExpr::New (StrValue::New ("word")),
-            VarExpr::New ("word_attr1")),
-          VarExpr::New ("word_attr2")),
-        VarExpr::New ("word_attr3")))));
+          ValueExpr::New (StrValue::New ("word")),
+          VarExpr::New ("word_attr1")),
+        VarExpr::New ("word_attr2")))));
 
   result->Assign (Assignor::New ("RID",
     VarExpr::New ("VID")));
 
   result->Assign (Assignor::New ("Score",
-    VarExpr::New ("word_attr3")));
+    VarExpr::New ("word_attr2")));
 
   result->Assign (Assignor::New ("Local",
     LOCAL_ADDRESS));
@@ -12018,13 +12115,23 @@ Vqap::Idb1b_eca (Ptr<Tuple> provQuery)
 
   Ptr<RelationBase> result;
 
-  result = GetRelation (SHARESULT)->Join (
+  result = GetRelation (PROV)->Join (
     provQuery,
+    strlist ("prov_attr2", "prov_attr1"),
+    strlist ("provQuery_attr3", "provQuery_attr1"));
+
+  result = GetRelation (SHARESULT)->Join (
+    result,
     strlist ("shaResult_attr2", "shaResult_attr1"),
     strlist ("provQuery_attr3", "provQuery_attr1"));
 
   result->Assign (Assignor::New ("Prov",
     VarExpr::New ("shaResult_attr3")));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("prov_attr3"),
+      VarExpr::New ("provQuery_attr3"))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_GT,
@@ -12060,13 +12167,6 @@ Vqap::Idb2_eca (Ptr<Tuple> provQuery)
     FEmpty::New (
 )));
 
-  result = result->Select (Selector::New (
-    Operation::New (RN_EQ,
-      FMember::New (
-        VarExpr::New ("provQuery_attr4"),
-        VarExpr::New ("provQuery_attr3")),
-      ValueExpr::New (Int32Value::New (0)))));
-
   result = result->Project (
     PRESULTTMP,
     strlist ("provQuery_attr1",
@@ -12097,12 +12197,10 @@ Vqap::Idb3_eca (Ptr<Tuple> provQuery)
     PITERATE,
     strlist ("provQuery_attr1",
       "provQuery_attr2",
-      "N",
-      "provQuery_attr5"),
+      "N"),
     strlist ("pIterate_attr1",
       "pIterate_attr2",
-      "pIterate_attr3",
-      "pIterate_attr4"));
+      "pIterate_attr3"));
 
   SendLocal (result);
 }
@@ -12134,12 +12232,10 @@ Vqap::Idb4_eca (Ptr<Tuple> pIterate)
     PITERATE,
     strlist ("pIterate_attr1",
       "pIterate_attr2",
-      "N",
-      "pIterate_attr4"),
+      "N"),
     strlist ("pIterate_attr1",
       "pIterate_attr2",
-      "pIterate_attr3",
-      "pIterate_attr4"));
+      "pIterate_attr3"));
 
   SendLocal (result);
 }
@@ -12179,31 +12275,27 @@ Vqap::Idb5_eca (Ptr<Tuple> pIterate)
     ERULEQUERY,
     strlist ("pIterate_attr1",
       "NQID",
-      "pIterate_attr2",
       "RID",
-      "pQList_attr3",
-      "pIterate_attr4"),
+      "pQList_attr3"),
     strlist ("eRuleQuery_attr1",
       "eRuleQuery_attr2",
       "eRuleQuery_attr3",
-      "eRuleQuery_attr4",
-      "eRuleQuery_attr5",
-      "eRuleQuery_attr6"));
+      "eRuleQuery_attr4"));
 
   SendLocal (result);
 }
 
 void
-Vqap::Idb6a_eca (Ptr<Tuple> eRuleQuery)
+Vqap::Idb6_eca (Ptr<Tuple> eRuleQuery)
 {
-  RAPIDNET_LOG_INFO ("Idb6a_eca triggered");
+  RAPIDNET_LOG_INFO ("Idb6_eca triggered");
 
   Ptr<RelationBase> result;
 
   result = GetRelation (PROV)->Join (
     eRuleQuery,
     strlist ("prov_attr3", "prov_attr1"),
-    strlist ("eRuleQuery_attr4", "eRuleQuery_attr1"));
+    strlist ("eRuleQuery_attr3", "eRuleQuery_attr1"));
 
   result->Assign (Assignor::New ("P2",
     FAppend::New (
@@ -12211,14 +12303,14 @@ Vqap::Idb6a_eca (Ptr<Tuple> eRuleQuery)
 
   result->Assign (Assignor::New ("P",
     FConcat::New (
-      VarExpr::New ("eRuleQuery_attr5"),
+      VarExpr::New ("eRuleQuery_attr4"),
       VarExpr::New ("P2"))));
 
   result = result->Project (
     RULEQUERY,
     strlist ("prov_attr4",
       "eRuleQuery_attr2",
-      "eRuleQuery_attr4",
+      "eRuleQuery_attr3",
       "P",
       "eRuleQuery_attr1",
       "prov_attr4"),
@@ -12350,9 +12442,9 @@ Vqap::Idb8Eca1Ins (Ptr<Tuple> pQList)
 }
 
 void
-Vqap::Idb9_eca (Ptr<Tuple> ePReturn)
+Vqap::Idb9a_eca (Ptr<Tuple> ePReturn)
 {
-  RAPIDNET_LOG_INFO ("Idb9_eca triggered");
+  RAPIDNET_LOG_INFO ("Idb9a_eca triggered");
 
   Ptr<RelationBase> result;
 
@@ -12361,10 +12453,20 @@ Vqap::Idb9_eca (Ptr<Tuple> ePReturn)
     strlist ("pResultTmp_attr2", "pResultTmp_attr1"),
     strlist ("ePReturn_attr2", "ePReturn_attr1"));
 
-  result->Assign (Assignor::New ("Prov",
+  result = GetRelation (SHARESULT)->Join (
+    result,
+    strlist ("shaResult_attr2", "shaResult_attr1"),
+    strlist ("pResultTmp_attr4", "ePReturn_attr1"));
+
+  result->Assign (Assignor::New ("Prov1",
     FPIdb::New (
       VarExpr::New ("pResultTmp_attr5"),
       VarExpr::New ("ePReturn_attr1"))));
+
+  result->Assign (Assignor::New ("Prov",
+    Operation::New (RN_PLUS,
+      VarExpr::New ("shaResult_attr3"),
+      VarExpr::New ("Prov1"))));
 
   result = result->Project (
     PRETURN,
@@ -12398,8 +12500,8 @@ Vqap::Rv1_eca (Ptr<Tuple> ruleQuery)
     RQLIST,
     strlist ("ruleQuery_attr1",
       "ruleQuery_attr2",
-      "ruleExec_attr5",
-      "ruleQuery_attr4"),
+      "ruleQuery_attr4",
+      "ruleExec_attr5"),
     strlist ("rQList_attr1",
       "rQList_attr2",
       "rQList_attr3",
@@ -12478,7 +12580,7 @@ Vqap::Rv4_eca (Ptr<Tuple> rIterate)
     Operation::New (RN_LT,
       VarExpr::New ("rIterate_attr3"),
       FSize::New (
-        VarExpr::New ("rQList_attr3")))));
+        VarExpr::New ("rQList_attr4")))));
 
   result = result->Project (
     RITERATE,
@@ -12506,7 +12608,7 @@ Vqap::Rv5_eca (Ptr<Tuple> rIterate)
 
   result->Assign (Assignor::New ("VID",
     FItem::New (
-      VarExpr::New ("rQList_attr3"),
+      VarExpr::New ("rQList_attr4"),
       VarExpr::New ("rIterate_attr3"))));
 
   result->Assign (Assignor::New ("NQID",
@@ -12522,7 +12624,7 @@ Vqap::Rv5_eca (Ptr<Tuple> rIterate)
     strlist ("rIterate_attr1",
       "NQID",
       "VID",
-      "rQList_attr4"),
+      "rQList_attr3"),
     strlist ("eProvQuery_attr1",
       "eProvQuery_attr2",
       "eProvQuery_attr3",
@@ -12621,7 +12723,7 @@ Vqap::Rv8Eca0Ins (Ptr<Tuple> rResultTmp)
       FSize::New (
         VarExpr::New ("rResultTmp_attr5")),
       FSize::New (
-        VarExpr::New ("rQList_attr3")))));
+        VarExpr::New ("rQList_attr4")))));
 
   result = result->Project (
     ERRETURN,
@@ -12650,7 +12752,7 @@ Vqap::Rv8Eca1Ins (Ptr<Tuple> rQList)
       FSize::New (
         VarExpr::New ("rResultTmp_attr5")),
       FSize::New (
-        VarExpr::New ("rQList_attr3")))));
+        VarExpr::New ("rQList_attr4")))));
 
   result = result->Project (
     ERRETURN,

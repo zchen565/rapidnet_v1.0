@@ -31,7 +31,9 @@
    synchronized with ISO/IEC 10646:2014, plus Amendment 1 (published
    2015-05-15).  */
 /* We do not support C11 <threads.h>.  */
-materialize(records,infinity,infinity,keys(1,2:cid,3:cid)).
-materialize(tuple, infinity, infinity, keys(1,2:str)).
-q1 provQuery(@Loc, QID, UID, ME):- periodic(@ME,E,10,2), tuple(@ME, Name, Loc, X), UID:=f_sha1(Name+Loc+X), Time := f_now(), QID:=f_sha1(""+UID+Time).
+materialize(records,infinity,infinity,keys(1,2:cid,3:cid,4:str)).
+materialize(tuple, infinity, infinity, keys(1,2:str,3,4:str)).
+materialize(temp, infinity, infinity, keys(1,2,3)).
+// qr temp(@Me, Name, X) :- tuple(@Me, Name, Loc, X).
+q1 provQuery(@Loc, QID, UID, P, ME):- tuple(@ME, Name, Loc, X), UID:=f_sha1(Name+Loc+X), Time := f_now(), QID:=f_sha1(""+UID+Time), P:=f_append("").
 q2 records(@ME, QID, RID, Prov) :- pReturn(@ME, QID, RID, Prov).

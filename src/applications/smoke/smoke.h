@@ -125,6 +125,14 @@ protected:
 
   virtual void Prov_r2_5_ecaDel (Ptr<Tuple> esmokeDelete);
 
+  virtual void Prov_r3_1Eca0Ins (Ptr<Tuple> friends);
+
+  virtual void Prov_r3_1Eca0Del (Ptr<Tuple> friends);
+
+  virtual void Prov_r3_1Eca3Ins (Ptr<Tuple> smoke);
+
+  virtual void Prov_r3_1Eca3Del (Ptr<Tuple> smoke);
+
   virtual void Prov_r11_1Eca0Ins (Ptr<Tuple> smoke);
 
   virtual void Prov_r11_1Eca0Del (Ptr<Tuple> smoke);
@@ -188,8 +196,6 @@ protected:
   virtual void Idb8Eca1Ins (Ptr<Tuple> pQList);
 
   virtual void Idb9a_eca (Ptr<Tuple> ePReturn);
-
-  virtual void Idb9b_eca (Ptr<Tuple> ePReturn);
 
   virtual void Rv1_eca (Ptr<Tuple> ruleQuery);
 

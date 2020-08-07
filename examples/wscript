@@ -208,11 +208,34 @@ def build(bld):
     obj = bld.create_ns3_program('trust-query-test')
     obj.source = 'trust-query-test.cc'
 
+
     obj = bld.create_ns3_program('vqap-query-test')
     obj.source = 'vqap-query-test.cc'
+
+    obj = bld.create_ns3_program('vqap-query-factory-test')
+    obj.source = 'vqap-query-factory-test.cc'
    
+    obj = bld.create_ns3_program('vqap-query-skyscraper-test')
+    obj.source = 'vqap-query-skyscraper-test.cc'
+
+    obj = bld.create_ns3_program('vqap-query-terminal-test')
+    obj.source = 'vqap-query-terminal-test.cc'
+
+    obj = bld.create_ns3_program('vqap-query-station-test')
+    obj.source = 'vqap-query-station-test.cc'
+
+    obj = bld.create_ns3_program('vqap-query-stadium-test')
+    obj.source = 'vqap-query-stadium-test.cc'
+
+    obj = bld.create_ns3_program('vqap-query-hotel-test')
+    obj.source = 'vqap-query-hotel-test.cc'
+
     obj = bld.create_ns3_program('smoke-test')
     obj.source = 'smoke-test.cc'
     
     obj = bld.create_ns3_program('smoke-query-test')
     obj.source = 'smoke-query-test.cc'
+
+    obj = bld.create_ns3_program('hyper-text-class-query-test')
+    obj.source = 'hyper-text-class-query-test.cc'
+

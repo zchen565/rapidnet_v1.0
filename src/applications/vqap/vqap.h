@@ -322,6 +322,18 @@ protected:
 
   virtual void Prov_r12_1Eca0Del (Ptr<Tuple> simRep2);
 
+  virtual void Prov_r13_1Eca0Ins (Ptr<Tuple> ans);
+
+  virtual void Prov_r13_1Eca0Del (Ptr<Tuple> ans);
+
+  virtual void Prov_r14_1Eca0Ins (Ptr<Tuple> candidate);
+
+  virtual void Prov_r14_1Eca0Del (Ptr<Tuple> candidate);
+
+  virtual void Prov_r15_1Eca0Ins (Ptr<Tuple> hasImgAns);
+
+  virtual void Prov_r15_1Eca0Del (Ptr<Tuple> hasImgAns);
+
   virtual void Prov_edb_1Eca1Ins (Ptr<Tuple> hasImg);
 
   virtual void Prov_edb_1Eca1Del (Ptr<Tuple> hasImg);
@@ -352,7 +364,7 @@ protected:
 
   virtual void Idb5_eca (Ptr<Tuple> pIterate);
 
-  virtual void Idb6a_eca (Ptr<Tuple> eRuleQuery);
+  virtual void Idb6_eca (Ptr<Tuple> eRuleQuery);
 
   virtual void Idb7_eca (Ptr<Tuple> rReturn);
 
@@ -360,7 +372,7 @@ protected:
 
   virtual void Idb8Eca1Ins (Ptr<Tuple> pQList);
 
-  virtual void Idb9_eca (Ptr<Tuple> ePReturn);
+  virtual void Idb9a_eca (Ptr<Tuple> ePReturn);
 
   virtual void Rv1_eca (Ptr<Tuple> ruleQuery);
 

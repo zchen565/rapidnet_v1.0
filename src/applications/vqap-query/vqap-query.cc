@@ -17,10 +17,9 @@ using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::vqapquery;
 
 const string VqapQuery::PRETURN = "pReturn";
-const string VqapQuery::PERIODIC = "periodic";
 const string VqapQuery::PROVQUERY = "provQuery";
-const string VqapQuery::Q1_ECAPERIODIC = "q1_ecaperiodic";
 const string VqapQuery::RECORDS = "records";
+const string VqapQuery::TEMP = "temp";
 const string VqapQuery::TUPLE = "tuple";
 
 NS_LOG_COMPONENT_DEFINE ("VqapQuery");
@@ -60,9 +59,6 @@ VqapQuery::StartApplication (void)
   NS_LOG_FUNCTION_NOARGS ();
 
   RapidNetApplicationBase::StartApplication ();
-  m_event_q1_ecaperiodic=
-    Simulator::Schedule (Seconds (0), &VqapQuery::Q1_ecaperiodic, this);
-  m_count_q1_ecaperiodic = 0;
   RAPIDNET_LOG_INFO("VqapQuery Application Started");
 }
 
@@ -72,7 +68,6 @@ VqapQuery::StopApplication ()
   NS_LOG_FUNCTION_NOARGS ();
 
   RapidNetApplicationBase::StopApplication ();
-  Simulator::Cancel(m_event_q1_ecaperiodic);
   RAPIDNET_LOG_INFO("VqapQuery Application Stopped");
 }
 
@@ -84,11 +79,19 @@ VqapQuery::InitDatabase ()
   AddRelationWithKeys (RECORDS, attrdeflist (
     attrdef ("records_attr1", IPV4),
     attrdef ("records_attr2", ID),
-    attrdef ("records_attr3", ID)));
+    attrdef ("records_attr3", ID),
+    attrdef ("records_attr4", STR)));
+
+  AddRelationWithKeys (TEMP, attrdeflist (
+    attrdef ("temp_attr1", IPV4),
+    attrdef ("temp_attr2", IPV4),
+    attrdef ("temp_attr3", IPV4)));
 
   AddRelationWithKeys (TUPLE, attrdeflist (
     attrdef ("tuple_attr1", IPV4),
-    attrdef ("tuple_attr2", STR)));
+    attrdef ("tuple_attr2", STR),
+    attrdef ("tuple_attr3", IPV4),
+    attrdef ("tuple_attr4", STR)));
 
 }
 
@@ -97,9 +100,9 @@ VqapQuery::DemuxRecv (Ptr<Tuple> tuple)
 {
   RapidNetApplicationBase::DemuxRecv (tuple);
 
-  if (IsRecvEvent (tuple, Q1_ECAPERIODIC))
+  if (IsInsertEvent (tuple, TUPLE))
     {
-      Q1_eca (tuple);
+      Q1Eca0Ins (tuple);
     }
   if (IsRecvEvent (tuple, PRETURN))
     {
@@ -108,32 +111,11 @@ VqapQuery::DemuxRecv (Ptr<Tuple> tuple)
 }
 
 void
-VqapQuery::Q1_ecaperiodic ()
+VqapQuery::Q1Eca0Ins (Ptr<Tuple> tuple)
 {
-  RAPIDNET_LOG_INFO ("Q1_ecaperiodic triggered");
+  RAPIDNET_LOG_INFO ("Q1Eca0Ins triggered");
 
-  SendLocal (tuple (Q1_ECAPERIODIC, attrlist (
-    attr ("q1_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
-    attr ("q1_ecaperiodic_attr2", Int32Value, rand ()))));
-
-  if (++m_count_q1_ecaperiodic < 2)
-    {
-      m_event_q1_ecaperiodic = Simulator::Schedule (Seconds(10),
-        &VqapQuery::Q1_ecaperiodic, this);
-    }
-}
-
-void
-VqapQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
-{
-  RAPIDNET_LOG_INFO ("Q1_eca triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (TUPLE)->Join (
-    q1_ecaperiodic,
-    strlist ("tuple_attr1"),
-    strlist ("q1_ecaperiodic_attr1"));
+  Ptr<Tuple> result = tuple;
 
   result->Assign (Assignor::New ("UID",
     FSha1::New (
@@ -155,17 +137,23 @@ VqapQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
           VarExpr::New ("UID")),
         VarExpr::New ("Time")))));
 
+  result->Assign (Assignor::New ("P",
+    FAppend::New (
+      ValueExpr::New (StrValue::New ("")))));
+
   result = result->Project (
     PROVQUERY,
     strlist ("tuple_attr3",
       "QID",
       "UID",
-      "q1_ecaperiodic_attr1",
+      "P",
+      "tuple_attr1",
       "tuple_attr3"),
     strlist ("provQuery_attr1",
       "provQuery_attr2",
       "provQuery_attr3",
       "provQuery_attr4",
+      "provQuery_attr5",
       RN_DEST));
 
   Send (result);
