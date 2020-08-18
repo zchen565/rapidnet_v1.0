@@ -210,6 +210,7 @@ void Print() {
   PrintRelation(apps, Smoke::FRIENDS);
   PrintRelation(apps, Smoke::SMOKE);
   PrintRelation(apps, Smoke::CANCER);
+  PrintRelation(apps, Smoke::RULEEXEC);
   PrintRelation(queryapps, SmokeQuery::TUPLE);
   PrintRelation(queryapps, SmokeQuery::RECORDS);
 }
@@ -218,10 +219,18 @@ void Print() {
 int n=1;
 
 
+
+void SingleTupleToQuery() {
+  Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
+  inserttuple(1, "cancer", 1, 2);
+}
+
+
 void TupleToQuery() {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
   // inserttuple(1, "cancer", 1, 2);
-  inserttuple(1, "cancer", 1, 6);
+  // inserttuple(1, "cancer", 1, 6);
+  inserttuple(1, "cancer", 1, n);
   n++;
 }
 
@@ -236,17 +245,16 @@ int main(int argc, char *argv[]){
   queryapps.Start (Seconds (0.0));
   queryapps.Stop (Seconds (100.0));
 
-  /*
   schedule (2.0, train);
-  for (int i=0; i<8; i++) {
-    schedule (5+i*5.0, TupleToQuery);
-    schedule (5+i*5.0+3, Print);
-  }
-  */
+  // for (int i=0; i<8; i++) {
+  //   schedule (5+i*5.0, TupleToQuery);
+  // }
+  schedule (5.0, SingleTupleToQuery);
+  schedule (99.0, Print);
 
-  schedule(1.0, train);
-  schedule(2.0, TupleToQuery);
-  schedule(5.0, Print);
+  // schedule(1.0, train);
+  // schedule(2.0, TupleToQuery);
+  // schedule(5.0, Print);
 
   Simulator::Run ();
   Simulator::Destroy ();

@@ -135,7 +135,8 @@ ECA Rule idb6_eca ACTION_REMOTE_SEND<ruleQuery(@RLoc, QID, RID, P, X)> :- EVENT_
 ECA Rule idb7_eca ACTION_ADD<pResultTmp(@X, QID, Ret, VID, Buf)> :- EVENT_RECV<rReturn(@X, NQID, RID, Prov)>, pResultTmp(@X, QID, Ret, VID, Buf1), NQID == f_sha1((+ QID)+ RID), Buf2 := f_append(Prov), Buf := f_concat(Buf1, Buf2).
 ECA Rule idb8Eca0Ins ACTION_LOCAL_SEND<ePReturn(@X, QID)> :- EVENT_INSERT<pResultTmp(@X, QID, Ret, VID, Buf)>, pQList(@X, QID, P, List), f_size(Buf) == f_size(List), f_size(Buf) != 0.
 ECA Rule idb8Eca1Ins ACTION_LOCAL_SEND<ePReturn(@X, QID)> :- EVENT_INSERT<pQList(@X, QID, P, List)>, pResultTmp(@X, QID, Ret, VID, Buf), f_size(Buf) == f_size(List), f_size(Buf) != 0.
-ECA Rule idb9a_eca ACTION_REMOTE_SEND<pReturn(@Ret, QID, VID, Prov)> :- EVENT_RECV<ePReturn(@X, QID)>, pResultTmp(@X, QID, Ret, VID, Buf), shaResult(@X, VID, Content), Prov1 := f_pIDB(Buf, X), Prov := Content+ Prov1.
+ECA Rule idb9a_eca ACTION_REMOTE_SEND<pReturn(@Ret, QID, VID, Prov)> :- EVENT_RECV<ePReturn(@X, QID)>, pResultTmp(@X, QID, Ret, VID, Buf), shaResult(@X, VID, Content), Prov1 := f_pIDB(Buf, X), Prov1 != c, Prov := Content+ Prov1.
+ECA Rule idb9b_eca ACTION_REMOTE_SEND<pReturn(@Ret, QID, VID, Prov)> :- EVENT_RECV<ePReturn(@X, QID)>, pResultTmp(@X, QID, Ret, VID, Buf), shaResult(@X, VID, Content), Prov1 := f_pIDB(Buf, X), Prov1 == c, Prov := Prov1.
 ECA Rule rv1_eca ACTION_ADD<rQList(@X, QID, P, List)> :- EVENT_RECV<ruleQuery(@X, QID, RID, P, Ret)>, ruleExec(@X, RID, RWeight, R, List).
 ECA Rule rv2_eca ACTION_ADD<rResultTmp(@X, QID, Ret, RID, Buf)> :- EVENT_RECV<ruleQuery(@X, QID, RID, P, Ret)>, Buf := f_empty().
 ECA Rule rv3_eca ACTION_LOCAL_SEND<rIterate(@X, QID, N)> :- EVENT_RECV<ruleQuery(@X, QID, RID, P, Ret)>, N := 1.

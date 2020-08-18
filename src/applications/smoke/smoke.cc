@@ -48,7 +48,6 @@ const string Smoke::RULEEXEC = "ruleExec";
 const string Smoke::RULEQUERY = "ruleQuery";
 const string Smoke::SHARESULT = "shaResult";
 const string Smoke::SMOKE = "smoke";
-const string Smoke::SMOKEEVENT = "smokeEvent";
 
 NS_LOG_COMPONENT_DEFINE ("Smoke");
 NS_OBJECT_ENSURE_REGISTERED (Smoke);
@@ -146,10 +145,6 @@ Smoke::InitDatabase ()
   AddRelationWithKeys (SMOKE, attrdeflist (
     attrdef ("smoke_attr1", IPV4),
     attrdef ("smoke_attr2", INT32)));
-
-  AddRelationWithKeys (SMOKEEVENT, attrdeflist (
-    attrdef ("smokeEvent_attr1", IPV4),
-    attrdef ("smokeEvent_attr2", INT32)));
 
 }
 
@@ -318,14 +313,6 @@ Smoke::DemuxRecv (Ptr<Tuple> tuple)
     {
       Prov_r13_1Eca0Del (tuple);
     }
-  if (IsInsertEvent (tuple, SMOKEEVENT))
-    {
-      Prov_r14_1Eca0Ins (tuple);
-    }
-  if (IsDeleteEvent (tuple, SMOKEEVENT))
-    {
-      Prov_r14_1Eca0Del (tuple);
-    }
   if (IsInsertEvent (tuple, FRIENDS))
     {
       Prov_edb_1Eca1Ins (tuple);
@@ -333,14 +320,6 @@ Smoke::DemuxRecv (Ptr<Tuple> tuple)
   if (IsDeleteEvent (tuple, FRIENDS))
     {
       Prov_edb_1Eca1Del (tuple);
-    }
-  if (IsInsertEvent (tuple, SMOKEEVENT))
-    {
-      Prov_edb_2Eca1Ins (tuple);
-    }
-  if (IsDeleteEvent (tuple, SMOKEEVENT))
-    {
-      Prov_edb_2Eca1Del (tuple);
     }
   if (IsRecvEvent (tuple, PROVQUERY))
     {
@@ -1738,7 +1717,9 @@ Smoke::Prov_r11_1Eca0Ins (Ptr<Tuple> smoke)
 
   result->Assign (Assignor::New ("Content",
     Operation::New (RN_PLUS,
-      VarExpr::New ("Name"),
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
       VarExpr::New ("smoke_attr2"))));
 
   result->Assign (Assignor::New ("RLOC",
@@ -1817,7 +1798,9 @@ Smoke::Prov_r11_1Eca0Del (Ptr<Tuple> smoke)
 
   result->Assign (Assignor::New ("Content",
     Operation::New (RN_PLUS,
-      VarExpr::New ("Name"),
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
       VarExpr::New ("smoke_attr2"))));
 
   result->Assign (Assignor::New ("RLOC",
@@ -2124,7 +2107,9 @@ Smoke::Prov_r12_1Eca0Ins (Ptr<Tuple> cancer)
 
   result->Assign (Assignor::New ("Content",
     Operation::New (RN_PLUS,
-      VarExpr::New ("Name"),
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
       VarExpr::New ("cancer_attr2"))));
 
   result->Assign (Assignor::New ("RLOC",
@@ -2203,7 +2188,9 @@ Smoke::Prov_r12_1Eca0Del (Ptr<Tuple> cancer)
 
   result->Assign (Assignor::New ("Content",
     Operation::New (RN_PLUS,
-      VarExpr::New ("Name"),
+      Operation::New (RN_PLUS,
+        VarExpr::New ("Name"),
+        ValueExpr::New (StrValue::New ("_"))),
       VarExpr::New ("cancer_attr2"))));
 
   result->Assign (Assignor::New ("RLOC",
@@ -2288,7 +2275,9 @@ Smoke::Prov_r13_1Eca0Ins (Ptr<Tuple> friends)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("friends_attr2")),
         ValueExpr::New (StrValue::New ("_"))),
       VarExpr::New ("friends_attr3"))));
@@ -2375,7 +2364,9 @@ Smoke::Prov_r13_1Eca0Del (Ptr<Tuple> friends)
     Operation::New (RN_PLUS,
       Operation::New (RN_PLUS,
         Operation::New (RN_PLUS,
-          VarExpr::New ("Name"),
+          Operation::New (RN_PLUS,
+            VarExpr::New ("Name"),
+            ValueExpr::New (StrValue::New ("_"))),
           VarExpr::New ("friends_attr2")),
         ValueExpr::New (StrValue::New ("_"))),
       VarExpr::New ("friends_attr3"))));
@@ -2388,164 +2379,6 @@ Smoke::Prov_r13_1Eca0Del (Ptr<Tuple> friends)
 
   result->Assign (Assignor::New ("R",
     ValueExpr::New (StrValue::New ("r13"))));
-
-  result->Assign (Assignor::New ("RID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          VarExpr::New ("R"),
-          VarExpr::New ("RLOC")),
-        VarExpr::New ("List")))));
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    ESHARESULTTEMPDELETE,
-    strlist ("RLOC",
-      "Local",
-      "VID",
-      "Content",
-      "RID",
-      "RWeight",
-      "R",
-      "List",
-      "RLOC"),
-    strlist ("eshaResultTempDelete_attr1",
-      "eshaResultTempDelete_attr2",
-      "eshaResultTempDelete_attr3",
-      "eshaResultTempDelete_attr4",
-      "eshaResultTempDelete_attr5",
-      "eshaResultTempDelete_attr6",
-      "eshaResultTempDelete_attr7",
-      "eshaResultTempDelete_attr8",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Smoke::Prov_r14_1Eca0Ins (Ptr<Tuple> smokeEvent)
-{
-  RAPIDNET_LOG_INFO ("Prov_r14_1Eca0Ins triggered");
-
-  Ptr<Tuple> result = smokeEvent;
-
-  result->Assign (Assignor::New ("PID1",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("smokeEvent")),
-          VarExpr::New ("smokeEvent_attr1")),
-        VarExpr::New ("smokeEvent_attr2")))));
-
-  result->Assign (Assignor::New ("List",
-    FAppend::New (
-      VarExpr::New ("PID1"))));
-
-  result->Assign (Assignor::New ("VID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("smokeEvent")),
-          VarExpr::New ("smokeEvent_attr1")),
-        VarExpr::New ("smokeEvent_attr2")))));
-
-  result->Assign (Assignor::New ("Name",
-    ValueExpr::New (StrValue::New ("smokeEvent"))));
-
-  result->Assign (Assignor::New ("Content",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("Name"),
-      VarExpr::New ("smokeEvent_attr2"))));
-
-  result->Assign (Assignor::New ("RLOC",
-    VarExpr::New ("smokeEvent_attr1")));
-
-  result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
-
-  result->Assign (Assignor::New ("R",
-    ValueExpr::New (StrValue::New ("r14"))));
-
-  result->Assign (Assignor::New ("RID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          VarExpr::New ("R"),
-          VarExpr::New ("RLOC")),
-        VarExpr::New ("List")))));
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    ESHARESULTTEMP,
-    strlist ("RLOC",
-      "Local",
-      "VID",
-      "Content",
-      "RID",
-      "RWeight",
-      "R",
-      "List",
-      "RLOC"),
-    strlist ("eshaResultTemp_attr1",
-      "eshaResultTemp_attr2",
-      "eshaResultTemp_attr3",
-      "eshaResultTemp_attr4",
-      "eshaResultTemp_attr5",
-      "eshaResultTemp_attr6",
-      "eshaResultTemp_attr7",
-      "eshaResultTemp_attr8",
-      RN_DEST));
-
-  Send (result);
-}
-
-void
-Smoke::Prov_r14_1Eca0Del (Ptr<Tuple> smokeEvent)
-{
-  RAPIDNET_LOG_INFO ("Prov_r14_1Eca0Del triggered");
-
-  Ptr<Tuple> result = smokeEvent;
-
-  result->Assign (Assignor::New ("PID1",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("smokeEvent")),
-          VarExpr::New ("smokeEvent_attr1")),
-        VarExpr::New ("smokeEvent_attr2")))));
-
-  result->Assign (Assignor::New ("List",
-    FAppend::New (
-      VarExpr::New ("PID1"))));
-
-  result->Assign (Assignor::New ("VID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("smokeEvent")),
-          VarExpr::New ("smokeEvent_attr1")),
-        VarExpr::New ("smokeEvent_attr2")))));
-
-  result->Assign (Assignor::New ("Name",
-    ValueExpr::New (StrValue::New ("smokeEvent"))));
-
-  result->Assign (Assignor::New ("Content",
-    Operation::New (RN_PLUS,
-      VarExpr::New ("Name"),
-      VarExpr::New ("smokeEvent_attr2"))));
-
-  result->Assign (Assignor::New ("RLOC",
-    VarExpr::New ("smokeEvent_attr1")));
-
-  result->Assign (Assignor::New ("RWeight",
-    ValueExpr::New (RealValue::New (1))));
-
-  result->Assign (Assignor::New ("R",
-    ValueExpr::New (StrValue::New ("r14"))));
 
   result->Assign (Assignor::New ("RID",
     FSha1::New (
@@ -2673,92 +2506,6 @@ Smoke::Prov_edb_1Eca1Del (Ptr<Tuple> friends)
 }
 
 void
-Smoke::Prov_edb_2Eca1Ins (Ptr<Tuple> smokeEvent)
-{
-  RAPIDNET_LOG_INFO ("Prov_edb_2Eca1Ins triggered");
-
-  Ptr<Tuple> result = smokeEvent;
-
-  result->Assign (Assignor::New ("RLoc",
-    VarExpr::New ("smokeEvent_attr1")));
-
-  result->Assign (Assignor::New ("VID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("smokeEvent")),
-          VarExpr::New ("smokeEvent_attr1")),
-        VarExpr::New ("smokeEvent_attr2")))));
-
-  result->Assign (Assignor::New ("RID",
-    VarExpr::New ("VID")));
-
-  result->Assign (Assignor::New ("Score",
-    VarExpr::New ("smokeEvent_attr2")));
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    PROV,
-    strlist ("Local",
-      "VID",
-      "RID",
-      "RLoc",
-      "Score"),
-    strlist ("prov_attr1",
-      "prov_attr2",
-      "prov_attr3",
-      "prov_attr4",
-      "prov_attr5"));
-
-  Insert (result);
-}
-
-void
-Smoke::Prov_edb_2Eca1Del (Ptr<Tuple> smokeEvent)
-{
-  RAPIDNET_LOG_INFO ("Prov_edb_2Eca1Del triggered");
-
-  Ptr<Tuple> result = smokeEvent;
-
-  result->Assign (Assignor::New ("RLoc",
-    VarExpr::New ("smokeEvent_attr1")));
-
-  result->Assign (Assignor::New ("VID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("smokeEvent")),
-          VarExpr::New ("smokeEvent_attr1")),
-        VarExpr::New ("smokeEvent_attr2")))));
-
-  result->Assign (Assignor::New ("RID",
-    VarExpr::New ("VID")));
-
-  result->Assign (Assignor::New ("Score",
-    VarExpr::New ("smokeEvent_attr2")));
-
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
-
-  result = result->Project (
-    PROV,
-    strlist ("Local",
-      "VID",
-      "RID",
-      "RLoc",
-      "Score"),
-    strlist ("prov_attr1",
-      "prov_attr2",
-      "prov_attr3",
-      "prov_attr4",
-      "prov_attr5"));
-
-  Delete (result);
-}
-
-void
 Smoke::Edb1_eca (Ptr<Tuple> provQuery)
 {
   RAPIDNET_LOG_INFO ("Edb1_eca triggered");
@@ -2846,23 +2593,13 @@ Smoke::Idb1b_eca (Ptr<Tuple> provQuery)
 
   Ptr<RelationBase> result;
 
-  result = GetRelation (PROV)->Join (
-    provQuery,
-    strlist ("prov_attr2", "prov_attr1"),
-    strlist ("provQuery_attr3", "provQuery_attr1"));
-
   result = GetRelation (SHARESULT)->Join (
-    result,
+    provQuery,
     strlist ("shaResult_attr2", "shaResult_attr1"),
     strlist ("provQuery_attr3", "provQuery_attr1"));
 
   result->Assign (Assignor::New ("Prov",
     VarExpr::New ("shaResult_attr3")));
-
-  result = result->Select (Selector::New (
-    Operation::New (RN_NEQ,
-      VarExpr::New ("prov_attr3"),
-      VarExpr::New ("provQuery_attr3"))));
 
   result = result->Select (Selector::New (
     Operation::New (RN_GT,

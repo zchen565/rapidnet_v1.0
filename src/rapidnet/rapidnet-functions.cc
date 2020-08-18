@@ -602,12 +602,14 @@ FPRule::Eval(Ptr<Tuple> tuple)
 
     for (rn_list_iterator it = provList.begin (); it != provList.end (); it++)
     {
-      if ((*it)->ToString()=="c"){
-        valid = false;
-      }
+      // if ((*it)->ToString()=="c"){
+      //   valid = false;
+      // }
       if (index++!=0) ss << "*";
       ss << (*it)->ToString ();
+      cout << (*it)->ToString() << ' ';
     }
+    cout << endl;
 
     ss << "))";
 

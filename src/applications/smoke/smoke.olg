@@ -1,5 +1,4 @@
 materialize(smoke, infinity, infinity, keys(1, 2:int32)).
-materialize(smokeEvent, infinity, infinity, keys(1, 2:int32)).
 materialize(cancer, infinity, infinity, keys(1, 2:int32)).
 materialize(friends, infinity, infinity, keys(1, 2:int32, 3:int32)).
 
@@ -11,7 +10,12 @@ r2 0.88 smoke(@Local, A) :- friends(@Local, A, B), smoke(@Local, B), A!=B.
 r3 0.88 smoke(@Local, B) :- friends(@Local, A, B), smoke(@Local, A), A!=B.
 
 
-r11 shaResult(@Local, VID, Content) :- smoke(@Local, P), VID:=f_sha1("smoke"+Local+P), Name:="smoke", Content:=Name+P.
-r12 shaResult(@Local, VID, Content) :- cancer(@Local, P), VID:=f_sha1("cancer"+Local+P), Name:="cancer", Content:=Name+P.
-r13 shaResult(@Local, VID, Content) :- friends(@Local, A, B), VID:=f_sha1("friends"+Local+A+B), Name:="friends", Content:=Name+A+"_"+B.
-r14 shaResult(@Local, VID, Content) :- smokeEvent(@Local, P), VID:=f_sha1("smokeEvent"+Local+P), Name:="smokeEvent", Content:=Name+P.
+r11 shaResult(@Local, VID, Content) :- smoke(@Local, P), VID:=f_sha1("smoke"+Local+P), Name:="smoke", Content:=Name+"_"+P.
+r12 shaResult(@Local, VID, Content) :- cancer(@Local, P), VID:=f_sha1("cancer"+Local+P), Name:="cancer", Content:=Name+"_"+P.
+r13 shaResult(@Local, VID, Content) :- friends(@Local, A, B), VID:=f_sha1("friends"+Local+A+B), Name:="friends", Content:=Name+"_"+A+"_"+B.
+
+
+
+// r11 shaResult(@Local, VID, Content) :- smoke(@Local, P), VID:=f_sha1("smoke"+Local+P), Name:="smoke", Content:=Name+P.
+// r12 shaResult(@Local, VID, Content) :- cancer(@Local, P), VID:=f_sha1("cancer"+Local+P), Name:="cancer", Content:=Name+P.
+// r13 shaResult(@Local, VID, Content) :- friends(@Local, A, B), VID:=f_sha1("friends"+Local+A+B), Name:="friends", Content:=Name+A+"_"+B.

@@ -374,6 +374,8 @@ protected:
 
   virtual void Idb9a_eca (Ptr<Tuple> ePReturn);
 
+  virtual void Idb9b_eca (Ptr<Tuple> ePReturn);
+
   virtual void Rv1_eca (Ptr<Tuple> ruleQuery);
 
   virtual void Rv2_eca (Ptr<Tuple> ruleQuery);

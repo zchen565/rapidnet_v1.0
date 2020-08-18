@@ -18,7 +18,8 @@ idb1a pQList(@X,QID,P,a_LIST<RID>) :- provQuery(@X,QID,VID,P,Ret),
        prov(@X,VID,RID,RLoc,Score), RID!=VID,
        f_member(P, VID)==0.
 idb1b pReturn(@Ret,QID,VID,Prov) :- provQuery(@X,QID,VID,P,Ret),
-       prov(@X,VID,RID,RLoc,Score), RID!=VID,
+       // prov(@X,VID,RID,RLoc,Score), 
+       // RID!=VID,
        f_member(P,VID)>0, shaResult(@X,VID,Content), Prov:=Content.
 
 idb2 pResultTmp(@X,QID,Ret,VID,Buf) :-
@@ -44,18 +45,16 @@ idb8 ePReturn(@X,QID) :- pResultTmp(@X,QID,Ret,VID,Buf),
        pQList(@X,QID,P,List),
        f_size(Buf)==f_size(List), f_size(Buf)!=0.
 
+
 idb9a pReturn(@Ret,QID,VID,Prov) :- ePReturn(@X,QID),
        pResultTmp(@X,QID,Ret,VID,Buf), Prov1:=f_pIDB(Buf,X),
-//        Prov1!="c", 
        shaResult(@X, VID, Content),
        Prov:=Content+Prov1.
 
-/*
-idb9b pReturn(@Ret,QID,VID,Prov) :- ePReturn(@X,QID),
-       pResultTmp(@X,QID,Ret,VID,Buf), Prov1:=f_pIDB(Buf,X),
-       Prov1=="c", shaResult(@X, VID, Content),
-       Prov:=Content.
-*/
+// idb9b pReturn(@Ret,QID,VID,Prov) :- ePReturn(@X,QID),
+//        pResultTmp(@X,QID,Ret,VID,Buf), Prov1:=f_pIDB(Buf,X),
+//        Prov1=="c", shaResult(@X, VID, Content),
+//        Prov:=Prov1.
 
 
 /* Rule Vertex */
@@ -77,12 +76,14 @@ rv6 provQuery(@X,QID,VID,P,X) :- eProvQuery(@X,QID,VID,P).
 rv7 rResultTmp(@X,QID,Ret,RID,Buf) :- pReturn(@X,NQID,VID,Prov),
       rResultTmp(@X,QID,Ret,RID,Buf1), NQID==f_sha1(""+QID+VID),
       Buf2:=f_append(Prov), Buf:=f_concat(Buf1,Buf2).
+//       ruleExec(@X,RID,RWeight,R,List), f_size(Buf)<=f_size(List).
 
 rv8 eRReturn(@X,QID) :- rResultTmp(@X,QID,Ret,RID,Buf),
       rQList(@X,QID,P,List), f_size(Buf)==f_size(List).
 rv9 rReturn(@Ret,QID,RID,Prov) :- eRReturn(@X,QID),
       rResultTmp(@X,QID,Ret,RID,Buf),
-      ruleExec(@X,RID,RWeight,R,List), Prov:=f_pRULE(Buf,X,R,RWeight).
+      ruleExec(@X,RID,RWeight,R,List), 
+      Prov:=f_pRULE(Buf,X,R,RWeight).
 
 
 

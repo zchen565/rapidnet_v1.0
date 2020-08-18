@@ -756,6 +756,10 @@ Vqap::DemuxRecv (Ptr<Tuple> tuple)
     {
       Idb9a_eca (tuple);
     }
+  if (IsRecvEvent (tuple, EPRETURN))
+    {
+      Idb9b_eca (tuple);
+    }
   if (IsRecvEvent (tuple, RULEQUERY))
     {
       Rv1_eca (tuple);
@@ -7913,7 +7917,6 @@ Vqap::Prov_r6_1Eca0Del (Ptr<Tuple> candidate)
       "eansTempDelete_attr7",
       RN_DEST));
 
-
   Send (result);
 }
 
@@ -12467,6 +12470,57 @@ Vqap::Idb9a_eca (Ptr<Tuple> ePReturn)
     Operation::New (RN_PLUS,
       VarExpr::New ("shaResult_attr3"),
       VarExpr::New ("Prov1"))));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_NEQ,
+      VarExpr::New ("Prov1"),
+      ValueExpr::New (StrValue::New ("c")))));
+
+  result = result->Project (
+    PRETURN,
+    strlist ("pResultTmp_attr3",
+      "ePReturn_attr2",
+      "pResultTmp_attr4",
+      "Prov",
+      "pResultTmp_attr3"),
+    strlist ("pReturn_attr1",
+      "pReturn_attr2",
+      "pReturn_attr3",
+      "pReturn_attr4",
+      RN_DEST));
+
+  Send (result);
+}
+
+void
+Vqap::Idb9b_eca (Ptr<Tuple> ePReturn)
+{
+  RAPIDNET_LOG_INFO ("Idb9b_eca triggered");
+
+  Ptr<RelationBase> result;
+
+  result = GetRelation (PRESULTTMP)->Join (
+    ePReturn,
+    strlist ("pResultTmp_attr2", "pResultTmp_attr1"),
+    strlist ("ePReturn_attr2", "ePReturn_attr1"));
+
+  result = GetRelation (SHARESULT)->Join (
+    result,
+    strlist ("shaResult_attr2", "shaResult_attr1"),
+    strlist ("pResultTmp_attr4", "ePReturn_attr1"));
+
+  result->Assign (Assignor::New ("Prov1",
+    FPIdb::New (
+      VarExpr::New ("pResultTmp_attr5"),
+      VarExpr::New ("ePReturn_attr1"))));
+
+  result->Assign (Assignor::New ("Prov",
+    VarExpr::New ("Prov1")));
+
+  result = result->Select (Selector::New (
+    Operation::New (RN_EQ,
+      VarExpr::New ("Prov1"),
+      ValueExpr::New (StrValue::New ("c")))));
 
   result = result->Project (
     PRETURN,

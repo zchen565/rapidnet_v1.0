@@ -32,6 +32,6 @@
    2015-05-15).  */
 /* We do not support C11 <threads.h>.  */
 materialize(records,infinity,infinity,keys(1,2:cid,3:cid)).
-materialize(tuple, infinity, infinity, keys(1,2:str)).
-q1 provQuery(@Loc, QID, UID, P, ME):- periodic(@ME,E,4,2), tuple(@ME, Name, Loc, X), UID:=f_sha1(Name+Loc+X), Time := f_now(), QID:=f_sha1(""+UID+Time), P:=f_append("").
+materialize(tuple, infinity, infinity, keys(1,2:str,3,4)).
+q1 provQuery(@Loc, QID, UID, P, ME):- tuple(@ME, Name, Loc, X), UID:=f_sha1(Name+Loc+X), Time := f_now(), QID:=f_sha1(""+UID+Time), P:=f_append("").
 q2 records(@ME, QID, RID, Prov) :- pReturn(@ME, QID, RID, Prov).

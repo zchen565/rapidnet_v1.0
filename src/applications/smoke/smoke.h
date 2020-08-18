@@ -61,7 +61,6 @@ public:
   static const string RULEQUERY;
   static const string SHARESULT;
   static const string SMOKE;
-  static const string SMOKEEVENT;
 
   static TypeId GetTypeId (void);
 
@@ -161,17 +160,9 @@ protected:
 
   virtual void Prov_r13_1Eca0Del (Ptr<Tuple> friends);
 
-  virtual void Prov_r14_1Eca0Ins (Ptr<Tuple> smokeEvent);
-
-  virtual void Prov_r14_1Eca0Del (Ptr<Tuple> smokeEvent);
-
   virtual void Prov_edb_1Eca1Ins (Ptr<Tuple> friends);
 
   virtual void Prov_edb_1Eca1Del (Ptr<Tuple> friends);
-
-  virtual void Prov_edb_2Eca1Ins (Ptr<Tuple> smokeEvent);
-
-  virtual void Prov_edb_2Eca1Del (Ptr<Tuple> smokeEvent);
 
   virtual void Edb1_eca (Ptr<Tuple> provQuery);
 

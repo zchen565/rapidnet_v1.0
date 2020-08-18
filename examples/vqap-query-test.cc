@@ -329,10 +329,10 @@ main(int argc, char *argv[]){
   queryapps.Stop (Seconds (100.0));
 
 	schedule (2.0, Train);
-  for (int i=0; i<answers.size()-1; i++) {
-  schedule (5.0+i, TupleToQuery);
-  }
-  // schedule (5.0, SingleTupleToQuery);
+  // for (int i=0; i<answers.size()-1; i++) {
+  // schedule (5.0+i, TupleToQuery);
+  // }
+  schedule (5.0, SingleTupleToQuery);
 	schedule (90.0, Print);
 
 	Simulator::Run ();

@@ -221,6 +221,22 @@ protected:
   Ptr<Expression> m_listAttrName;
 };
 
+/*
+
+class FPrintSize : public FunctionExpr 
+{
+public:
+
+  virtual ~FPrintSize () {}
+
+
+
+  static void New (
+
+
+}
+*/
+
 /**
  * \ingroup rapidnet_functions
  *

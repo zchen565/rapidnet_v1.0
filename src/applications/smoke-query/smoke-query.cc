@@ -17,9 +17,7 @@ using namespace ns3::rapidnet;
 using namespace ns3::rapidnet::smokequery;
 
 const string SmokeQuery::PRETURN = "pReturn";
-const string SmokeQuery::PERIODIC = "periodic";
 const string SmokeQuery::PROVQUERY = "provQuery";
-const string SmokeQuery::Q1_ECAPERIODIC = "q1_ecaperiodic";
 const string SmokeQuery::RECORDS = "records";
 const string SmokeQuery::TUPLE = "tuple";
 
@@ -60,9 +58,6 @@ SmokeQuery::StartApplication (void)
   NS_LOG_FUNCTION_NOARGS ();
 
   RapidNetApplicationBase::StartApplication ();
-  m_event_q1_ecaperiodic=
-    Simulator::Schedule (Seconds (0), &SmokeQuery::Q1_ecaperiodic, this);
-  m_count_q1_ecaperiodic = 0;
   RAPIDNET_LOG_INFO("SmokeQuery Application Started");
 }
 
@@ -72,7 +67,6 @@ SmokeQuery::StopApplication ()
   NS_LOG_FUNCTION_NOARGS ();
 
   RapidNetApplicationBase::StopApplication ();
-  Simulator::Cancel(m_event_q1_ecaperiodic);
   RAPIDNET_LOG_INFO("SmokeQuery Application Stopped");
 }
 
@@ -88,7 +82,9 @@ SmokeQuery::InitDatabase ()
 
   AddRelationWithKeys (TUPLE, attrdeflist (
     attrdef ("tuple_attr1", IPV4),
-    attrdef ("tuple_attr2", STR)));
+    attrdef ("tuple_attr2", STR),
+    attrdef ("tuple_attr3", IPV4),
+    attrdef ("tuple_attr4", IPV4)));
 
 }
 
@@ -97,9 +93,9 @@ SmokeQuery::DemuxRecv (Ptr<Tuple> tuple)
 {
   RapidNetApplicationBase::DemuxRecv (tuple);
 
-  if (IsRecvEvent (tuple, Q1_ECAPERIODIC))
+  if (IsInsertEvent (tuple, TUPLE))
     {
-      Q1_eca (tuple);
+      Q1Eca0Ins (tuple);
     }
   if (IsRecvEvent (tuple, PRETURN))
     {
@@ -108,32 +104,11 @@ SmokeQuery::DemuxRecv (Ptr<Tuple> tuple)
 }
 
 void
-SmokeQuery::Q1_ecaperiodic ()
+SmokeQuery::Q1Eca0Ins (Ptr<Tuple> tuple)
 {
-  RAPIDNET_LOG_INFO ("Q1_ecaperiodic triggered");
+  RAPIDNET_LOG_INFO ("Q1Eca0Ins triggered");
 
-  SendLocal (tuple (Q1_ECAPERIODIC, attrlist (
-    attr ("q1_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
-    attr ("q1_ecaperiodic_attr2", Int32Value, rand ()))));
-
-  if (++m_count_q1_ecaperiodic < 2)
-    {
-      m_event_q1_ecaperiodic = Simulator::Schedule (Seconds(4),
-        &SmokeQuery::Q1_ecaperiodic, this);
-    }
-}
-
-void
-SmokeQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
-{
-  RAPIDNET_LOG_INFO ("Q1_eca triggered");
-
-  Ptr<RelationBase> result;
-
-  result = GetRelation (TUPLE)->Join (
-    q1_ecaperiodic,
-    strlist ("tuple_attr1"),
-    strlist ("q1_ecaperiodic_attr1"));
+  Ptr<Tuple> result = tuple;
 
   result->Assign (Assignor::New ("UID",
     FSha1::New (
@@ -165,7 +140,7 @@ SmokeQuery::Q1_eca (Ptr<Tuple> q1_ecaperiodic)
       "QID",
       "UID",
       "P",
-      "q1_ecaperiodic_attr1",
+      "tuple_attr1",
       "tuple_attr3"),
     strlist ("provQuery_attr1",
       "provQuery_attr2",
