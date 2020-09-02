@@ -607,9 +607,8 @@ FPRule::Eval(Ptr<Tuple> tuple)
       // }
       if (index++!=0) ss << "*";
       ss << (*it)->ToString ();
-      cout << (*it)->ToString() << ' ';
+      // cout << (*it)->ToString() << ' ';
     }
-    cout << endl;
 
     ss << "))";
 

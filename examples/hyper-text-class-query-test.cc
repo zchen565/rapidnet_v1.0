@@ -156,7 +156,7 @@ void parseLine(const string& line) {
 
 
 void train() {
-  ifstream fp(HyperTextClassTest3);
+  ifstream fp(HyperTextClassTest2);
   string line;
 
   while (getline(fp, line)) {

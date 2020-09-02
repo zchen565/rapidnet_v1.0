@@ -179,7 +179,7 @@ void parseLine(const string& line) {
 
 
 void train() {
-  ifstream fp(SmokeTest);
+  ifstream fp(SmokeTrain);
   string line;
 
   while (getline(fp, line)) {
@@ -210,7 +210,6 @@ void Print() {
   PrintRelation(apps, Smoke::FRIENDS);
   PrintRelation(apps, Smoke::SMOKE);
   PrintRelation(apps, Smoke::CANCER);
-  PrintRelation(apps, Smoke::RULEEXEC);
   PrintRelation(queryapps, SmokeQuery::TUPLE);
   PrintRelation(queryapps, SmokeQuery::RECORDS);
 }
@@ -246,10 +245,10 @@ int main(int argc, char *argv[]){
   queryapps.Stop (Seconds (100.0));
 
   schedule (2.0, train);
-  // for (int i=0; i<8; i++) {
-  //   schedule (5+i*5.0, TupleToQuery);
-  // }
-  schedule (5.0, SingleTupleToQuery);
+  for (int i=0; i<8; i++) {
+  schedule (5+i*5.0, TupleToQuery);
+  }
+  // schedule (5.0, SingleTupleToQuery);
   schedule (99.0, Print);
 
   // schedule(1.0, train);
