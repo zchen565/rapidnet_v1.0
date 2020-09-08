@@ -1171,6 +1171,7 @@ OlContext::AddEdbProvenanceRule ()
       != potentialEdbs.end (); entry++)
     {
       ParseFunctor* f = entry->second;
+      // cout << entry->first << endl;
       if ( (mTables->count (f->fName->name) > 0) && rewrittenIdbs.insert (
         f->fName->name).second) //this table is edb
         {

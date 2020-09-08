@@ -1556,6 +1556,10 @@ protected:
 
   virtual void Prov_r363_1Eca0Del (Ptr<Tuple> hasword);
 
+  virtual void Prov_r364_1Eca0Ins (Ptr<Tuple> hasword);
+
+  virtual void Prov_r364_1Eca0Del (Ptr<Tuple> hasword);
+
   virtual void Prov_r365_1Eca0Ins (Ptr<Tuple> hasword);
 
   virtual void Prov_r365_1Eca0Del (Ptr<Tuple> hasword);
@@ -2096,150 +2100,6 @@ protected:
 
   virtual void Prov_r499_1Eca0Del (Ptr<Tuple> hasword);
 
-  virtual void Prov_r500_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r500_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r501_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r501_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r502_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r502_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r503_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r503_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r504_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r504_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r505_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r505_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r506_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r506_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r507_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r507_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r508_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r508_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r509_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r509_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r510_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r510_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r511_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r511_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r512_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r512_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r513_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r513_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r514_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r514_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r515_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r515_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r516_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r516_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r517_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r517_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r518_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r518_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r519_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r519_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r520_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r520_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r521_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r521_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r522_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r522_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r523_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r523_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r524_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r524_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r525_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r525_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r526_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r526_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r527_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r527_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r528_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r528_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r529_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r529_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r530_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r530_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r531_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r531_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r532_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r532_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r533_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r533_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r534_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r534_1Eca0Del (Ptr<Tuple> hasword);
-
-  virtual void Prov_r535_1Eca0Ins (Ptr<Tuple> hasword);
-
-  virtual void Prov_r535_1Eca0Del (Ptr<Tuple> hasword);
-
   virtual void Prov_rs1_1Eca0Ins (Ptr<Tuple> topic);
 
   virtual void Prov_rs1_1Eca0Del (Ptr<Tuple> topic);
@@ -2299,8 +2159,6 @@ protected:
   virtual void Idb8Eca1Ins (Ptr<Tuple> pQList);
 
   virtual void Idb9a_eca (Ptr<Tuple> ePReturn);
-
-  virtual void Idb9b_eca (Ptr<Tuple> ePReturn);
 
   virtual void Rv1_eca (Ptr<Tuple> ruleQuery);
 

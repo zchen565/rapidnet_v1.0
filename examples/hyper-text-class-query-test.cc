@@ -33,17 +33,35 @@
 #include <boost/algorithm/string.hpp>
 
 
-#define HyperTextClassTest \
-"./data/hyper-text-class/hypertext-test.db"
+#define HyperTextClassTest1 \
+"./data/hyper-text-class/sample1.db"
 
 #define HyperTextClassTest2 \
-"./data/hyper-text-class/hypertext-test2.db"
+"./data/hyper-text-class/sample2.db"
 
 #define HyperTextClassTest3 \
-"./data/hyper-text-class/hypertext-test3.db"
+"./data/hyper-text-class/sample3.db"
 
 #define HyperTextClassTest4 \
-"./data/hyper-text-class/hypertext-test4.db"
+"./data/hyper-text-class/sample4.db"
+
+#define HyperTextClassTest5 \
+"./data/hyper-text-class/sample5.db"
+
+#define HyperTextClassTest6 \
+"./data/hyper-text-class/sample6.db"
+
+#define HyperTextClassTest7 \
+"./data/hyper-text-class/sample7.db"
+
+#define HyperTextClassTest8 \
+"./data/hyper-text-class/sample8.db"
+
+#define HyperTextClassTest9 \
+"./data/hyper-text-class/sample9.db"
+
+#define HyperTextClassTest10 \
+"./data/hyper-text-class/sample10.db"
 
 #define hasword(local, word, address) \
 tuple (HyperTextClass::HASWORD, \
@@ -156,7 +174,7 @@ void parseLine(const string& line) {
 
 
 void train() {
-  ifstream fp(HyperTextClassTest2);
+  ifstream fp(HyperTextClassTest5);
   string line;
 
   while (getline(fp, line)) {
@@ -198,7 +216,14 @@ void TupleToQuery() {
 
 void TupleToQueryLoop() {
   Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
-  inserttuple(1, "topic", 1, g_topics[g_i], 2);
+  inserttuple(1, "topic", 1, g_topics[g_i], 46);
+  g_i++;
+}
+
+
+void TupleToQueryLoopV2() {
+  Ptr<RapidNetApplicationBase> queryNode = queryapps.Get(0)->GetObject<RapidNetApplicationBase>();
+  inserttuple(1, "topic", 1, "Student", g_i);
   g_i++;
 }
 
@@ -235,20 +260,24 @@ int main(int argc, char *argv[]){
   }
 
   apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (100.0));
+  apps.Stop (Seconds (1000.0));
   queryapps.Start (Seconds (0.0));
-  queryapps.Stop (Seconds (100.0));
+  queryapps.Stop (Seconds (1000.0));
 
   schedule (1.0, train);
 
-  for (int i=0; i<g_topics.size(); i++) {
-    schedule (i+2.0, TupleToQueryLoop);
+  // for (int i=0; i<g_topics.size(); i++) {
+  // schedule (i+2.0, TupleToQueryLoop);
+  // }
+
+  for (int i=0; i<100; i++) {
+  schedule (i+1.0, TupleToQueryLoopV2);
   }
 
   // schedule  (g_i*5.0+3, TupleToQueryLoop);
   // schedule  (g_i*5.0+3, TupleToQueryLoop);
 
-  schedule (99.0, Print);
+  schedule (999.0, Print);
 
   Simulator::Run ();
   Simulator::Destroy ();
