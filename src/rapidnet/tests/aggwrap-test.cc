@@ -27,256 +27,253 @@ using namespace std;
 using namespace ns3;
 using namespace ns3::rapidnet;
 
-namespace ns3 {
-namespace rapidnet {
-namespace tests {
+namespace ns3
+{
+  namespace rapidnet
+  {
+    namespace tests
+    {
 
-
-/**
+      /**
  * \ingroup rapidnet_tests
  *
  * \brief Tests RapidNet Aggwraps
  *
  * @see AggWrap
  */
-class AggWrapTest : public Test
-{
-public:
+      class AggWrapTest : public Test
+      {
+      public:
+        AggWrapTest() : Test("Rapidnet-AggWrapTest") {}
 
-  AggWrapTest () : Test ("Rapidnet-AggWrapTest") {}
+        virtual ~AggWrapTest() {}
 
-  virtual ~AggWrapTest () {}
+        virtual bool RunTests(void);
 
-  virtual bool RunTests (void);
+      protected:
+        bool AggrMinTest1();
+        bool AggrMinTest2();
+        bool AggrMaxTest1();
+        bool AggrMaxTest2();
+      };
 
-protected:
+      bool
+      AggWrapTest::RunTests()
+      {
+        bool result = true;
+        result = AggrMinTest1() && AggrMinTest2() && AggrMaxTest1() && AggrMaxTest2();
 
-  bool AggrMinTest1 ();
-  bool AggrMinTest2 ();
-  bool AggrMaxTest1 ();
-  bool AggrMaxTest2 ();
-};
+        return result;
+      }
 
-bool
-AggWrapTest::RunTests ()
-{
-  bool result = true;
-  result = AggrMinTest1 ()
-    && AggrMinTest2 ()
-    && AggrMaxTest1 ()
-    && AggrMaxTest2 ();
+      //materialize(link, infinity, 1, keys(1,2)).
 
-  return result;
-}
+      Ptr<RelationBase>
+      GetRelation()
+      {
+        Ptr<Relation> linkReln = Relation::New("link");
+        linkReln->AddKeyAttribute(attrdeftype("id", STR));
 
-//materialize(link, infinity, 1, keys(1,2)).
+        linkReln->Insert(rtuple("link",
+                                attr("id", StrValue, "T1"),
+                                attr("src", Ipv4Value, "10.0.0.1"),
+                                attr("dest", Ipv4Value, "10.0.0.2"),
+                                attr("cost", Int32Value, 5),
+                                attr("timestamp", StrValue, "1pm")));
 
-Ptr<RelationBase>
-GetRelation ()
-{
-  Ptr<Relation> linkReln = Relation::New ("link");
-  linkReln->AddKeyAttribute (attrdeftype ("id", STR));
+        linkReln->Insert(rtuple("link",
+                                attr("id", StrValue, "T2"),
+                                attr("src", Ipv4Value, "10.0.0.1"),
+                                attr("dest", Ipv4Value, "10.0.0.2"),
+                                attr("cost", Int32Value, 3),
+                                attr("timestamp", StrValue, "2pm")));
 
-  linkReln->Insert (tuple ("link",
-    attr ("id", StrValue, "T1"),
-    attr ("src", Ipv4Value, "10.0.0.1"),
-    attr ("dest", Ipv4Value, "10.0.0.2"),
-    attr ("cost", Int32Value, 5),
-    attr ("timestamp", StrValue, "1pm")));
+        linkReln->Insert(rtuple("link",
+                                attr("id", StrValue, "T3"),
+                                attr("src", Ipv4Value, "10.0.0.1"),
+                                attr("dest", Ipv4Value, "10.0.0.2"),
+                                attr("cost", Int32Value, 10),
+                                attr("timestamp", StrValue, "3pm")));
 
-  linkReln->Insert (tuple ("link",
-    attr ("id", StrValue, "T2"),
-    attr ("src", Ipv4Value, "10.0.0.1"),
-    attr ("dest", Ipv4Value, "10.0.0.2"),
-    attr ("cost", Int32Value, 3),
-    attr ("timestamp", StrValue, "2pm")));
+        linkReln->Insert(rtuple("link",
+                                attr("id", StrValue, "T4"),
+                                attr("src", Ipv4Value, "10.0.0.1"),
+                                attr("dest", Ipv4Value, "10.0.0.3"),
+                                attr("cost", Int32Value, 11),
+                                attr("timestamp", StrValue, "4pm")));
 
-  linkReln->Insert (tuple ("link",
-    attr ("id", StrValue, "T3"),
-    attr ("src", Ipv4Value, "10.0.0.1"),
-    attr ("dest", Ipv4Value, "10.0.0.2"),
-    attr ("cost", Int32Value, 10),
-    attr ("timestamp", StrValue, "3pm")));
+        linkReln->Insert(rtuple("link",
+                                attr("id", StrValue, "T5"),
+                                attr("src", Ipv4Value, "10.0.0.1"),
+                                attr("dest", Ipv4Value, "10.0.0.3"),
+                                attr("cost", Int32Value, 5),
+                                attr("timestamp", StrValue, "5pm")));
 
-  linkReln->Insert (tuple ("link",
-    attr ("id", StrValue, "T4"),
-    attr ("src", Ipv4Value, "10.0.0.1"),
-    attr ("dest", Ipv4Value, "10.0.0.3"),
-    attr ("cost", Int32Value, 11),
-    attr ("timestamp", StrValue, "4pm")));
+        linkReln->Insert(rtuple("link",
+                                attr("id", StrValue, "T6"),
+                                attr("src", Ipv4Value, "10.0.0.1"),
+                                attr("dest", Ipv4Value, "10.0.0.4"),
+                                attr("cost", Int32Value, 15),
+                                attr("timestamp", StrValue, "6pm")));
 
-  linkReln->Insert (tuple ("link",
-    attr ("id", StrValue, "T5"),
-    attr ("src", Ipv4Value, "10.0.0.1"),
-    attr ("dest", Ipv4Value, "10.0.0.3"),
-    attr ("cost", Int32Value, 5),
-    attr ("timestamp", StrValue, "5pm")));
+        return linkReln;
+      }
 
-  linkReln->Insert (tuple ("link",
-    attr ("id", StrValue, "T6"),
-    attr ("src", Ipv4Value, "10.0.0.1"),
-    attr ("dest", Ipv4Value, "10.0.0.4"),
-    attr ("cost", Int32Value, 15),
-    attr ("timestamp", StrValue, "6pm")));
+      // Test Min for every src/dest pair
+      bool
+      AggWrapTest::AggrMinTest1()
+      {
+        bool result = true;
 
-  return linkReln;
-}
+        Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMin>(
+            attrdeflist(
+                attrdeftype("src", ANYTYPE),
+                attrdeftype("dest", ANYTYPE),
+                attrdeftype("cost", ANYTYPE),
+                attrdeftype("id", ANYTYPE),
+                attrdeftype("timestamp", ANYTYPE)),
+            3);
 
-// Test Min for every src/dest pair
-bool
-AggWrapTest::AggrMinTest1 ()
-{
-  bool result = true;
+        // Assume we get this as the result
+        Ptr<RelationBase> resultReln = GetRelation();
 
-  Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMin> (
-    attrdeflist (
-      attrdeftype ("src", ANYTYPE),
-      attrdeftype ("dest", ANYTYPE),
-      attrdeftype ("cost", ANYTYPE),
-      attrdeftype ("id", ANYTYPE),
-      attrdeftype ("timestamp", ANYTYPE)),
-    3);
+        // Run aggwrap over the result
+        resultReln = aggwrap1->Compute(resultReln);
+        // result->PrintAllTuples (cout);
+        NS_TEST_ASSERT(resultReln->Count() == 3);
+        list<Ptr<Tuple>> tuples = resultReln->GetAllTuples();
 
-  // Assume we get this as the result
-  Ptr<RelationBase> resultReln = GetRelation ();
-
-  // Run aggwrap over the result
-  resultReln = aggwrap1->Compute (resultReln);
-  // result->PrintAllTuples (cout);
-  NS_TEST_ASSERT (resultReln->Count() == 3);
-  list<Ptr<Tuple> > tuples = resultReln->GetAllTuples ();
-
-  int correct_match = 0;
-  for (list<Ptr<Tuple> >::iterator it = tuples.begin ();
-    it != tuples.end (); ++it)
-    {
-      string id = rn_str ((*it)->GetAttribute ("id")->GetValue ());
-      if (id == "T2" || id == "T5" || id == "T6")
+        int correct_match = 0;
+        for (list<Ptr<Tuple>>::iterator it = tuples.begin();
+             it != tuples.end(); ++it)
         {
-          correct_match++;
+          string id = rn_str((*it)->GetAttribute("id")->GetValue());
+          if (id == "T2" || id == "T5" || id == "T6")
+          {
+            correct_match++;
+          }
         }
-    }
-  NS_TEST_ASSERT (correct_match == 3);
-  //cout << "AggrMinTest1 is passed!" << endl;
-  return result;
-}
+        NS_TEST_ASSERT(correct_match == 3);
+        //cout << "AggrMinTest1 is passed!" << endl;
+        return result;
+      }
 
-// Test Max for every src/dest pair
-bool
-AggWrapTest::AggrMaxTest1 ()
-{
-  bool result = true;
+      // Test Max for every src/dest pair
+      bool
+      AggWrapTest::AggrMaxTest1()
+      {
+        bool result = true;
 
-  Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMax> (
-    attrdeflist (
-      attrdeftype ("src", ANYTYPE),
-      attrdeftype ("dest", ANYTYPE),
-      attrdeftype ("cost", ANYTYPE),
-      attrdeftype ("id", ANYTYPE),
-      attrdeftype ("timestamp", ANYTYPE)),
-    3);
+        Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMax>(
+            attrdeflist(
+                attrdeftype("src", ANYTYPE),
+                attrdeftype("dest", ANYTYPE),
+                attrdeftype("cost", ANYTYPE),
+                attrdeftype("id", ANYTYPE),
+                attrdeftype("timestamp", ANYTYPE)),
+            3);
 
-  // Assume we get this as the result
-  Ptr<RelationBase> resultReln = GetRelation ();
+        // Assume we get this as the result
+        Ptr<RelationBase> resultReln = GetRelation();
 
-  // Run aggwrap over the result
-  resultReln = aggwrap1->Compute (resultReln);
-  // result->PrintAllTuples (cout);
-  NS_TEST_ASSERT (resultReln->Count() == 3);
-  list<Ptr<Tuple> > tuples = resultReln->GetAllTuples ();
+        // Run aggwrap over the result
+        resultReln = aggwrap1->Compute(resultReln);
+        // result->PrintAllTuples (cout);
+        NS_TEST_ASSERT(resultReln->Count() == 3);
+        list<Ptr<Tuple>> tuples = resultReln->GetAllTuples();
 
-  int correct_match = 0;
-  for (list<Ptr<Tuple> >::iterator it = tuples.begin ();
-    it != tuples.end (); ++it)
-    {
-      string id = rn_str ((*it)->GetAttribute ("id")->GetValue ());
-      if (id == "T3" || id == "T4" || id == "T6")
+        int correct_match = 0;
+        for (list<Ptr<Tuple>>::iterator it = tuples.begin();
+             it != tuples.end(); ++it)
         {
-          correct_match++;
+          string id = rn_str((*it)->GetAttribute("id")->GetValue());
+          if (id == "T3" || id == "T4" || id == "T6")
+          {
+            correct_match++;
+          }
         }
-    }
-  NS_TEST_ASSERT (correct_match == 3);
-  //cout << "AggrMaxTest1 is passed!" << endl;
-  return result;
-}
+        NS_TEST_ASSERT(correct_match == 3);
+        //cout << "AggrMaxTest1 is passed!" << endl;
+        return result;
+      }
 
-// Test Min over all
-bool
-AggWrapTest::AggrMinTest2 ()
-{
-  bool result = true;
+      // Test Min over all
+      bool
+      AggWrapTest::AggrMinTest2()
+      {
+        bool result = true;
 
-  Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMin> (
-    attrdeflist (
-      attrdeftype ("cost", ANYTYPE),
-      attrdeftype ("src", ANYTYPE),
-      attrdeftype ("dest", ANYTYPE),
-      attrdeftype ("id", ANYTYPE)),
-    1);
+        Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMin>(
+            attrdeflist(
+                attrdeftype("cost", ANYTYPE),
+                attrdeftype("src", ANYTYPE),
+                attrdeftype("dest", ANYTYPE),
+                attrdeftype("id", ANYTYPE)),
+            1);
 
-  // Assume we get this as the result
-  Ptr<RelationBase> resultReln = GetRelation ();
+        // Assume we get this as the result
+        Ptr<RelationBase> resultReln = GetRelation();
 
-  // Run aggwrap over the result
-  resultReln = aggwrap1->Compute (resultReln);
-  //result->PrintAllTuples (cout);
-  NS_TEST_ASSERT (resultReln->Count() == 1);
-  list<Ptr<Tuple> > tuples = resultReln->GetAllTuples ();
+        // Run aggwrap over the result
+        resultReln = aggwrap1->Compute(resultReln);
+        //result->PrintAllTuples (cout);
+        NS_TEST_ASSERT(resultReln->Count() == 1);
+        list<Ptr<Tuple>> tuples = resultReln->GetAllTuples();
 
-  int correct_match = 0;
-  for (list<Ptr<Tuple> >::iterator it = tuples.begin ();
-    it != tuples.end (); ++it)
-    {
-      string id = rn_str ((*it)->GetAttribute ("id")->GetValue ());
-      if (id == "T2")
+        int correct_match = 0;
+        for (list<Ptr<Tuple>>::iterator it = tuples.begin();
+             it != tuples.end(); ++it)
         {
-          correct_match++;
+          string id = rn_str((*it)->GetAttribute("id")->GetValue());
+          if (id == "T2")
+          {
+            correct_match++;
+          }
         }
-    }
-  NS_TEST_ASSERT (correct_match == 1);
-  //cout << "AggrMinTest2 is passed!" << endl;
-  return result;
-}
+        NS_TEST_ASSERT(correct_match == 1);
+        //cout << "AggrMinTest2 is passed!" << endl;
+        return result;
+      }
 
-bool
-AggWrapTest::AggrMaxTest2 ()
-{
-  bool result = true;
+      bool
+      AggWrapTest::AggrMaxTest2()
+      {
+        bool result = true;
 
-  Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMax> (
-    attrdeflist (
-      attrdeftype ("cost", ANYTYPE),
-      attrdeftype ("src", ANYTYPE),
-      attrdeftype ("dest", ANYTYPE),
-      attrdeftype ("id", ANYTYPE)),
-    1);
+        Ptr<AggWrap> aggwrap1 = AggWrap::New<AggWrapMax>(
+            attrdeflist(
+                attrdeftype("cost", ANYTYPE),
+                attrdeftype("src", ANYTYPE),
+                attrdeftype("dest", ANYTYPE),
+                attrdeftype("id", ANYTYPE)),
+            1);
 
-  // Assume we get this as the result
-  Ptr<RelationBase> resultReln = GetRelation ();
+        // Assume we get this as the result
+        Ptr<RelationBase> resultReln = GetRelation();
 
-  // Run aggwrap over the result
-  resultReln = aggwrap1->Compute (resultReln);
-  //result->PrintAllTuples (cout);
-  NS_TEST_ASSERT (resultReln->Count() == 1);
-  list<Ptr<Tuple> > tuples = resultReln->GetAllTuples ();
+        // Run aggwrap over the result
+        resultReln = aggwrap1->Compute(resultReln);
+        //result->PrintAllTuples (cout);
+        NS_TEST_ASSERT(resultReln->Count() == 1);
+        list<Ptr<Tuple>> tuples = resultReln->GetAllTuples();
 
-  int correct_match = 0;
-  for (list<Ptr<Tuple> >::iterator it = tuples.begin ();
-    it != tuples.end (); ++it)
-    {
-      string id = rn_str ((*it)->GetAttribute ("id")->GetValue ());
-      if (id == "T6")
+        int correct_match = 0;
+        for (list<Ptr<Tuple>>::iterator it = tuples.begin();
+             it != tuples.end(); ++it)
         {
-          correct_match++;
+          string id = rn_str((*it)->GetAttribute("id")->GetValue());
+          if (id == "T6")
+          {
+            correct_match++;
+          }
         }
-    }
-  NS_TEST_ASSERT (correct_match == 1);
-  //cout << "AggrMaxTest2 is passed!" << endl;
-  return result;
-}
+        NS_TEST_ASSERT(correct_match == 1);
+        //cout << "AggrMaxTest2 is passed!" << endl;
+        return result;
+      }
 
-static AggWrapTest g_aggWrapTest;
+      static AggWrapTest g_aggWrapTest;
 
-} // namespace tests
-} // namespace rapidnet
+    } // namespace tests
+  }   // namespace rapidnet
 } // namespace ns3

@@ -224,7 +224,7 @@ class Timelines:
             for ranges in timeline.get_ranges():
                 for ran in ranges.get_all():
                     range_values[ran.value] = 1
-        return range_values.keys()
+        return list(range_values.keys())
 class Color:
     def __init__(self, r = 0.0, g = 0.0, b = 0.0):
         self.r = r
@@ -242,7 +242,7 @@ class Colors:
     def add(self, name, color):
         self.__colors[name] = color
     def lookup(self, name):
-        if not self.__colors.has_key(name):
+        if name not in self.__colors:
             self.add(name, self.default_colors.pop())
         return self.__colors.get(name)
 
@@ -524,7 +524,7 @@ class ScaleRenderer:
         # print scale points
         ctx.set_source_rgb(0, 0, 0)
         ctx.set_line_width(1.0)
-        ticks = range(int(start), int(end + delta), int(delta))
+        ticks = list(range(int(start), int(end + delta), int(delta)))
         for x in ticks:
             real_x = (x - self.__lo ) * self.__width / (self.__hi - self.__lo)
             ctx.move_to(real_x, 0)

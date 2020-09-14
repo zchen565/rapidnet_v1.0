@@ -12,9 +12,9 @@ args = {}
 args['path'] = 'pennNetDB/dens/branches/ws_mshivk_code_release'
 
 if len (sys.argv) not in [9, 10]:
-  print 'Usage: ./runner <user> <cluster-id> <nodes> <duration> <speed_low> <speed_up> <xbound> <ybound> [<mobility_model>]'
-  print 'Path of the branch on cluster: ', args['path']
-  print 'Make sure branch is updated on the cluster!!!'
+  print('Usage: ./runner <user> <cluster-id> <nodes> <duration> <speed_low> <speed_up> <xbound> <ybound> [<mobility_model>]')
+  print('Path of the branch on cluster: ', args['path'])
+  print('Make sure branch is updated on the cluster!!!')
   sys.exit (0)
  
 args['user'] = sys.argv[1] #os.environ['USER']
@@ -61,18 +61,18 @@ def run_simulation (cluster_id, app, nodes, duration, speed_low, speed_up, xboun
   args['command'] = './simulation/run_simulation.py %s %d %d %s %s %s %s %s %d %s'
   ssh_cmd = ssh_cmd_template % args
   ssh_cmd = ssh_cmd % (cluster_id, app, nodes, duration, speed_low, speed_up, xbound, ybound, mob_model, queryNum, timestamp)
-  print ssh_cmd
+  print(ssh_cmd)
   retval = os.system (ssh_cmd)
-  print 'Simulation exited with code %d' % retval
+  print('Simulation exited with code %d' % retval)
 
 def move_and_plot (cluster_id, nodes, duration, speed_low, speed_up, timestamp):
   args['command'] = './rapidnet/plot/move_and_plot.py %d %d %s %s %s'
   ssh_cmd = ssh_cmd_template % args
   ssh_cmd = ssh_cmd % (cluster_id, nodes, duration, speed_low, speed_up, timestamp)
-  for thread in threads.values ():
+  for thread in list(threads.values ()):
     thread.join ()
-  print ssh_cmd
+  print(ssh_cmd)
   retval = os.system (ssh_cmd)
-  print 'Plot exited with code %d' % retval
+  print('Plot exited with code %d' % retval)
 
 main ()

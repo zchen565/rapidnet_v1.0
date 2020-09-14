@@ -162,7 +162,7 @@ def main(argv):
     ipAddrs.SetBase(ns3.Ipv4Address("172.16.0.0"), ns3.Ipv4Mask("255.255.255.0"))
 
     for i in range(backboneNodes):
-        print "Configuring local area network for backbone node ", i
+        print("Configuring local area network for backbone node ", i)
         # 
         #  Create a container to manage the nodes of the LAN.  We need
         #  two containers here; one with all of the new nodes, and one
@@ -206,7 +206,7 @@ def main(argv):
     ipAddrs.SetBase(ns3.Ipv4Address("10.0.0.0"), ns3.Ipv4Mask("255.255.255.0"))
 
     for i in range(backboneNodes):
-        print "Configuring wireless network for backbone node ", i
+        print("Configuring wireless network for backbone node ", i)
         # 
         #  Create a container to manage the nodes of the LAN.  We need
         #  two containers here; one with all of the new nodes, and one
@@ -271,7 +271,7 @@ def main(argv):
     #                                                                        # 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # / 
 
-    print "Enabling OLSR routing on all backbone nodes"
+    print("Enabling OLSR routing on all backbone nodes")
     olsr = ns3.OlsrHelper()
     olsr.Install(backbone)
 
@@ -283,7 +283,7 @@ def main(argv):
 
     #  Create the OnOff application to send UDP datagrams of size
     #  210 bytes at a rate of 448 Kb/s, between two nodes
-    print "Create Applications."
+    print("Create Applications.")
     port = 9   #  Discard port(RFC 863)
 
     #  Let's make sure that the user does not define too few LAN nodes
@@ -313,7 +313,7 @@ def main(argv):
     #                                                                        # 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # / 
 
-    print "Configure Tracing."
+    print("Configure Tracing.")
     # 
     #  Let's set up some ns-2-like ascii traces, using another helper class
     # 
@@ -321,7 +321,7 @@ def main(argv):
     #ascii.open("mixed-wireless.tr")
     #WifiHelper.EnableAsciiAll(ascii)
     #CsmaHelper.EnableAsciiAll(ascii)
-    print "(tracing not done for Python)"
+    print("(tracing not done for Python)")
     #  Look at nodes 11, 13 only
     # WifiHelper.EnableAscii(ascii, 11, 0); 
     # WifiHelper.EnableAscii(ascii, 13, 0); 
@@ -343,7 +343,7 @@ def main(argv):
     #                                                                        # 
     # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #  
 
-    print "Run Simulation."
+    print("Run Simulation.")
     ns3.Simulator.Stop(ns3.Seconds(stopTime))
     ns3.Simulator.Run()
     ns3.Simulator.Destroy()

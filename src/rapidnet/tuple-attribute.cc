@@ -23,119 +23,113 @@
 using namespace ns3;
 using namespace ns3::rapidnet;
 
-
-TupleAttribute::TupleAttribute (string name, Ptr<Value> value)
-  : m_value (value)
+TupleAttribute::TupleAttribute(string name, Ptr<Value> value)
+    : m_value(value)
 {
-  SetName (name);
+  SetName(name);
 }
 
-TupleAttribute::TupleAttribute (TupleAttribute &attr)
+TupleAttribute::TupleAttribute(TupleAttribute &attr)
 {
-  SetName (attr.GetName ());
-  m_value = attr.GetValue ()->Clone ();
+  SetName(attr.GetName());
+  m_value = attr.GetValue()->Clone();
 }
 
-TupleAttribute::~TupleAttribute ()
+TupleAttribute::~TupleAttribute()
 {
 }
 
 TypeId
 TupleAttribute::GetTypeId(void)
 {
-  static TypeId tid = TypeId ("ns3::rapidnet::TupleAttribute")
-    .SetParent<Object> ()
-    .AddConstructor<TupleAttribute>();
-    ;
+  static TypeId tid = TypeId("ns3::rapidnet::TupleAttribute")
+                          .SetParent<Object>()
+                          .AddConstructor<TupleAttribute>();
+  ;
 
   return tid;
 }
 
 uint32_t
-TupleAttribute::GetSerializedSize (void) const
+TupleAttribute::GetSerializedSize(void) const
 {
-  return m_name->GetSerializedSize () + m_value->GetSerializedSize ();
+  return m_name->GetSerializedSize() + m_value->GetSerializedSize();
 }
 
-void
-TupleAttribute::Serialize (Buffer::Iterator& start) const
+void TupleAttribute::Serialize(Buffer::Iterator &start) const
 {
-  m_name->Serialize (start);
-  m_value->Serialize (start);
+  m_name->Serialize(start);
+  m_value->Serialize(start);
 }
 
 uint32_t
-TupleAttribute::Deserialize (Buffer::Iterator& end)
+TupleAttribute::Deserialize(Buffer::Iterator &end)
 {
-  SetName ("dummy"); // Initialize the name object first
-  end.ReadNtohU16 (); // Do a dummy type-id read to discard it
-  m_name->Deserialize (end); // Now it is safe to De-serialize
+  SetName("dummy");         // Initialize the name object first
+  end.ReadNtohU16();        // Do a dummy type-id read to discard it
+  m_name->Deserialize(end); // Now it is safe to De-serialize
 
   // Read and discard the type id
-  ValueTypeId type = (ValueTypeId) end.ReadNtohU16 ();
+  ValueTypeId type = (ValueTypeId)end.ReadNtohU16();
   // Create the object using the factory
-  m_value = Value::GetInstanceOfType (type);
+  m_value = Value::GetInstanceOfType(type);
   // Now it is safe to De-serialize
-  m_value->Deserialize (end);
+  m_value->Deserialize(end);
 
-  return GetSerializedSize ();
+  return GetSerializedSize();
 }
 
 string
-TupleAttribute::ToString ()
+TupleAttribute::ToString()
 {
   stringstream ss;
-  ss << m_name->GetStrValue () << "(" << GetTypeName(m_value->GetType()) <<
-    ":" << m_value->ToString () << ")";
-  return ss.str ();
+  ss << m_name->GetStrValue() << "(" << GetTypeName(m_value->GetType()) << ":" << m_value->ToString() << ")";
+  return ss.str();
 }
 
-bool
-TupleAttribute::ValueEquals (const Ptr<TupleAttribute> attr) const
+bool TupleAttribute::ValueEquals(const Ptr<TupleAttribute> attr) const
 {
-  return m_value->Equals (attr->GetValue ());
+  return m_value->Equals(attr->GetValue());
 }
 
-bool
-TupleAttribute::Equals (const Ptr<TupleAttribute> attr) const
+bool TupleAttribute::Equals(const Ptr<TupleAttribute> attr) const
 {
-  return GetName () == attr->GetName () && m_value->Equals (attr->GetValue ());
+  return GetName() == attr->GetName() && m_value->Equals(attr->GetValue());
 }
 
-bool
-TupleAttribute::Less (const Ptr<TupleAttribute> a1,
-  const Ptr<TupleAttribute> a2)
+bool TupleAttribute::Less(const Ptr<TupleAttribute> a1,
+                          const Ptr<TupleAttribute> a2)
 {
-  int32_t nameComparison = a1->GetName ().compare (a2->GetName ());
+  int32_t nameComparison = a1->GetName().compare(a2->GetName());
 
   if (nameComparison == 0)
-    {
-      return a1->GetValue ()->Less (a2->GetValue ());
-    }
+  {
+    return a1->GetValue()->Less(a2->GetValue());
+  }
   else
-    {
-      return nameComparison < 0;
-    }
+  {
+    return nameComparison < 0;
+  }
 }
 
 Ptr<TupleAttribute>
-TupleAttribute::New (string name, Ptr<Value> value)
+TupleAttribute::New(string name, Ptr<Value> value)
 {
-  Ptr<TupleAttribute> retval = Create<TupleAttribute> ();
-  retval->SetName (name);
-  retval->SetValue (value);
+  Ptr<TupleAttribute> retval = Create<TupleAttribute>();
+  retval->SetName(name);
+  retval->SetValue(value);
   return retval;
 }
 
 Ptr<TupleAttribute>
-TupleAttribute::New (string name, Ptr<TupleAttribute> attr)
+TupleAttribute::New(string name, Ptr<TupleAttribute> attr)
 {
-  return New (name, attr->GetValue ());
+  return New(name, attr->GetValue());
 }
 
-ostream& ns3::rapidnet::operator << (ostream& os, const Ptr<TupleAttribute>&
-  attr)
+ostream &ns3::rapidnet::operator<<(ostream &os, const Ptr<TupleAttribute> &
+                                                    attr)
 {
-  os << attr->ToString ();
+  os << attr->ToString();
   return os;
 }

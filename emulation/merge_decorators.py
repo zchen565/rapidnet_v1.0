@@ -3,7 +3,7 @@
 import os, sys
 
 if len (sys.argv) != 4:
-  print 'Usage: ./merge_decorators.py <emu_dir> <topo_dir> <orbit|cluster>'
+  print('Usage: ./merge_decorators.py <emu_dir> <topo_dir> <orbit|cluster>')
   sys.exit (0)
 
 emu_dir = sys.argv[1]
@@ -34,12 +34,12 @@ def process_decorator(decorator_file,nodeid):
   arena = file.readline ()
   ip = file.readline ()
   for line in file:
-    time = long (line.partition ('ns')[0])
+    time = int (line.partition ('ns')[0])
     event = line.split(' 0 ')[0]+' %d '%nodeid+line.split(' 0 ')[1]
     add_event (time, event)
   
   
-print 'Reading emu_decorators_log...'
+print('Reading emu_decorators_log...')
 emu_decorators = os.listdir (emu_dir)
 for file in emu_decorators:
   if file.startswith ('decorator-'):
@@ -49,11 +49,11 @@ for file in emu_decorators:
   if file.startswith ('output_'):
     os.system ('cp %s %s'%(os.path.join (emu_dir, file),os.path.join (emu_dir, 'output.log')))
 
-print 'Reading topo_decorators_log...'
+print('Reading topo_decorators_log...')
 file = open (topo_decorator, 'r')
 arena = file.readline ()
 for line in file:
-    time = long (line.partition ('ns')[0])
+    time = int (line.partition ('ns')[0])
     if line.split()[1] == 'ip':
       node = int(line.split()[2])
       ip = nodes[node+1]
@@ -67,7 +67,7 @@ for line in file:
     add_event (time, event)
 
 
-times = events.keys ()
+times = list(events.keys ())
 times.sort ()
 ofile.write (arena) # Echo arena line
 for time in times:

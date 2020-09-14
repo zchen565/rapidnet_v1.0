@@ -2,7 +2,7 @@
 import sys, os
 
 if len (sys.argv) != 6:
-  print 'Usage: avg.py <ls_dir> <hsls_dir> <dest_dir> <nodes> <duration>'
+  print('Usage: avg.py <ls_dir> <hsls_dir> <dest_dir> <nodes> <duration>')
   sys.exit (0)
 
 ls_dir = sys.argv[1]
@@ -65,7 +65,7 @@ def avgLossRateNew (dir):
     losses[values[0]] = values[1:]
   sent = 0
   recd = 0
-  for k, v in losses.iteritems ():
+  for k, v in losses.items ():
     sent += v[2]
     recd += v[3]
   loss_rate = 100.0 * (sent - recd) / sent

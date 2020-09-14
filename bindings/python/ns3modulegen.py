@@ -23,15 +23,15 @@ class ErrorHandler(pybindgen.settings.ErrorHandler):
         try:
             stack = wrapper.stack_where_defined
         except AttributeError:
-            print >> sys.stderr, "??:??: %s / %r" % (wrapper, exception)
+            print("??:??: %s / %r" % (wrapper, exception), file=sys.stderr)
         else:
             stack = list(stack)
             stack.reverse()
             for (filename, line_number, function_name, text) in stack:
                 file_dir = os.path.dirname(os.path.abspath(filename))
                 if file_dir == this_script_dir:
-                    print >> sys.stderr, "%s:%i: %r" % (os.path.join("..", "bindings", "python", os.path.basename(filename)),
-                                                        line_number, exception)
+                    print("%s:%i: %r" % (os.path.join("..", "bindings", "python", os.path.basename(filename)),
+                                                        line_number, exception), file=sys.stderr)
                     break
         return True
 pybindgen.settings.error_handler = ErrorHandler()
@@ -71,7 +71,7 @@ class MyMultiSectionFactory(MultiSectionFactory):
     def close(self):
         self.header_sink.file.close()
         self.main_sink.file.close()
-        for sink in self.section_sinks.itervalues():
+        for sink in self.section_sinks.values():
             sink.file.close()
 
 
@@ -158,7 +158,7 @@ if __name__ == '__main__':
         except ImportError:
             main()
         else:
-            print >> sys.stderr, "** running under profiler"
+            print("** running under profiler", file=sys.stderr)
             profile.run('main()', 'ns3modulegen.pstat')
     else:
         main()

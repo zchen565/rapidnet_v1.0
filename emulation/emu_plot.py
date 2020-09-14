@@ -6,7 +6,7 @@ from emu_plot_bandwidth import *
 APPTABLE_PERIOD = 5
 
 if len (sys.argv) < 7:
-  print 'Usage: ./emulation/plot <app> <dir> <apptable-file> <node-count> <orbit|cluster> <duration> [blacklist]'
+  print('Usage: ./emulation/plot <app> <dir> <apptable-file> <node-count> <orbit|cluster> <duration> [blacklist]')
   sys.exit (0)
 
 app = sys.argv[1]

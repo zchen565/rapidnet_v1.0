@@ -22,18 +22,18 @@
 #include "ns3/rapidnet-module.h"
 #include "ns3/values-module.h"
 
-#define tlink(src, next) \
-  tuple (Pingpong::TLINK, \
-    attr ("tLink_attr1", Ipv4Value, src), \
-    attr ("tLink_attr2", Ipv4Value, next))
+#define tlink(src, next)                      \
+  rtuple(Pingpong::TLINK,                     \
+         attr("tLink_attr1", Ipv4Value, src), \
+         attr("tLink_attr2", Ipv4Value, next))
 
-#define insertlink(from, to) \
-  app(from)->Insert (tlink (addr (from), addr (to))); \
-  app(to)->Insert (tlink (addr (to), addr (from)));
+#define insertlink(from, to)                      \
+  app(from)->Insert(tlink(addr(from), addr(to))); \
+  app(to)->Insert(tlink(addr(to), addr(from)));
 
-#define deletelink(from, to) \
-  app(from)->Delete (tlink (addr (from), addr (to))); \
-  app(to)->Delete (tlink (addr (to), addr (from)));
+#define deletelink(from, to)                      \
+  app(from)->Delete(tlink(addr(from), addr(to))); \
+  app(to)->Delete(tlink(addr(to), addr(from)));
 
 #define DEFAULT_DURATION 100
 
@@ -46,17 +46,15 @@ ApplicationContainer apps;
 string myaddr, dstaddr;
 double duration = DEFAULT_DURATION;
 
-void
-UpdateLinks1 ()
+void UpdateLinks1()
 {
   Ptr<RapidNetApplicationBase> app = apps.Get(0)->GetObject<RapidNetApplicationBase>();
-  app->Insert (tlink (Ipv4Address (myaddr.c_str()), Ipv4Address (dstaddr.c_str())));
+  app->Insert(tlink(Ipv4Address(myaddr.c_str()), Ipv4Address(dstaddr.c_str())));
 }
 
-NS_LOG_COMPONENT_DEFINE ("EmulationPingPongExample");
+NS_LOG_COMPONENT_DEFINE("EmulationPingPongExample");
 
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   LogComponentEnable("Pingpong", LOG_LEVEL_INFO);
   LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
@@ -76,44 +74,43 @@ main (int argc, char *argv[])
   cmd.AddValue("IPbase", "IP base", IPbase);
   cmd.AddValue("myaddr", "my IP address", myaddr);
   cmd.AddValue("dstaddr", "dst IP address", dstaddr);
-  cmd.Parse (argc, argv);
+  cmd.Parse(argc, argv);
 
-  GlobalValue::Bind ("SimulatorImplementationType",
-  StringValue ("ns3::RealtimeSimulatorImpl"));
+  GlobalValue::Bind("SimulatorImplementationType",
+                    StringValue("ns3::RealtimeSimulatorImpl"));
 
   NodeContainer n;
-  n.Create (1);
+  n.Create(1);
 
   InternetStackHelper internet;
-  internet.Install (n);
+  internet.Install(n);
 
   EmuHelper emu;
-  emu.SetAttribute ("DeviceName", StringValue (deviceName));
-  NetDeviceContainer d = emu.Install (n);
+  emu.SetAttribute("DeviceName", StringValue(deviceName));
+  NetDeviceContainer d = emu.Install(n);
 
-  Ptr<NetDevice> nd = d.Get (0);
-  Ptr<EmuNetDevice> ed = nd->GetObject<EmuNetDevice> ();
-  ed->SetAddress (Mac48Address(macAddress));
+  Ptr<NetDevice> nd = d.Get(0);
+  Ptr<EmuNetDevice> ed = nd->GetObject<EmuNetDevice>();
+  ed->SetAddress(Mac48Address(macAddress));
 
-  NS_LOG_INFO ("Assign IP Addresses.");
+  NS_LOG_INFO("Assign IP Addresses.");
   Ipv4AddressHelper ipv4;
-  ipv4.SetBase (Ipv4Address (IPnet.c_str()), Ipv4Mask (IPmask.c_str()),
-    Ipv4Address (IPbase.c_str()));
-  Ipv4InterfaceContainer i = ipv4.Assign (d);
+  ipv4.SetBase(Ipv4Address(IPnet.c_str()), Ipv4Mask(IPmask.c_str()),
+               Ipv4Address(IPbase.c_str()));
+  Ipv4InterfaceContainer i = ipv4.Assign(d);
 
   PingpongHelper app;
 
   apps = app.Install(n);
-  apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (duration));
+  apps.Start(Seconds(0.0));
+  apps.Stop(Seconds(duration));
 
-  Simulator::Schedule (Seconds (0.0), UpdateLinks1);
+  Simulator::Schedule(Seconds(0.0), UpdateLinks1);
 
-  string  pacpname="emu-ping-pong-"+myaddr;
-  EmuHelper::EnablePcapAll (pacpname, true);
+  string pacpname = "emu-ping-pong-" + myaddr;
+  EmuHelper::EnablePcapAll(pacpname, true);
 
-  Simulator::Run ();
-  Simulator::Destroy ();
+  Simulator::Run();
+  Simulator::Destroy();
   return 0;
 }
-

@@ -3,7 +3,7 @@ import os, sys
 sys.path.append ('./emulation')
 
 if len (sys.argv) != 7:
-  print 'Usage: plot_losses <dir> <nodes> <duration> <apptable-file> <app> <testbed>'
+  print('Usage: plot_losses <dir> <nodes> <duration> <apptable-file> <app> <testbed>')
   raise SystemExit
 
 # Indices
@@ -98,7 +98,7 @@ def add_compute_events ():
     add_event (t * MS, (BANDWIDTH))
 
 def parse_trace_files ():
-  execfile (apptable_file, globals ())
+  exec(compile(open(apptable_file, "rb").read(), apptable_file, 'exec'), globals ())
   for filename in os.listdir (os.path.join (sim_dir, 'pcaps')):
     if filename.endswith ('.pcap.trace'):
       #print filename
@@ -125,7 +125,7 @@ def process_events ():
   global MAX_RATE
 
   # Sort the times before processing
-  times = events.keys ()
+  times = list(events.keys ())
   times.sort ()
 
   # Setup graph with node to neighbor counts
@@ -189,7 +189,7 @@ def process_events ():
           data[i] = 0
 
       else:
-        print 'Unknown event!'
+        print('Unknown event!')
         raise SystemExit
 
 def plot_loss ():
@@ -199,7 +199,7 @@ def plot_loss ():
   scriptfile = open ('rapidnet/bandwidth/losses.gnuplot', 'r').read ()
   plot_script = scriptfile % (stats_file_loss)
   open ('temp.gnuplot', 'w').write (plot_script)
-  print ('Generating plot %s' % plot_file_loss)
+  print(('Generating plot %s' % plot_file_loss))
   os.system ('gnuplot temp.gnuplot > %s' % plot_file_loss)
 
 

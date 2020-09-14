@@ -179,7 +179,7 @@ EmuLsPeriodic::R11_ecaperiodic ()
 {
   RAPIDNET_LOG_INFO ("R11_ecaperiodic triggered");
 
-  SendLocal (tuple (R11_ECAPERIODIC, attrlist (
+  SendLocal (rtuple (R11_ECAPERIODIC, attrlist (
     attr ("r11_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
     attr ("r11_ecaperiodic_attr2", Int32Value, rand ()))));
 
@@ -304,7 +304,7 @@ EmuLsPeriodic::R61A_ecaperiodic ()
 {
   RAPIDNET_LOG_INFO ("R61A_ecaperiodic triggered");
 
-  SendLocal (tuple (R61A_ECAPERIODIC, attrlist (
+  SendLocal (rtuple (R61A_ECAPERIODIC, attrlist (
     attr ("r61A_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
     attr ("r61A_ecaperiodic_attr2", Int32Value, rand ()))));
 
@@ -358,7 +358,7 @@ EmuLsPeriodic::R61B_ecaperiodic ()
 {
   RAPIDNET_LOG_INFO ("R61B_ecaperiodic triggered");
 
-  SendLocal (tuple (R61B_ECAPERIODIC, attrlist (
+  SendLocal (rtuple (R61B_ECAPERIODIC, attrlist (
     attr ("r61B_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
     attr ("r61B_ecaperiodic_attr2", Int32Value, rand ()))));
 

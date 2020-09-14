@@ -23,21 +23,19 @@
 #include "ns3/mincost-prov-module.h"
 #include <time.h>
 
+#define link(src, next, cost)                 \
+  rtuple(MincostProv::LINK,                   \
+         attr("link_attr1", Ipv4Value, src),  \
+         attr("link_attr2", Ipv4Value, next), \
+         attr("link_attr3", Int32Value, cost))
 
+#define insertlink(from, to, cost)                     \
+  app(from)->Insert(link(addr(from), addr(to), cost)); \
+  app(to)->Insert(link(addr(to), addr(from), cost));
 
-#define link(src, next, cost) \
-tuple (MincostProv::LINK, \
-attr ("link_attr1", Ipv4Value, src), \
-attr ("link_attr2", Ipv4Value, next), \
-attr ("link_attr3", Int32Value, cost))
-
-#define insertlink(from, to, cost) \
-app(from)->Insert (link (addr (from), addr (to), cost)); \
-app(to)->Insert (link (addr (to), addr (from), cost));
-
-#define deletelink(from, to, cost) \
-app(from)->Delete (link (addr (from), addr (to), cost)); \
-app(to)->Delete (link (addr (to), addr (from), cost));
+#define deletelink(from, to, cost)                     \
+  app(from)->Delete(link(addr(from), addr(to), cost)); \
+  app(to)->Delete(link(addr(to), addr(from), cost));
 
 using namespace std;
 using namespace ns3;
@@ -46,41 +44,36 @@ using namespace ns3::rapidnet::mincostprov;
 
 ApplicationContainer apps;
 
-void
-UpdateLinks1 ()
+void UpdateLinks1()
 {
-  insertlink (1, 2, 3);
-  insertlink (2, 3, 2);
-  insertlink (1, 3, 5);
+  insertlink(1, 2, 3);
+  insertlink(2, 3, 2);
+  insertlink(1, 3, 5);
 }
 
-void
-Print ()
+void Print()
 {
-  PrintRelation (apps, MincostProv::BESTPATH);
-  PrintRelation (apps, MincostProv::PROV);
-  PrintRelation (apps, MincostProv::RULEEXEC);
+  PrintRelation(apps, MincostProv::BESTPATH);
+  PrintRelation(apps, MincostProv::PROV);
+  PrintRelation(apps, MincostProv::RULEEXEC);
 }
 
-
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   LogComponentEnable("MincostProv", LOG_LEVEL_INFO);
   LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
 
-  apps = InitRapidNetApps (3, Create<MincostProvHelper> ());
-  SetMaxJitter (apps, 0.001);
+  apps = InitRapidNetApps(3, Create<MincostProvHelper>());
+  SetMaxJitter(apps, 0.001);
 
-  apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (10.0));
+  apps.Start(Seconds(0.0));
+  apps.Stop(Seconds(10.0));
 
-  schedule (2.0, UpdateLinks1);
-  schedule (5.0, Print);
+  schedule(2.0, UpdateLinks1);
+  schedule(5.0, Print);
 
-  Simulator::Run ();
-  Simulator::Destroy ();
+  Simulator::Run();
+  Simulator::Destroy();
 
   return 0;
 }
-

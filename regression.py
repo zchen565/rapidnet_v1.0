@@ -66,14 +66,14 @@ def diff(dir1, dir2, verbose):
             import difflib
             for diff_fname in comp.diff_files:
                 if not (diff_fname.endswith(".tr") or diff_fname.endswith(".mob")):
-                    print "The different file %r does not sound like a text file, not compared." % (diff_fname,)
+                    print("The different file %r does not sound like a text file, not compared." % (diff_fname,))
                 diff_file1 = open(os.path.join(dir1, diff_fname), "rt").readlines()
                 diff_file2 = open(os.path.join(dir2, diff_fname), "rt").readlines()
                 diff = difflib.unified_diff(diff_file1, diff_file2)
                 count = 0
-                print "Differences in file %r" % (diff_fname,)
+                print("Differences in file %r" % (diff_fname,))
                 for line in diff:
-                    print line
+                    print(line)
                     count += 1
                     if count > 100:
                         break
@@ -136,7 +136,7 @@ class regression_test_task(Task.TaskBase):
         else:
             reason_cannot_run = None
         if reason_cannot_run:
-            print "SKIP %s (%s)" % (self.test_name, reason_cannot_run)
+            print("SKIP %s (%s)" % (self.test_name, reason_cannot_run))
             self.result = None
             return 0
 
@@ -144,20 +144,20 @@ class regression_test_task(Task.TaskBase):
             # clean the target dir
             try:
                 shutil.rmtree(reference_traces_path)
-            except OSError, ex:
+            except OSError as ex:
                 if ex.errno not in [errno.ENOENT]:
                     raise
             os.makedirs(reference_traces_path)
             result = self.run_reference_generate(reference_traces_path, program, arguments, is_pyscript)
             if result == 0:
-                print "GENERATE " + self.test_name
+                print("GENERATE " + self.test_name)
             else:
-                print "GENERATE FAIL " + self.test_name
+                print("GENERATE FAIL " + self.test_name)
         else:
             # clean the target dir
             try:
                 shutil.rmtree(trace_output_path)
-            except OSError, ex:
+            except OSError as ex:
                 if ex.errno not in [errno.ENOENT]:
                     raise
             os.makedirs(trace_output_path)
@@ -166,15 +166,15 @@ class regression_test_task(Task.TaskBase):
             #    % (reference_traces_path, trace_output_path, program, arguments, is_pyscript)
             result = self.run_reference_test(reference_traces_path, trace_output_path, program, arguments, is_pyscript)
             if result == 0:
-                print "PASS " + self.test_name
+                print("PASS " + self.test_name)
             else:
-                print "FAIL " + self.test_name
+                print("FAIL " + self.test_name)
         self.result = result
         return 0
 
     def run_reference_test(self, reference_traces_path, trace_output_path, program, arguments, is_pyscript):
         if not os.path.exists(reference_traces_path):
-            print "Cannot locate reference traces in " + reference_traces_path
+            print("Cannot locate reference traces in " + reference_traces_path)
             return 1
 
         if is_pyscript:
@@ -182,29 +182,29 @@ class regression_test_task(Task.TaskBase):
             argv = [self.env['PYTHON'], script] + arguments
             try:
                 wutils.run_argv(argv, self.env, cwd=trace_output_path, force_no_valgrind=True)
-            except Utils.WafError, ex:
-                print >> sys.stderr, ex
+            except Utils.WafError as ex:
+                print(ex)
                 return 1
         else:
             try:
                 wutils.run_program(program, self.env,
                                    command_template=wutils.get_command_template(self.env, arguments),
                                    cwd=trace_output_path)
-            except Utils.WafError, ex:
-                print >> sys.stderr, ex
+            except Utils.WafError as ex:
+                print(ex)
                 return 1
 
         rc = diff(trace_output_path, reference_traces_path, Options.options.verbose)
         if rc:
-            print "----------"
-            print "Traces differ in test: ", self.test_name
-            print "Reference traces in directory: " + reference_traces_path
-            print "Traces in directory: " + trace_output_path
-            print "Run the following command for details:"
-            print "\tdiff -u %s %s" % (reference_traces_path, trace_output_path)
+            print("----------")
+            print("Traces differ in test: ", self.test_name)
+            print("Reference traces in directory: " + reference_traces_path)
+            print("Traces in directory: " + trace_output_path)
+            print("Run the following command for details:")
+            print("\tdiff -u %s %s" % (reference_traces_path, trace_output_path))
             if not Options.options.verbose:
-                print "Or re-run regression testing with option -v"
-            print "----------"
+                print("Or re-run regression testing with option -v")
+            print("----------")
         return rc
 
 
@@ -214,16 +214,16 @@ class regression_test_task(Task.TaskBase):
             argv = [self.env['PYTHON'], script] + arguments
             try:
                 retval = wutils.run_argv(argv, self.env, cwd=trace_output_path, force_no_valgrind=True)
-            except Utils.WafError, ex:
-                print >> sys.stderr, ex
+            except Utils.WafError as ex:
+                print(ex)
                 return 1
         else:
             try:
                 retval = wutils.run_program(program, self.env,
                                             command_template=wutils.get_command_template(self.env, arguments),
                                             cwd=trace_output_path)
-            except Utils.WafError, ex:
-                print >> sys.stderr, ex
+            except Utils.WafError as ex:
+                print(ex)
                 return 1
         return retval
 
@@ -246,19 +246,19 @@ class regression_test_collector_task(Task.TaskBase):
     def run(self):
         failed_tests = [test for test in self.test_tasks if test.result is not None and test.result != 0]
         skipped_tests = [test for test in self.test_tasks if test.result is None]
-        print "Regression testing summary:"
+        print("Regression testing summary:")
         if skipped_tests:
-            print "SKIP: %i of %i tests have been skipped (%s)" % (
+            print("SKIP: %i of %i tests have been skipped (%s)" % (
                 len(skipped_tests), len(self.test_tasks),
-                ', '.join([test.test_name for test in skipped_tests]))
+                ', '.join([test.test_name for test in skipped_tests])))
         if failed_tests:
-            print "FAIL: %i of %i tests have failed (%s)" % (
+            print("FAIL: %i of %i tests have failed (%s)" % (
                 len(failed_tests), len(self.test_tasks),
-                ', '.join([test.test_name for test in failed_tests]))
+                ', '.join([test.test_name for test in failed_tests])))
             return 1
         else:
-            print "PASS: %i of %i tests passed" % (len(self.test_tasks) - len(skipped_tests),
-                                                   len(self.test_tasks))
+            print("PASS: %i of %i tests passed" % (len(self.test_tasks) - len(skipped_tests),
+                                                   len(self.test_tasks)))
             return 0
 
 def run_regression(bld, reference_traces):
@@ -270,7 +270,7 @@ def run_regression(bld, reference_traces):
 
     testdir = os.path.join("regression", "tests")
     if not os.path.exists(testdir):
-        print "Tests directory does not exist"
+        print("Tests directory does not exist")
         sys.exit(3)
 
     if Options.options.regression_tests:
@@ -279,7 +279,7 @@ def run_regression(bld, reference_traces):
         tests = _find_tests(testdir)
 
     if not os.path.exists(reference_traces):
-        print "Reference traces directory (%s) does not exist" % reference_traces
+        print("Reference traces directory (%s) does not exist" % reference_traces)
         return 3
     
     test_scripts_dir = bld.path.find_dir('regression/tests').abspath()

@@ -32,163 +32,158 @@ using namespace std;
 using namespace ns3;
 using namespace ns3::rapidnet;
 
-namespace ns3 {
-namespace rapidnet {
-namespace tests {
+namespace ns3
+{
+  namespace rapidnet
+  {
+    namespace tests
+    {
 
-/**
+      /**
  * \ingroup rapidnet_tests
  *
  * \brief Tests RapidNet functions.
  *
  */
-class FunctionsTest : public Test
-{
-public:
+      class FunctionsTest : public Test
+      {
+      public:
+        FunctionsTest() : Test("Rapidnet-FunctionsTest") {}
 
-  FunctionsTest () : Test ("Rapidnet-FunctionsTest") {}
+        virtual ~FunctionsTest() {}
 
-  virtual ~FunctionsTest () {}
+        virtual bool RunTests(void);
 
-  virtual bool RunTests (void);
+      protected:
+        bool FAppendTest();
+        bool FConcatTest();
+        bool FMemberTest();
+        bool FSha1Test();
+      };
 
-protected:
+      bool
+      FunctionsTest::RunTests()
+      {
+        bool result = true;
+        result = FAppendTest() && FConcatTest() && FMemberTest() && FSha1Test();
 
-  bool FAppendTest ();
-  bool FConcatTest ();
-  bool FMemberTest ();
-  bool FSha1Test ();
-};
+        return result;
+      }
 
-bool
-FunctionsTest::RunTests ()
-{
-  bool result = true;
-  result = FAppendTest ()
-    && FConcatTest ()
-    && FMemberTest ()
-    && FSha1Test ();
+      bool
+      FunctionsTest::FAppendTest()
+      {
+        bool result = true;
+        Ptr<Tuple> tuple = Tuple::New("fappend_test");
+        tuple->AddAttribute(TupleAttribute::New("a1", Int32Value::New(5)));
+        Ptr<Expression> func = FAppend::New(VarExpr::New("a1"));
+        Ptr<Assignor> assignor = Assignor::New("a2", func);
+        assignor->Assign(tuple);
+        NS_TEST_ASSERT(tuple->HasAttribute("a2"));
+        //cout << tuple << endl;
+        list<Ptr<Value>> results;
+        results.push_back(Int32Value::New(5));
+        NS_TEST_ASSERT(tuple->GetAttribute("a2")->GetValue()->Equals(
+            ListValue::New(results)));
 
-  return result;
-}
+        //cout << "FAppend tests passed!" << endl;
+        return result;
+      }
 
+      bool
+      FunctionsTest::FConcatTest()
+      {
+        bool result = true;
+        list<Ptr<Value>> a1;
+        a1.push_back(Ipv4Value::New("10.1.1.1"));
+        a1.push_back(Ipv4Value::New("10.1.1.2"));
 
-bool
-FunctionsTest::FAppendTest ()
-{
-  bool result = true;
-  Ptr<Tuple> tuple = Tuple::New ("fappend_test");
-  tuple->AddAttribute (TupleAttribute::New ("a1", Int32Value::New (5)));
-  Ptr<Expression> func = FAppend::New (VarExpr::New ("a1"));
-  Ptr<Assignor> assignor = Assignor::New ("a2", func);
-  assignor->Assign (tuple);
-  NS_TEST_ASSERT (tuple->HasAttribute ("a2"));
-  //cout << tuple << endl;
-  list<Ptr<Value> > results;
-  results.push_back (Int32Value::New (5));
-  NS_TEST_ASSERT (tuple->GetAttribute ("a2")->GetValue ()->Equals (
-    ListValue::New (results)));
+        list<Ptr<Value>> a2;
+        a2.push_back(Ipv4Value::New("10.1.1.3"));
 
-  //cout << "FAppend tests passed!" << endl;
-  return result;
-}
+        list<Ptr<Value>> a3;
+        a3.push_back(Ipv4Value::New("10.1.1.1"));
+        a3.push_back(Ipv4Value::New("10.1.1.2"));
+        a3.push_back(Ipv4Value::New("10.1.1.3"));
 
-bool
-FunctionsTest::FConcatTest ()
-{
-  bool result = true;
-  list<Ptr<Value> > a1;
-  a1.push_back (Ipv4Value::New ("10.1.1.1"));
-  a1.push_back (Ipv4Value::New ("10.1.1.2"));
+        Ptr<Tuple> tuple = Tuple::New("fconcat_test");
+        tuple->AddAttribute(TupleAttribute::New("a1", ListValue::New(a1)));
+        tuple->AddAttribute(TupleAttribute::New("a2", ListValue::New(a2)));
+        Ptr<Expression> func = FConcat::New(VarExpr::New("a1"),
+                                            VarExpr::New("a2"));
+        Ptr<Assignor> assignor = Assignor::New("a3", func);
+        assignor->Assign(tuple);
+        NS_TEST_ASSERT(tuple->HasAttribute("a3"));
+        //cout << tuple << endl;
+        NS_TEST_ASSERT(tuple->GetAttribute("a3")->GetValue()->Equals(
+            ListValue::New(a3)));
 
-  list<Ptr<Value> > a2;
-  a2.push_back (Ipv4Value::New ("10.1.1.3"));
+        //cout << "FConcat tests passed!" << endl;
+        return result;
+      }
 
-  list<Ptr<Value> > a3;
-  a3.push_back (Ipv4Value::New ("10.1.1.1"));
-  a3.push_back (Ipv4Value::New ("10.1.1.2"));
-  a3.push_back (Ipv4Value::New ("10.1.1.3"));
+      bool
+      FunctionsTest::FMemberTest()
+      {
+        bool result = true;
+        list<Ptr<Value>> a1;
+        a1.push_back(Ipv4Value::New("10.1.1.1"));
+        a1.push_back(Ipv4Value::New("10.1.1.2"));
+        a1.push_back(Ipv4Value::New("10.1.1.3"));
 
+        Ptr<Tuple> tuple = Tuple::New("fmember_test");
+        tuple->AddAttribute(TupleAttribute::New("a1", ListValue::New(a1)));
+        tuple->AddAttribute(TupleAttribute::New("a2", Ipv4Value::New("10.1.1.2")));
 
-  Ptr<Tuple> tuple = Tuple::New ("fconcat_test");
-  tuple->AddAttribute (TupleAttribute::New ("a1", ListValue::New (a1)));
-  tuple->AddAttribute (TupleAttribute::New ("a2", ListValue::New (a2)));
-  Ptr<Expression> func = FConcat::New (VarExpr::New ("a1"),
-    VarExpr::New ("a2"));
-  Ptr<Assignor> assignor = Assignor::New ("a3", func);
-  assignor->Assign (tuple);
-  NS_TEST_ASSERT (tuple->HasAttribute ("a3"));
-  //cout << tuple << endl;
-  NS_TEST_ASSERT (tuple->GetAttribute ("a3")->GetValue ()->Equals (
-    ListValue::New (a3)));
+        Ptr<Expression> func = FMember::New(VarExpr::New("a1"),
+                                            ValueExpr::New(Ipv4Value::New("10.1.1.2")));
+        Ptr<Selector> selector = Selector::New(Operation::New(RN_EQ,
+                                                              func,
+                                                              ValueExpr::New(Int32Value::New(true))));
+        //cout << tuple << endl;
+        NS_TEST_ASSERT(selector->Select(tuple));
 
-  //cout << "FConcat tests passed!" << endl;
-  return result;
-}
+        selector = Selector::New(Operation::New(RN_EQ,
+                                                FMember::New(VarExpr::New("a1"),
+                                                             VarExpr::New("a2")),
+                                                ValueExpr::New(Int32Value::New(true))));
+        NS_TEST_ASSERT(selector->Select(tuple));
 
+        selector = Selector::New(Operation::New(RN_EQ,
+                                                FMember::New(VarExpr::New("a1"),
+                                                             ValueExpr::New(Ipv4Value::New("10.1.1.4"))),
+                                                ValueExpr::New(Int32Value::New(true))));
+        NS_TEST_ASSERT(!selector->Select(tuple));
 
-bool
-FunctionsTest::FMemberTest ()
-{
-  bool result = true;
-  list<Ptr<Value> > a1;
-  a1.push_back (Ipv4Value::New ("10.1.1.1"));
-  a1.push_back (Ipv4Value::New ("10.1.1.2"));
-  a1.push_back (Ipv4Value::New ("10.1.1.3"));
+        //cout << "FMember tests passed!" << endl;
+        return result;
+      }
 
-  Ptr<Tuple> tuple = Tuple::New ("fmember_test");
-  tuple->AddAttribute (TupleAttribute::New ("a1", ListValue::New (a1)));
-  tuple->AddAttribute (TupleAttribute::New ("a2", Ipv4Value::New ("10.1.1.2")));
+      bool
+      FunctionsTest::FSha1Test()
+      {
+        bool result = true;
+        Ptr<Expression> expr1, expr2;
+        Ptr<Value> value;
+        Ptr<Tuple> dummy = rtuple("dummy");
 
-  Ptr<Expression> func = FMember::New (VarExpr::New ("a1"),
-    ValueExpr::New (Ipv4Value::New ("10.1.1.2")));
-  Ptr<Selector> selector = Selector::New (Operation::New (RN_EQ,
-    func,
-    ValueExpr::New (Int32Value::New (true))));
-  //cout << tuple << endl;
-  NS_TEST_ASSERT (selector->Select (tuple));
+        value = StrValue::New("Hello, World!");
+        expr1 = FSha1::New(ValueExpr::New(value));
+        expr2 = FSha1::New(ValueExpr::New(value->Clone()));
+        NS_TEST_ASSERT(expr1->Eval(dummy)->Equals(expr2->Eval(dummy)));
+        //cout << expr1->Eval (dummy) << endl;
 
-  selector = Selector::New (Operation::New (RN_EQ,
-    FMember::New (VarExpr::New ("a1"),
-      VarExpr::New ("a2")),
-    ValueExpr::New (Int32Value::New (true))));
-  NS_TEST_ASSERT (selector->Select (tuple));
+        value = Ipv4Value::New("192.168.0.1");
+        expr1 = FSha1::New(ValueExpr::New(value));
+        expr2 = FSha1::New(ValueExpr::New(value->Clone()));
+        NS_TEST_ASSERT(expr1->Eval(dummy)->Equals(expr2->Eval(dummy)));
 
-  selector = Selector::New (Operation::New (RN_EQ,
-    FMember::New (VarExpr::New ("a1"),
-      ValueExpr::New (Ipv4Value::New ("10.1.1.4"))),
-    ValueExpr::New (Int32Value::New (true))));
-  NS_TEST_ASSERT (!selector->Select (tuple));
+        //cout << "FSha1 tests passed!" << endl;
+        return result;
+      }
 
-  //cout << "FMember tests passed!" << endl;
-  return result;
-}
+      static FunctionsTest g_functionsTest;
 
-bool
-FunctionsTest::FSha1Test ()
-{
-  bool result = true;
-  Ptr<Expression> expr1, expr2;
-  Ptr<Value> value;
-  Ptr<Tuple> dummy = tuple ("dummy");
-
-  value = StrValue::New ("Hello, World!");
-  expr1 = FSha1::New (ValueExpr::New (value));
-  expr2 = FSha1::New (ValueExpr::New (value->Clone ()));
-  NS_TEST_ASSERT (expr1->Eval (dummy)->Equals (expr2->Eval (dummy)));
-  //cout << expr1->Eval (dummy) << endl;
-
-  value = Ipv4Value::New ("192.168.0.1");
-  expr1 = FSha1::New (ValueExpr::New (value));
-  expr2 = FSha1::New (ValueExpr::New (value->Clone ()));
-  NS_TEST_ASSERT (expr1->Eval (dummy)->Equals (expr2->Eval (dummy)));
-
-  //cout << "FSha1 tests passed!" << endl;
-  return result;
-}
-
-static FunctionsTest g_functionsTest;
-
-} // namespace tests
-} // namespace rapidnet
+    } // namespace tests
+  }   // namespace rapidnet
 } // namespace ns3

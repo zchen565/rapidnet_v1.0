@@ -23,156 +23,144 @@ const string Pingpong::PERIODIC = "periodic";
 const string Pingpong::R1_ECAPERIODIC = "r1_ecaperiodic";
 const string Pingpong::TLINK = "tLink";
 
-NS_LOG_COMPONENT_DEFINE ("Pingpong");
-NS_OBJECT_ENSURE_REGISTERED (Pingpong);
+NS_LOG_COMPONENT_DEFINE("Pingpong");
+NS_OBJECT_ENSURE_REGISTERED(Pingpong);
 
 TypeId
-Pingpong::GetTypeId (void)
+Pingpong::GetTypeId(void)
 {
-  static TypeId tid = TypeId ("ns3::rapidnet::pingpong::Pingpong")
-    .SetParent<RapidNetApplicationBase> ()
-    .AddConstructor<Pingpong> ()
-    ;
+  static TypeId tid = TypeId("ns3::rapidnet::pingpong::Pingpong")
+                          .SetParent<RapidNetApplicationBase>()
+                          .AddConstructor<Pingpong>();
   return tid;
 }
 
 Pingpong::Pingpong()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 }
 
 Pingpong::~Pingpong()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 }
 
-void
-Pingpong::DoDispose (void)
+void Pingpong::DoDispose(void)
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::DoDispose ();
+  RapidNetApplicationBase::DoDispose();
 }
 
-void
-Pingpong::StartApplication (void)
+void Pingpong::StartApplication(void)
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::StartApplication ();
-  m_event_r1_ecaperiodic=
-    Simulator::Schedule (Seconds (0), &Pingpong::R1_ecaperiodic, this);
+  RapidNetApplicationBase::StartApplication();
+  m_event_r1_ecaperiodic =
+      Simulator::Schedule(Seconds(0), &Pingpong::R1_ecaperiodic, this);
   RAPIDNET_LOG_INFO("Pingpong Application Started");
 }
 
-void
-Pingpong::StopApplication ()
+void Pingpong::StopApplication()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::StopApplication ();
+  RapidNetApplicationBase::StopApplication();
   Simulator::Cancel(m_event_r1_ecaperiodic);
   RAPIDNET_LOG_INFO("Pingpong Application Stopped");
 }
 
-void
-Pingpong::InitDatabase ()
+void Pingpong::InitDatabase()
 {
   //RapidNetApplicationBase::InitDatabase ();
 
-  AddRelationWithKeys (TLINK, attrdeflist (
-    attrdef ("tLink_attr1", IPV4),
-    attrdef ("tLink_attr2", IPV4)));
-
+  AddRelationWithKeys(TLINK, attrdeflist(
+                                 attrdef("tLink_attr1", IPV4),
+                                 attrdef("tLink_attr2", IPV4)));
 }
 
-void
-Pingpong::DemuxRecv (Ptr<Tuple> tuple)
+void Pingpong::DemuxRecv(Ptr<Tuple> tuple)
 {
-  RapidNetApplicationBase::DemuxRecv (tuple);
+  RapidNetApplicationBase::DemuxRecv(tuple);
 
-  if (IsRecvEvent (tuple, R1_ECAPERIODIC))
-    {
-      R1_eca (tuple);
-    }
-  if (IsRecvEvent (tuple, EPING))
-    {
-      R2_eca (tuple);
-    }
-  if (IsRecvEvent (tuple, EPONG))
-    {
-      R3_eca (tuple);
-    }
+  if (IsRecvEvent(tuple, R1_ECAPERIODIC))
+  {
+    R1_eca(tuple);
+  }
+  if (IsRecvEvent(tuple, EPING))
+  {
+    R2_eca(tuple);
+  }
+  if (IsRecvEvent(tuple, EPONG))
+  {
+    R3_eca(tuple);
+  }
 }
 
-void
-Pingpong::R1_ecaperiodic ()
+void Pingpong::R1_ecaperiodic()
 {
-  RAPIDNET_LOG_INFO ("R1_ecaperiodic triggered");
+  RAPIDNET_LOG_INFO("R1_ecaperiodic triggered");
 
-  SendLocal (tuple (R1_ECAPERIODIC, attrlist (
-    attr ("r1_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
-    attr ("r1_ecaperiodic_attr2", Int32Value, rand ()))));
+  SendLocal(rtuple(R1_ECAPERIODIC, attrlist(
+                                       attr("r1_ecaperiodic_attr1", Ipv4Value, GetAddress()),
+                                       attr("r1_ecaperiodic_attr2", Int32Value, rand()))));
 
-  m_event_r1_ecaperiodic = Simulator::Schedule (Seconds(1),
-    &Pingpong::R1_ecaperiodic, this);
+  m_event_r1_ecaperiodic = Simulator::Schedule(Seconds(1),
+                                               &Pingpong::R1_ecaperiodic, this);
 }
 
-void
-Pingpong::R1_eca (Ptr<Tuple> r1_ecaperiodic)
+void Pingpong::R1_eca(Ptr<Tuple> r1_ecaperiodic)
 {
-  RAPIDNET_LOG_INFO ("R1_eca triggered");
+  RAPIDNET_LOG_INFO("R1_eca triggered");
 
   Ptr<RelationBase> result;
 
-  result = GetRelation (TLINK)->Join (
-    r1_ecaperiodic,
-    strlist ("tLink_attr1"),
-    strlist ("r1_ecaperiodic_attr1"));
+  result = GetRelation(TLINK)->Join(
+      r1_ecaperiodic,
+      strlist("tLink_attr1"),
+      strlist("r1_ecaperiodic_attr1"));
 
-  result = result->Project (
-    EPING,
-    strlist ("tLink_attr2",
-      "r1_ecaperiodic_attr1",
-      "tLink_attr2"),
-    strlist ("ePing_attr1",
-      "ePing_attr2",
-      RN_DEST));
+  result = result->Project(
+      EPING,
+      strlist("tLink_attr2",
+              "r1_ecaperiodic_attr1",
+              "tLink_attr2"),
+      strlist("ePing_attr1",
+              "ePing_attr2",
+              RN_DEST));
 
-  Send (result);
+  Send(result);
 }
 
-void
-Pingpong::R2_eca (Ptr<Tuple> ePing)
+void Pingpong::R2_eca(Ptr<Tuple> ePing)
 {
-  RAPIDNET_LOG_INFO ("R2_eca triggered");
+  RAPIDNET_LOG_INFO("R2_eca triggered");
 
   Ptr<Tuple> result = ePing;
 
-  result = result->Project (
-    EPONG,
-    strlist ("ePing_attr2",
-      "ePing_attr1",
-      "ePing_attr2"),
-    strlist ("ePong_attr1",
-      "ePong_attr2",
-      RN_DEST));
+  result = result->Project(
+      EPONG,
+      strlist("ePing_attr2",
+              "ePing_attr1",
+              "ePing_attr2"),
+      strlist("ePong_attr1",
+              "ePong_attr2",
+              RN_DEST));
 
-  Send (result);
+  Send(result);
 }
 
-void
-Pingpong::R3_eca (Ptr<Tuple> ePong)
+void Pingpong::R3_eca(Ptr<Tuple> ePong)
 {
-  RAPIDNET_LOG_INFO ("R3_eca triggered");
+  RAPIDNET_LOG_INFO("R3_eca triggered");
 
   Ptr<Tuple> result = ePong;
 
-  result = result->Project (
-    EPINGPONGFINISH,
-    strlist ("ePong_attr1"),
-    strlist ("ePingPongFinish_attr1"));
+  result = result->Project(
+      EPINGPONGFINISH,
+      strlist("ePong_attr1"),
+      strlist("ePingPongFinish_attr1"));
 
-  SendLocal (result);
+  SendLocal(result);
 }
-

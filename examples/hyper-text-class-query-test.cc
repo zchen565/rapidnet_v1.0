@@ -64,14 +64,14 @@
 "./data/hyper-text-class/sample10.db"
 
 #define hasword(local, word, address) \
-tuple (HyperTextClass::HASWORD, \
+rtuple (HyperTextClass::HASWORD, \
 attr ("hasword_attr1", Ipv4Value, local), \
 attr ("hasword_attr2", StrValue, word), \
 attr ("hasword_attr3", Int32Value, address) \
 )
 
 #define links(local, address1, address2) \
-tuple (HyperTextClass::LINKS, \
+rtuple (HyperTextClass::LINKS, \
 attr ("links_attr1", Ipv4Value, local), \
 attr ("links_attr2", Int32Value, address1), \
 attr ("links_attr3", Int32Value, address2) \
@@ -87,7 +87,7 @@ app(local)->Insert(links(addr(local), address1, address2))
 
 
 #define tupleQuery(local, name, attr1, attr2, attr3) \
-tuple (HyperTextClassQuery::TUPLE, \
+rtuple (HyperTextClassQuery::TUPLE, \
 attr ("tuple_attr1", Ipv4Value, local), \
 attr ("tuple_attr2", StrValue, name), \
 attr ("tuple_attr3", Ipv4Value, attr1), \

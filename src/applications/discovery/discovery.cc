@@ -22,165 +22,151 @@ const string Discovery::LINK = "link";
 const string Discovery::PERIODIC = "periodic";
 const string Discovery::R1_ECAPERIODIC = "r1_ecaperiodic";
 
-NS_LOG_COMPONENT_DEFINE ("Discovery");
-NS_OBJECT_ENSURE_REGISTERED (Discovery);
+NS_LOG_COMPONENT_DEFINE("Discovery");
+NS_OBJECT_ENSURE_REGISTERED(Discovery);
 
 TypeId
-Discovery::GetTypeId (void)
+Discovery::GetTypeId(void)
 {
-  static TypeId tid = TypeId ("ns3::rapidnet::discovery::Discovery")
-    .SetParent<RapidNetApplicationBase> ()
-    .AddConstructor<Discovery> ()
-    ;
+  static TypeId tid = TypeId("ns3::rapidnet::discovery::Discovery")
+                          .SetParent<RapidNetApplicationBase>()
+                          .AddConstructor<Discovery>();
   return tid;
 }
 
 Discovery::Discovery()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 }
 
 Discovery::~Discovery()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 }
 
-void
-Discovery::DoDispose (void)
+void Discovery::DoDispose(void)
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::DoDispose ();
+  RapidNetApplicationBase::DoDispose();
 }
 
-void
-Discovery::StartApplication (void)
+void Discovery::StartApplication(void)
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::StartApplication ();
-  m_event_r1_ecaperiodic=
-    Simulator::Schedule (Seconds (1 + (drand48 () * 4)), &Discovery::R1_ecaperiodic, this);
+  RapidNetApplicationBase::StartApplication();
+  m_event_r1_ecaperiodic =
+      Simulator::Schedule(Seconds(1 + (drand48() * 4)), &Discovery::R1_ecaperiodic, this);
   RAPIDNET_LOG_INFO("Discovery Application Started");
 }
 
-void
-Discovery::StopApplication ()
+void Discovery::StopApplication()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::StopApplication ();
+  RapidNetApplicationBase::StopApplication();
   Simulator::Cancel(m_event_r1_ecaperiodic);
   RAPIDNET_LOG_INFO("Discovery Application Stopped");
 }
 
-void
-Discovery::InitDatabase ()
+void Discovery::InitDatabase()
 {
   //RapidNetApplicationBase::InitDatabase ();
 
-  AddRelationWithKeys (LINK, attrdeflist (
-    attrdef ("link_attr1", IPV4),
-    attrdef ("link_attr2", IPV4)),
-    Seconds (11));
-
+  AddRelationWithKeys(LINK, attrdeflist(attrdef("link_attr1", IPV4), attrdef("link_attr2", IPV4)),
+                      Seconds(11));
 }
 
-void
-Discovery::DemuxRecv (Ptr<Tuple> tuple)
+void Discovery::DemuxRecv(Ptr<Tuple> tuple)
 {
-  RapidNetApplicationBase::DemuxRecv (tuple);
+  RapidNetApplicationBase::DemuxRecv(tuple);
 
-  if (IsRecvEvent (tuple, R1_ECAPERIODIC))
-    {
-      R1_eca (tuple);
-    }
-  if (IsRecvEvent (tuple, BEACON))
-    {
-      R2_eca (tuple);
-    }
-  if (IsRecvEvent (tuple, BEACONLOC))
-    {
-      R3_eca (tuple);
-    }
+  if (IsRecvEvent(tuple, R1_ECAPERIODIC))
+  {
+    R1_eca(tuple);
+  }
+  if (IsRecvEvent(tuple, BEACON))
+  {
+    R2_eca(tuple);
+  }
+  if (IsRecvEvent(tuple, BEACONLOC))
+  {
+    R3_eca(tuple);
+  }
 }
 
-void
-Discovery::R1_ecaperiodic ()
+void Discovery::R1_ecaperiodic()
 {
-  RAPIDNET_LOG_INFO ("R1_ecaperiodic triggered");
+  RAPIDNET_LOG_INFO("R1_ecaperiodic triggered");
 
-  SendLocal (tuple (R1_ECAPERIODIC, attrlist (
-    attr ("r1_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
-    attr ("r1_ecaperiodic_attr2", Int32Value, rand ()))));
+  SendLocal(rtuple(R1_ECAPERIODIC, attrlist(
+                                       attr("r1_ecaperiodic_attr1", Ipv4Value, GetAddress()),
+                                       attr("r1_ecaperiodic_attr2", Int32Value, rand()))));
 
-  m_event_r1_ecaperiodic = Simulator::Schedule (Seconds(5),
-    &Discovery::R1_ecaperiodic, this);
+  m_event_r1_ecaperiodic = Simulator::Schedule(Seconds(5),
+                                               &Discovery::R1_ecaperiodic, this);
 }
 
-void
-Discovery::R1_eca (Ptr<Tuple> r1_ecaperiodic)
+void Discovery::R1_eca(Ptr<Tuple> r1_ecaperiodic)
 {
-  RAPIDNET_LOG_INFO ("R1_eca triggered");
+  RAPIDNET_LOG_INFO("R1_eca triggered");
 
   Ptr<Tuple> result = r1_ecaperiodic;
 
-  result->Assign (Assignor::New ("Broadcast",
-    BROADCAST_ADDRESS));
+  result->Assign(Assignor::New("Broadcast",
+                               BROADCAST_ADDRESS));
 
-  result = result->Project (
-    BEACON,
-    strlist ("Broadcast",
-      "r1_ecaperiodic_attr1",
-      "Broadcast"),
-    strlist ("beacon_attr1",
-      "beacon_attr2",
-      RN_DEST));
+  result = result->Project(
+      BEACON,
+      strlist("Broadcast",
+              "r1_ecaperiodic_attr1",
+              "Broadcast"),
+      strlist("beacon_attr1",
+              "beacon_attr2",
+              RN_DEST));
 
-  Send (result);
+  Send(result);
 }
 
-void
-Discovery::R2_eca (Ptr<Tuple> beacon)
+void Discovery::R2_eca(Ptr<Tuple> beacon)
 {
-  RAPIDNET_LOG_INFO ("R2_eca triggered");
+  RAPIDNET_LOG_INFO("R2_eca triggered");
 
   Ptr<Tuple> result = beacon;
 
-  result->Assign (Assignor::New ("Local",
-    LOCAL_ADDRESS));
+  result->Assign(Assignor::New("Local",
+                               LOCAL_ADDRESS));
 
-  result = result->Project (
-    BEACONLOC,
-    strlist ("Local",
-      "beacon_attr2",
-      "Local"),
-    strlist ("beaconLoc_attr1",
-      "beaconLoc_attr2",
-      RN_DEST));
+  result = result->Project(
+      BEACONLOC,
+      strlist("Local",
+              "beacon_attr2",
+              "Local"),
+      strlist("beaconLoc_attr1",
+              "beaconLoc_attr2",
+              RN_DEST));
 
-  Send (result);
+  Send(result);
 }
 
-void
-Discovery::R3_eca (Ptr<Tuple> beaconLoc)
+void Discovery::R3_eca(Ptr<Tuple> beaconLoc)
 {
-  RAPIDNET_LOG_INFO ("R3_eca triggered");
+  RAPIDNET_LOG_INFO("R3_eca triggered");
 
   Ptr<Tuple> result = beaconLoc;
 
-  result->Assign (Assignor::New ("Cost",
-    ValueExpr::New (Int32Value::New (1))));
+  result->Assign(Assignor::New("Cost",
+                               ValueExpr::New(Int32Value::New(1))));
 
-  result = result->Project (
-    LINK,
-    strlist ("beaconLoc_attr1",
-      "beaconLoc_attr2",
-      "Cost"),
-    strlist ("link_attr1",
-      "link_attr2",
-      "link_attr3"));
+  result = result->Project(
+      LINK,
+      strlist("beaconLoc_attr1",
+              "beaconLoc_attr2",
+              "Cost"),
+      strlist("link_attr1",
+              "link_attr2",
+              "link_attr3"));
 
-  Insert (result);
+  Insert(result);
 }
-

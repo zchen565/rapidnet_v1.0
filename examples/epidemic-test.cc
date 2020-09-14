@@ -23,15 +23,15 @@
 #include "ns3/values-module.h"
 #include "ns3/rapidnet-script-utils.h"
 
-#define eLinkAdd(src, next, cost) \
-  tuple (Epidemic::ELINKADD, \
-    attr ("eLinkAdd_attr1", Ipv4Value, src), \
-    attr ("eLinkAdd_attr2", Ipv4Value, next), \
-    attr ("eLinkAdd_attr3", Int32Value, cost))
+#define eLinkAdd(src, next, cost)                 \
+  rtuple(Epidemic::ELINKADD,                      \
+         attr("eLinkAdd_attr1", Ipv4Value, src),  \
+         attr("eLinkAdd_attr2", Ipv4Value, next), \
+         attr("eLinkAdd_attr3", Int32Value, cost))
 
-#define insertlink(from, to, cost) \
-  app(from)->Inject (eLinkAdd (addr (from), addr (to), cost)); \
-  app(to)->Inject (eLinkAdd (addr (to), addr (from), cost));
+#define insertlink(from, to, cost)                         \
+  app(from)->Inject(eLinkAdd(addr(from), addr(to), cost)); \
+  app(to)->Inject(eLinkAdd(addr(to), addr(from), cost));
 
 using namespace std;
 using namespace ns3;
@@ -41,70 +41,62 @@ using namespace ns3::rapidnet::epidemic;
 ApplicationContainer apps;
 
 // dynamic topology
-void
-UpdateLink1()
+void UpdateLink1()
 {
   insertlink(1, 2, 1);
   insertlink(1, 3, 1);
   insertlink(4, 5, 1);
 }
 
-void
-UpdateLink2()
+void UpdateLink2()
 {
   insertlink(3, 5, 1);
 }
 
-void
-UpdateLink3()
+void UpdateLink3()
 {
   insertlink(4, 6, 1);
 }
 
-void
-InjectMessage1 ()
+void InjectMessage1()
 {
-  app(1)->Inject (tuple (Epidemic::EMESSAGEINJECTORIGINAL,
-    attr ("eMessageInjectOriginal_attr1", Ipv4Value, Ipv4Address ("192.168.0.1")),
-    attr ("eMessageInjectOriginal_attr2", Ipv4Value, Ipv4Address ("192.168.0.6"))));
+  app(1)->Inject(rtuple(Epidemic::EMESSAGEINJECTORIGINAL,
+                        attr("eMessageInjectOriginal_attr1", Ipv4Value, Ipv4Address("192.168.0.1")),
+                        attr("eMessageInjectOriginal_attr2", Ipv4Value, Ipv4Address("192.168.0.6"))));
 }
 
-void
-InjectMessage2 ()
+void InjectMessage2()
 {
-  app(2)->Inject (tuple (Epidemic::EMESSAGEINJECTORIGINAL,
-    attr ("eMessageInjectOriginal_attr1", Ipv4Value, Ipv4Address ("192.168.0.2")),
-    attr ("eMessageInjectOriginal_attr2", Ipv4Value, Ipv4Address ("192.168.0.6"))));
+  app(2)->Inject(rtuple(Epidemic::EMESSAGEINJECTORIGINAL,
+                        attr("eMessageInjectOriginal_attr1", Ipv4Value, Ipv4Address("192.168.0.2")),
+                        attr("eMessageInjectOriginal_attr2", Ipv4Value, Ipv4Address("192.168.0.6"))));
 }
 
-
-void
-PrintTables ()
+void PrintTables()
 {
   PrintRelation(apps, Epidemic::TMESSAGE, std::clog);
   PrintRelation(apps, Epidemic::TSUMMARYVEC, std::clog);
 }
 
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  srand((unsigned)time(0));   // seed should be set in main function
+  srand((unsigned)time(0)); // seed should be set in main function
 
   LogComponentEnable("Epidemic", LOG_LEVEL_INFO);
   LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
 
   double TOTAL_TIME = 15.0;
-  apps = InitRapidNetApps (6, Create<EpidemicHelper> (), "192.168.0.0");
-  apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (TOTAL_TIME));
-  schedule (0.0, UpdateLink1);
-  schedule (1.0, InjectMessage1);
-  schedule (1.1, InjectMessage2);
-  schedule (5.0, UpdateLink2);
-  schedule (10.0, UpdateLink3);
-  schedule (TOTAL_TIME, PrintTables);
+  apps = InitRapidNetApps(6, Create<EpidemicHelper>(), "192.168.0.0");
+  apps.Start(Seconds(0.0));
+  apps.Stop(Seconds(TOTAL_TIME));
+  schedule(0.0, UpdateLink1);
+  schedule(1.0, InjectMessage1);
+  schedule(1.1, InjectMessage2);
+  schedule(5.0, UpdateLink2);
+  schedule(10.0, UpdateLink3);
+  schedule(TOTAL_TIME, PrintTables);
 
-  Simulator::Run ();
-  Simulator::Destroy ();
+  Simulator::Run();
+  Simulator::Destroy();
   return 0;
 }

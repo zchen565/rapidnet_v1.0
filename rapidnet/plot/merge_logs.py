@@ -4,7 +4,7 @@ import os, sys
 import math, gmpy
 
 if len (sys.argv) not in [2, 3, 4]:
-  print 'Usage: merge_logs <logs_dir> [<route_quality(True/False)>] [<bandwidth_color(True/False)>]'
+  print('Usage: merge_logs <logs_dir> [<route_quality(True/False)>] [<bandwidth_color(True/False)>]')
   sys.exit (0)
 
 dir = sys.argv[1]
@@ -19,7 +19,7 @@ else :
   bandwidth_color = 'True'
 
 if not os.path.isdir (dir):
-  print '%s is not a directory.' % dir
+  print('%s is not a directory.' % dir)
   sys.exit (0)
 
 decorator_log = os.path.join (dir, 'decorator.log')
@@ -83,8 +83,8 @@ def check_lsu(time, line):
         node = line.split()[2]
         src = line.split()[4].split(':')[1]
         if src != '127.0.0.1':
-          t = long(time)/2000000000L
-          time = t * 2000000000L
+          t = int(time)/2000000000
+          time = t * 2000000000
           smallid = min (int(node),ipaddrinv[src])
           bigid = max (int(node),ipaddrinv[src])
           if (time, smallid, bigid) not in LSUevents:
@@ -105,11 +105,11 @@ def add_path_dsr (line):
     
 def delete_path_dsr (time, line):
   if line.split()[3] == '+Clear':
-    for items in linkSrc.keys():
+    for items in list(linkSrc.keys()):
       event = str(time) + 'ns link ' + linkSrc[items][0] + ' ' + linkSrc[items][1] + ' -linkSrc\n'
       add_event (time, event)
     linkSrc.clear()
-    for items in bestPath.keys():
+    for items in list(bestPath.keys()):
       event = str(time) + 'ns link ' + bestPath[items][0] + ' ' + bestPath[items][1] + ' -bestPath\n'
       add_event (time, event)
     bestPath.clear()
@@ -119,7 +119,7 @@ def delete_path_dsr (time, line):
 def update_BestPath (time, line):
   if line.split()[3] == '+tBestPath' and line.split()[1] == 'tuple':
     time=time+10
-    for items in bestPath.keys():
+    for items in list(bestPath.keys()):
       event = str(time) + 'ns link ' + bestPath[items][0] + ' ' + bestPath[items][1] + ' -bestPath\n'
       add_event (time, event)
     bestPath.clear()   
@@ -129,7 +129,7 @@ def update_BestPath (time, line):
     length = len(pathNode)
     for i in range(0,length-1):
       bestPath[i] = [str(int(pathNode[i].split('.')[3])-1),pathNode[i+1].split(':')[1]] 
-    for items in bestPath.keys():
+    for items in list(bestPath.keys()):
       event = str(time) + 'ns link ' + bestPath[items][0] + ' ' + bestPath[items][1] + ' +bestPath\n'
       add_event (time, event)
 
@@ -187,8 +187,8 @@ def count_linkevents (time, line):
   if line.split()[1] == 'link':
     if line.split()[4] in ['+link', '-link']:
       if int(line.split()[2]) != int(line.split()[3].split('.')[3])-1 :
-        t = long(time)/1000000000L
-        time = (t+1) * 1000000000L
+        t = int(time)/1000000000
+        time = (t+1) * 1000000000
         if time not in linkevents:
           linkevents[time] = 1
         else:
@@ -196,8 +196,8 @@ def count_linkevents (time, line):
 
 def add_linkevents ():
   max_linkevent = 0
-  for time in linkevents.keys():
-    if linkevents[time] > max_linkevent and time > 5000000000L: # Exclude first 5 seconds
+  for time in list(linkevents.keys()):
+    if linkevents[time] > max_linkevent and time > 5000000000: # Exclude first 5 seconds
       max_linkevent = linkevents[time]  
     add_event (time, '%ldns point linkevent %d\n' % (time, linkevents[time]))
   if (route_quality == 'False'):
@@ -220,7 +220,7 @@ def parse_for_chord (time, line):
     
 
 ####################################### For All
-print 'Reading output.log...'
+print('Reading output.log...')
 file = open (output_log, 'r')
 count = 0
 speed_low = 0
@@ -272,15 +272,15 @@ for line in file:
     elif value == 'ConstantPosition':
       value = 'Constant_Position'
     ofile.write ('info label mobility_model Mobility_Model %s %d\n'%(value,2))
-print 'Done!'
+print('Done!')
 
-print 'Reading decorator_log...'
+print('Reading decorator_log...')
 file = open (decorator_log, 'r')
 arena = file.readline ()
 words = arena.strip('\n').split(' ')
 ofile.write ('info label arena Arena %sm_X_%sm %d\n'%(words[3],words[4],4))
 for line in file:
-  time = long (line.partition ('ns')[0])
+  time = int (line.partition ('ns')[0])
   if line.split()[1] == 'ip':
     node = int (line.split()[2])
     assert node not in ipaddr
@@ -296,63 +296,63 @@ for line in file:
     parse_for_chord (time, line)
 if Linkevent:
   add_linkevents()
-print 'Done!'
+print('Done!')
 
 if Bandwidth:
-  print 'Reading bandwidth-sent.points...'
+  print('Reading bandwidth-sent.points...')
   max_bandwidth = 0.0
   file = open (bw_sent_points, 'r')
   for line in file:
     words = line.split (' ')
-    time = long (words[0]) * 1000000000L
+    time = int (words[0]) * 1000000000
     value = float (words[1]) / 1000.0
     if value > max_bandwidth:
       max_bandwidth = value
     add_event (time, '%ldns point sent %.2f\n' % (time, value))
   ofile.write ('info graph sent Per-node_Bandwidth_(kB/s) 0 %s 0 %f %d\n'%(duration, max_bandwidth, 1))
-  print 'Done!'
+  print('Done!')
 
 if Validity:
-  print 'Reading validity.points...'
+  print('Reading validity.points...')
   file = open (validity_points, 'r')
   for line in file:
     words = line.split (' ')
-    time = long (words[0]) * 1000000000L
+    time = int (words[0]) * 1000000000
     value = float (words[1])
     add_event (time, '%ldns point validity %.3f\n' % (time, value))
   ofile.write ('info graph validity Avg._Route_Validity 0 %s 0 1.1 %d\n'%(duration, 3))
-  print 'Done!'
+  print('Done!')
 
 if Stretch:
-  print 'Reading stretch.points...'
+  print('Reading stretch.points...')
   file = open (stretch_points, 'r')
   max_stretch = 0.0
   for line in file:
     words = line.split (' ')
-    time = long (words[0]) * 1000000000L
+    time = int (words[0]) * 1000000000
     value = float (words[1])
     if value > max_stretch:
       max_stretch = value
     add_event (time, '%ldns point stretch %.3f\n' % (time, value))
   ofile.write ('info graph stretch Avg._Route_Stretch 0 %s 1.0 %s %d\n'%(duration, max_stretch, 4))
-  print 'Done!'
+  print('Done!')
 
 if Losses:
-  print 'Reading losses.points...'
+  print('Reading losses.points...')
   file = open (losses_points, 'r')
   max_loss = 0.0
   for line in file:
     words = line.split (' ')
-    time = long (words[0]) * 1000000000L
+    time = int (words[0]) * 1000000000
     value = float (words[1])
     if value > max_loss:
       max_loss = value
     add_event (time, '%ldns point loss %.3f\n' % (time, value))
   ofile.write ('info graph loss Loss_Rate_(%%) 0 %s 0 %s %d\n'%(duration, max_loss, 2))
-  print 'Done!'
+  print('Done!')
 
 if Bandwidth_Color:
-  print 'Reading dataRate.points...'
+  print('Reading dataRate.points...')
   file = open (data_points, 'r')
   dataline=file.readlines()
   max_rate = dataline[len(dataline)-1].split(' ')[1]
@@ -361,24 +361,24 @@ if Bandwidth_Color:
   for line in dataline:
     words = line.split (' ')
     if words[0] != 'MAX_RATE':
-      time = long (words[0]) * 1000000000L
+      time = int (words[0]) * 1000000000
       node = int (words[1])
       value = float (words[2])
       level = int (value/level_value)
       add_event (time, '%ldns state %d +%s\n' % (time, node, rate_level[level]))
-  print 'Done!'
+  print('Done!')
 
 if Bandwidth_Color:
-  print 'Computing eLSU events...'
+  print('Computing eLSU events...')
   level_value = maxLSU / 4
   rate_level=['low','med','high','veryhigh','veryhigh']
-  for key in LSUevents.keys ():
+  for key in list(LSUevents.keys ()):
     level = int (LSUevents[key]/level_value)
     linkstate = rate_level[level]
     time = key[0]
     event = str(time) + 'ns link ' + str(key[1]) + ' ' + ipaddr[key[2]] + ' +%s\n'%linkstate    
     add_event (time, event)
-    time = key[0]+1900000000L
+    time = key[0]+1900000000
     event = str(time) + 'ns link ' + str(key[1]) + ' ' + ipaddr[key[2]] + ' -%s\n'%linkstate
     add_event (time, event)
 
@@ -386,7 +386,7 @@ if Bandwidth_Color:
 if route_quality == 'False':
   ofile.write ('info graph tmessage Message_Propogation 0 %s 0 %s %d\n'%(duration, node_count, 4))
 
-times = events.keys ()
+times = list(events.keys ())
 times.sort ()
 
 ofile.write (arena) # Echo arena line
@@ -394,4 +394,4 @@ for time in times:
   for event in events[time]:
     ofile.write (event)
 
-print 'Events written to %s' % events_log
+print('Events written to %s' % events_log)

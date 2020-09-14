@@ -36,9 +36,9 @@ def computeRouteQuality (tLink, tLSU, nodecount):
   #for node in tLink:
   #  print node, tLink[node]
 
-  for node, routing_table in node_routes.iteritems ():
+  for node, routing_table in node_routes.items ():
     #print 'Computing route quality for node: ', node
-    for dest, entry in routing_table.iteritems ():
+    for dest, entry in routing_table.items ():
       #print dest, entry
       nextHop = entry[0]
       cost = entry [1]
@@ -85,8 +85,8 @@ def computeRouteQuality (tLink, tLSU, nodecount):
   all_costs = []
   num_valid_routes = 0 # Number of valid routes
   validity = 0.0
-  for node, routing_table in node_routes.iteritems ():
-    for dest, entry in routing_table.iteritems ():
+  for node, routing_table in node_routes.items ():
+    for dest, entry in routing_table.items ():
       if entry[2]:
         all_costs.append (entry[3])
         num_valid_routes += 1
@@ -108,8 +108,8 @@ def computeRouteQuality (tLink, tLSU, nodecount):
     median_path_length = all_costs [num_valid_routes/2]
     min_cost = 3
     max_cost = all_costs [num_valid_routes - 1]
-    for node, routing_table in node_routes.iteritems ():
-      for dest, entry in routing_table.iteritems ():
+    for node, routing_table in node_routes.items ():
+      for dest, entry in routing_table.items ():
         if entry[2] and entry[3] >= min_cost:
           num_stretch_routes += 1
           delta = float (entry[3]) / entry [4]

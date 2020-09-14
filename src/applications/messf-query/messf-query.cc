@@ -126,7 +126,7 @@ MessfQuery::Q1_ecaperiodic ()
 {
   RAPIDNET_LOG_INFO ("Q1_ecaperiodic triggered");
 
-  SendLocal (tuple (Q1_ECAPERIODIC, attrlist (
+  SendLocal (rtuple (Q1_ECAPERIODIC, attrlist (
     attr ("q1_ecaperiodic_attr1", Ipv4Value, GetAddress ()),
     attr ("q1_ecaperiodic_attr2", Int32Value, rand ()))));
 

@@ -52,6 +52,6 @@ nodes = {
 }
 
 nodesinv = {}
-for k, v in nodes.iteritems ():
+for k, v in nodes.items ():
   nodesinv[v] = k
 

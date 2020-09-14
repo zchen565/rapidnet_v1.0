@@ -21,19 +21,19 @@
 #include "ns3/rapidnet-module.h"
 #include "ns3/values-module.h"
 
-#define link(src, next, cost) \
-  tuple (SecurePathvector::LINK, \
-    attr ("link_attr1", Ipv4Value, src), \
-    attr ("link_attr2", Ipv4Value, next), \
-    attr ("link_attr3", Int32Value, cost))
+#define link(src, next, cost)                 \
+  rtuple(SecurePathvector::LINK,              \
+         attr("link_attr1", Ipv4Value, src),  \
+         attr("link_attr2", Ipv4Value, next), \
+         attr("link_attr3", Int32Value, cost))
 
-#define insertlink(from, to, cost) \
-  app(from)->Insert (link (addr (from), addr (to), cost)); \
-  app(to)->Insert (link (addr (to), addr (from), cost));
+#define insertlink(from, to, cost)                     \
+  app(from)->Insert(link(addr(from), addr(to), cost)); \
+  app(to)->Insert(link(addr(to), addr(from), cost));
 
-#define deletelink(from, to, cost) \
-  app(from)->Delete (link (addr (from), addr (to), cost)); \
-  app(to)->Delete (link (addr (to), addr (from), cost));
+#define deletelink(from, to, cost)                     \
+  app(from)->Delete(link(addr(from), addr(to), cost)); \
+  app(to)->Delete(link(addr(to), addr(from), cost));
 
 using namespace std;
 using namespace ns3;
@@ -42,58 +42,53 @@ using namespace ns3::rapidnet::securepathvector;
 
 ApplicationContainer apps;
 
-void Print ()
+void Print()
 {
-  PrintRelation (apps, SecurePathvector::PATH);
-  PrintRelation (apps, SecurePathvector::BESTPATH);
+  PrintRelation(apps, SecurePathvector::PATH);
+  PrintRelation(apps, SecurePathvector::BESTPATH);
 }
-
 
 // Create a chain topology
-void
-UpdateLinks1 ()
+void UpdateLinks1()
 {
-  insertlink (1, 2, 2);
-  insertlink (1, 3, 3);
-  insertlink (1, 4, 5);
-  insertlink (2, 3, 6);
-  insertlink (3, 4, 2);
-  insertlink (4, 5, 10);
+  insertlink(1, 2, 2);
+  insertlink(1, 3, 3);
+  insertlink(1, 4, 5);
+  insertlink(2, 3, 6);
+  insertlink(3, 4, 2);
+  insertlink(4, 5, 10);
 }
 
-void
-UpdateLinks2 ()
+void UpdateLinks2()
 {
-  deletelink (1, 2, 2);
+  deletelink(1, 2, 2);
 }
 
-void
-UpdateLinks3 ()
+void UpdateLinks3()
 {
-  insertlink (1, 2, 3);
-  insertlink (2, 5, 1);
+  insertlink(1, 2, 3);
+  insertlink(2, 5, 1);
 }
 
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   LogComponentEnable("SecurePathvector", LOG_LEVEL_INFO);
   LogComponentEnable("RapidNetApplicationBase", LOG_LEVEL_INFO);
 
-  apps = InitRapidNetApps (5, Create<SecurePathvectorHelper> ());
-  apps.Start (Seconds (0.0));
-  apps.Stop (Seconds (40.0));
+  apps = InitRapidNetApps(5, Create<SecurePathvectorHelper>());
+  apps.Start(Seconds(0.0));
+  apps.Stop(Seconds(40.0));
 
-  Simulator::Schedule (Seconds(0.0001), &UpdateLinks1);
-  Simulator::Schedule (Seconds(10.0000), &Print);
-  Simulator::Schedule (Seconds(10.0001), &UpdateLinks2);
-  Simulator::Schedule (Seconds(20.0000), &Print);
-  Simulator::Schedule (Seconds(20.0001), &UpdateLinks3);
-  Simulator::Schedule (Seconds(40.0000), &Print);
+  Simulator::Schedule(Seconds(0.0001), &UpdateLinks1);
+  Simulator::Schedule(Seconds(10.0000), &Print);
+  Simulator::Schedule(Seconds(10.0001), &UpdateLinks2);
+  Simulator::Schedule(Seconds(20.0000), &Print);
+  Simulator::Schedule(Seconds(20.0001), &UpdateLinks3);
+  Simulator::Schedule(Seconds(40.0000), &Print);
 
-  SetMaxJitter (apps, 30);
+  SetMaxJitter(apps, 30);
 
-  Simulator::Run ();
-  Simulator::Destroy ();
+  Simulator::Run();
+  Simulator::Destroy();
   return 0;
 }

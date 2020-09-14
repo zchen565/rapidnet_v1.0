@@ -33,41 +33,41 @@
 #include "parser-util.h"
 #include "ol-parser.hh"
 
-namespace ns3 {
-namespace rapidnet_compiler {
+namespace ns3
+{
+  namespace rapidnet_compiler
+  {
 
-class OlContext;
+    class OlContext;
 
-
-/**
+    /**
  * \ingroup rapidnet_compiler
  *
  * \brief A C++ wrapper for the RapidNet lexical analyzer.
  */
-class OlLexer : public OLBaseFlexLexer {
+    class OlLexer : public OLBaseFlexLexer
+    {
 
-private:
-  int comment_depth;
-  ostringstream *cstring;
+    private:
+      int comment_depth;
+      ostringstream *cstring;
 
-  yy_buffer_state *bufstate;
-  std::istringstream strb;
+      yy_buffer_state *bufstate;
+      std::istringstream strb;
 
-public:
+    public:
+      // Default: yyin == std::cin.
+      OlLexer(std::istream *str);
+      // Give it a string...
+      OlLexer(const char *prog);
+      virtual ~OlLexer();
 
-  // Default: yyin == std::cin.
-  OlLexer(std::istream *str);
-  // Give it a string...
-  OlLexer(const char *prog);
-  virtual ~OlLexer();
+      int yylex(YYSTYPE *lvalp, OlContext *env);
 
-  int yylex (YYSTYPE *lvalp, OlContext *env);
+      int line_num() const { return yylineno; };
+    };
 
-  int line_num() const { return yylineno; };
-
-};
-
+  } // namespace rapidnet_compiler
 } // namespace ns3
-} // namespace rapidnet_compiler
 
 #endif /* __OL_LEXER_H_ */

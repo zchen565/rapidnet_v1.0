@@ -42,26 +42,26 @@
 
 
 #define live(local, person, city) \
-tuple (Acquaintance::LIVEEVENT, \
+rtuple (Acquaintance::LIVEEVENT, \
 attr ("liveEvent_attr1", Ipv4Value, local), \
 attr ("liveEvent_attr2", Int32Value, person), \
 attr ("liveEvent_attr3", Int32Value, city))
 
 #define like(local, person, hobby) \
-tuple (Acquaintance::LIKEEVENT, \
+rtuple (Acquaintance::LIKEEVENT, \
 attr ("likeEvent_attr1", Ipv4Value, local), \
 attr ("likeEvent_attr2", Int32Value, person), \
 attr ("likeEvent_attr3", Int32Value, hobby))
 
 #define know(local, person1, person2, state) \
-tuple (Acquaintance::KNOWEVENT, \
+rtuple (Acquaintance::KNOWEVENT, \
 attr ("knowEvent_attr1", Ipv4Value, local), \
 attr ("knowEvent_attr2", Int32Value, person1), \
 attr ("knowEvent_attr3", Int32Value, person2), \
 attr ("knowEvent_attr4", Int32Value, state))
 
 #define relation(local, person1, person2, state) \
-tuple (Acquaintance::RELATION, \
+rtuple (Acquaintance::RELATION, \
 attr ("relation_attr1", Ipv4Value, local), \
 attr ("relation_attr2", Int32Value, person1), \
 attr ("relation_attr3", Int32Value, person2), \
@@ -77,9 +77,9 @@ app(local)->Insert(like(addr(local), person, hobby));
 #define insertlive(local, person, city) \
 app(local)->Insert(live(addr(local), person, city));
 
-//define the tuple you would like to query and how to insert it
+//define the rtuple you would like to query and how to insert it
 #define tupleQuery(loc, name, attr1, attr2, attr3, attr4) \
-tuple (AcquaintanceQuery::TUPLE, \
+rtuple (AcquaintanceQuery::TUPLE, \
 attr ("tuple_attr1", Ipv4Value, loc), \
 attr ("tuple_attr2", StrValue, name), \
 attr ("tuple_attr3", Ipv4Value, attr1), \

@@ -2,7 +2,7 @@
 import os, sys
 
 if len (sys.argv) != 5:
-  print 'Usage: plot_losses <dir> <nodes> <duration> <app>'
+  print('Usage: plot_losses <dir> <nodes> <duration> <app>')
   raise SystemExit
 
 # Indices
@@ -116,7 +116,7 @@ def process_events ():
   global MAX_RATE
 
   # Sort the times before processing
-  times = events.keys ()
+  times = list(events.keys ())
   times.sort ()
 
   # Setup graph with node to neighbor counts
@@ -180,7 +180,7 @@ def process_events ():
           data[i] = 0
 
       else:
-        print 'Unknown event!'
+        print('Unknown event!')
         raise SystemExit
 
 def plot_loss ():
@@ -190,7 +190,7 @@ def plot_loss ():
   scriptfile = open ('rapidnet/bandwidth/losses.gnuplot', 'r').read ()
   plot_script = scriptfile % (stats_file_loss)
   open ('temp.gnuplot', 'w').write (plot_script)
-  print ('Generating plot %s' % plot_file_loss)
+  print(('Generating plot %s' % plot_file_loss))
   os.system ('gnuplot temp.gnuplot > %s' % plot_file_loss)
 
 

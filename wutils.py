@@ -143,7 +143,7 @@ def run_argv(argv, env, os_env=None, cwd=None, force_no_valgrind=False):
         else:
             try:
                 retval = subprocess.Popen(argv, env=proc_env, cwd=cwd).wait()
-            except WindowsError, ex:
+            except WindowsError as ex:
                 raise Utils.WafError("Command %s raised exception %s" % (argv, ex))
     if retval:
         raise Utils.WafError("Command %s exited with code %i" % (argv, retval))
@@ -164,7 +164,7 @@ def get_run_program(program_string, command_template=None):
 
         try:
             program_obj = find_program(program_name, env)
-        except ValueError, ex:
+        except ValueError as ex:
             raise Utils.WafError(str(ex))
 
         program_node = program_obj.path.find_or_declare(ccroot.get_target_name(program_obj))
@@ -180,7 +180,7 @@ def get_run_program(program_string, command_template=None):
         program_name = program_string
         try:
             program_obj = find_program(program_name, env)
-        except ValueError, ex:
+        except ValueError as ex:
             raise Utils.WafError(str(ex))
 
         program_node = program_obj.path.find_or_declare(ccroot.get_target_name(program_obj))

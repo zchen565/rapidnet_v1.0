@@ -2,7 +2,7 @@ import sys
 from emulate import *
 
 if len (sys.argv) != 8:
-  print 'Usage: program <app> <dir> <path> <apptable-file> <testbed> <device> <duration>'
+  print('Usage: program <app> <dir> <path> <apptable-file> <testbed> <device> <duration>')
 
 app = sys.argv[1]
 dir = sys.argv[2]

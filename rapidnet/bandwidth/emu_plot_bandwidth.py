@@ -24,13 +24,13 @@ TITLE_SENT = 'Bandwidth (sent)'
 TITLE_RECD = 'Bandwidth (received)'
 
 def process_pcap (pcap_file):
-  print ('Processing ' + pcap_file)
+  print(('Processing ' + pcap_file))
 
   # Trace file for dumping individual node IP packet traces
   trace_file = pcap_file + '.trace'
 
   # Only dumping sender and destination address is always broadcast
-  print ('Creating ' + trace_file)
+  print(('Creating ' + trace_file))
   os.system ('tcpdump -tt -nn -r %s broadcast | grep "IP" | grep ".4000: UDP, length" | cut -d \' \' -f 1,3,8 > %s' % (pcap_file, trace_file))
 
 
@@ -38,7 +38,7 @@ def process_pcap (pcap_file):
 # The node's IP address, neighbor list and corresponding pcap file
 # is provided as arguments
 def aggregate_stats (ipaddr, pcap_file):
-  print pcap_file
+  print(pcap_file)
   trace_file = pcap_file + '.trace'
 
   # Create a map of sender to list of (time, length) pairs
@@ -49,7 +49,7 @@ def aggregate_stats (ipaddr, pcap_file):
     time = int (round (float (words[0])))
     sender = words[1].rpartition ('.')[0]
     bytes = int (words[2])
-    if sender not in senders.keys ():
+    if sender not in list(senders.keys ()):
       senders[sender] = [(time, bytes)]
     else:
       senders[sender] += [(time, bytes)]
@@ -58,13 +58,13 @@ def aggregate_stats (ipaddr, pcap_file):
   for packet in senders[ipaddr]:
     time = packet[0]
     bytes = packet[1]
-    if time not in sent_stats.keys ():
+    if time not in list(sent_stats.keys ()):
       sent_stats[time] = bytes
     else:
       sent_stats[time] += bytes
 
   # Aggregate recd packets
-  for sender, packets in senders.iteritems ():
+  for sender, packets in senders.items ():
     for packet in packets:
       #print 'begin, for packet: ', packet
       time = packet[0]
@@ -74,25 +74,25 @@ def aggregate_stats (ipaddr, pcap_file):
       #print '[ipaddr, sender]: ', [ipaddr, sender]
       if [ipaddr, sender] in apptable [interval]:
         #print 'accepting'
-        if time not in recd_stats.keys ():
+        if time not in list(recd_stats.keys ()):
           recd_stats[time] = bytes
         else:
           recd_stats[time] += bytes
 
 # Computes the average bytes per second
 def compute_average (stats, count):
-  for time, bytes in stats.iteritems ():
+  for time, bytes in stats.items ():
     stats[time] = int (round (float(bytes) / count))
 
 # Dumps the stats to a file
 def dump_stats (stats, dir, stats_file, count):
   for i in range (0, max (stats.keys ()) + 10):
-    if i not in stats.keys ():
+    if i not in list(stats.keys ()):
       stats[i] = 0;
-  print ('Dumping to stats file: ' + stats_file)
+  print(('Dumping to stats file: ' + stats_file))
   compute_average (stats, count)
   file = open (dir + stats_file, 'w')
-  times = stats.keys()
+  times = list(stats.keys())
   times.sort ()
   for k in times:
     file.write (str (k) + ' ' + str(stats[k]) + '\n')
@@ -107,7 +107,7 @@ def get_fileinfo (dir, app, nodes, blacklist):
   # }
   data = {}
 
-  for nodeid in nodes.keys ():
+  for nodeid in list(nodes.keys ()):
     if nodeid not in blacklist:
       data[nodes[nodeid]] = {
         'emu-pcap': os.path.join (dir, 'pcaps', app + '_' + nodes[nodeid] + '-0-0.pcap'),
@@ -120,10 +120,10 @@ def compute_stats (dir, app, nodes, apptable_file, blacklist):
   data = get_fileinfo (dir, app, nodes, blacklist)
 
   # loads the apptable global dict
-  execfile (apptable_file, globals ())
+  exec(compile(open(apptable_file, "rb").read(), apptable_file, 'exec'), globals ())
 
   # Iterate over every node's data and aggregate stats
-  for nodeip, data in data.iteritems ():
+  for nodeip, data in data.items ():
     aggregate_stats (nodeip, data['emu-pcap'])
 
   # Finally, dump the aggregated stats
@@ -159,14 +159,14 @@ def plot_stats (dir, app, nodes, apptable_file, blacklist):
   plot_file_sent = dir + PLOT_FILE_SENT
   sentplot_script = scriptfile % (dir + STATS_FILE_SENT, TITLE_SENT)
   open ('temp.gnuplot', 'w').write (sentplot_script)
-  print ('Generating plot %s' % plot_file_sent)
+  print(('Generating plot %s' % plot_file_sent))
   os.system ('gnuplot temp.gnuplot > %s' % plot_file_sent)
 
   # Plot recd stats
   plot_file_recd = dir + PLOT_FILE_RECD
   recdplot_script = scriptfile % (dir + STATS_FILE_RECD, TITLE_RECD)
   open ('temp.gnuplot', 'w').write (recdplot_script)
-  print ('Generating plot %s' % plot_file_recd)
+  print(('Generating plot %s' % plot_file_recd))
   os.system ('gnuplot temp.gnuplot > %s' % plot_file_recd)
 
   # Remove the temp file

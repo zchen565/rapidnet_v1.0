@@ -26,7 +26,7 @@ def main():
 	for x in range(X_MIN ,X_MAX+1):
 		currentNode='dbclust%d'%x
 		if currentNode not in blacklisted_nodes:
-			print currentNode
+			print(currentNode)
 			t = threading.Thread(target=runlinkstate, args=(x,1))
 			t.start()
 	

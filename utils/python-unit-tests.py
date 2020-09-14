@@ -43,11 +43,11 @@ class TestSimulator(unittest.TestCase):
         self.assertEqual(self._cb_time.GetSeconds(), 123.0)
 
     def testTimeComparison(self):
-        self.assert_(ns3.Seconds(123) == ns3.Seconds(123))
-        self.assert_(ns3.Seconds(123) >= ns3.Seconds(123))
-        self.assert_(ns3.Seconds(123) <= ns3.Seconds(123))
-        self.assert_(ns3.Seconds(124) > ns3.Seconds(123))
-        self.assert_(ns3.Seconds(123) < ns3.Seconds(124))
+        self.assertTrue(ns3.Seconds(123) == ns3.Seconds(123))
+        self.assertTrue(ns3.Seconds(123) >= ns3.Seconds(123))
+        self.assertTrue(ns3.Seconds(123) <= ns3.Seconds(123))
+        self.assertTrue(ns3.Seconds(124) > ns3.Seconds(123))
+        self.assertTrue(ns3.Seconds(123) < ns3.Seconds(124))
 
     def testTimeNumericOperations(self):
         self.assertEqual(ns3.Seconds(10) + ns3.Seconds(5), ns3.Seconds(15))
@@ -78,7 +78,7 @@ class TestSimulator(unittest.TestCase):
         source.SendTo(ns3.Packet(19), 0, ns3.InetSocketAddress(ns3.Ipv4Address("127.0.0.1"), 80))
 
         ns3.Simulator.Run()
-        self.assert_(self._received_packet is not None)
+        self.assertTrue(self._received_packet is not None)
         self.assertEqual(self._received_packet.GetSize(), 19)
 
 
@@ -106,7 +106,7 @@ class TestSimulator(unittest.TestCase):
 
         ptr = ns3.PointerValue()
         mobility.GetAttribute("PositionAllocator", ptr)
-        self.assert_(ptr.GetObject() is not None)
+        self.assertTrue(ptr.GetObject() is not None)
 
     def testIdentity(self):
         csma = ns3.CsmaNetDevice()
@@ -116,7 +116,7 @@ class TestSimulator(unittest.TestCase):
         c1 = csma.GetChannel()
         c2 = csma.GetChannel()
 
-        self.assert_(c1 is c2)
+        self.assertTrue(c1 is c2)
 
     def testTypeId(self):
         typeId1 = ns3.TypeId.LookupByNameFailSafe("ns3::UdpSocketFactory")

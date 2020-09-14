@@ -1,7 +1,7 @@
 
 def replace(file_name):
   s = open('./data/prov/'+file_name, 'r').readline().strip()
-  print s
+  print(s)
   with open('./data/map/'+file_name, 'r') as f:
     for line in f.readlines():
       line = line.strip()
@@ -11,4 +11,4 @@ def replace(file_name):
 
 if __name__ == '__main__':
   s = replace('trustPath4-5.txt')
-  print s
+  print(s)

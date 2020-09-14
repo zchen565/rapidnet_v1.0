@@ -21,7 +21,7 @@ def parse_output (dir, nodecount):
         prev_time = time
         routefilename = os.path.join (dir, 'routes/route_%3.3d.py' % time)
         routefile = open (routefilename, 'w')
-        print 'Dumping links for time %3d seconds in %s' % (time, routefilename)
+        print('Dumping links for time %3d seconds in %s' % (time, routefilename))
         routefile.write ('tLink = {}\n')
         routefile.write ('tLSU = {}\n')
         routefile.write ('for i in range (1, %d + 1):\n' % nodecount)

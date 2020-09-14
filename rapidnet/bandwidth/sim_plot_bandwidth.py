@@ -25,13 +25,13 @@ TITLE_RECD = 'Bandwidth (received)'
 # is provided as arguments
 def aggregate_stats (ipaddr, pcap_file):
 
-  print ('Processing ' + pcap_file + ' for node ' + ipaddr)
+  print(('Processing ' + pcap_file + ' for node ' + ipaddr))
 
   # Trace file for dumping individual node IP packet traces
   trace_file = pcap_file + '.trace'
 
 # Only dumping sender and destination address is always broadcast
-  print ('Creating ' + trace_file)
+  print(('Creating ' + trace_file))
   # IMPORTANT: IF DISCOVERY IS USING PORT 520 THEN YOU WILL NEED TO CHANGE CUT TO SELECT
   # FIELD 1,3,11 ELSE FIELDS SHOULD BE 1,3,8 (Run tcpdump and you will know why).
   os.system ('sudo tcpdump -nn -tt -r %s | grep "4000: UDP" | cut -d \' \' -f 1,3,8 > %s' % (pcap_file, trace_file))
@@ -44,7 +44,7 @@ def aggregate_stats (ipaddr, pcap_file):
     time = int (round (float (words[0])))
     sender = words[1].rpartition ('.')[0]
     bytes = int (words[2])
-    if sender not in senders.keys ():
+    if sender not in list(senders.keys ()):
       senders[sender] = [(time, bytes)]
     else:
       senders[sender] += [(time, bytes)]
@@ -54,13 +54,13 @@ def aggregate_stats (ipaddr, pcap_file):
     for packet in senders[ipaddr]:
       time = packet[0]
       bytes = packet[1]
-      if time not in sent_stats.keys ():
+      if time not in list(sent_stats.keys ()):
         sent_stats[time] = bytes
       else:
         sent_stats[time] += bytes
 
   # Aggregate recd packets
-  for sender in senders.keys ():
+  for sender in list(senders.keys ()):
     if sender == ipaddr:
       #print ('Self %s' % sender)
       continue
@@ -68,22 +68,22 @@ def aggregate_stats (ipaddr, pcap_file):
     for packet in senders[sender]:
       time = packet[0]
       bytes = packet[1]
-      if time not in recd_stats.keys ():
+      if time not in list(recd_stats.keys ()):
         recd_stats[time] = bytes
       else:
         recd_stats[time] += bytes
 
 # Computes the average bytes per second
 def compute_average (stats, count):
-  for time, bytes in stats.iteritems ():
+  for time, bytes in stats.items ():
     stats[time] = int (round (float(bytes) / count))
 
 # Dumps the stats to a file
 def dump_stats (stats, dir, stats_file, count):
-  print ('Dumping to stats file: ' + stats_file)
+  print(('Dumping to stats file: ' + stats_file))
   compute_average (stats, count)
   file = open (os.path.join (dir, stats_file), 'w')
-  times = stats.keys()
+  times = list(stats.keys())
   times.sort ()
   #print times
   for k in times:
@@ -100,7 +100,7 @@ def compute_stats (dir, app, nodes):
   data = {}
 
   # Map neighbor list representation to IPs and populate data
-  for nodeid, nodeip in nodes.iteritems ():
+  for nodeid, nodeip in nodes.items ():
     data[nodeip] = {
       'sim-pcap': os.path.join (dir, 'pcaps', app + '-' + str (nodeid-1) + '-0.pcap'),
       }
@@ -108,7 +108,7 @@ def compute_stats (dir, app, nodes):
   #print data
 
   # Iterate over every node's data and aggregate stats
-  for nodeip,data in data.iteritems ():
+  for nodeip,data in data.items ():
     aggregate_stats (nodeip, data['sim-pcap'])
 
   # Finally, dump the aggregated stats
@@ -130,14 +130,14 @@ def plot_stats (dir, app, nodes):
   plot_file_sent = os.path.join (dir, PLOT_FILE_SENT)
   sentplot_script = scriptfile % (os.path.join (dir, STATS_FILE_SENT), TITLE_SENT)
   open ('temp.gnuplot', 'w').write (sentplot_script)
-  print ('Generating plot %s' % plot_file_sent)
+  print(('Generating plot %s' % plot_file_sent))
   os.system ('gnuplot temp.gnuplot > %s' % plot_file_sent)
 
   # Plot recd stats
   plot_file_recd = os.path.join (dir, PLOT_FILE_RECD)
   recdplot_script = scriptfile % (os.path.join (dir, STATS_FILE_RECD), TITLE_RECD)
   open ('temp.gnuplot', 'w').write (recdplot_script)
-  print ('Generating plot %s' % plot_file_recd)
+  print(('Generating plot %s' % plot_file_recd))
   os.system ('gnuplot temp.gnuplot > %s' % plot_file_recd)
 
   # Remove the temp file

@@ -33,9 +33,9 @@ def getAddress(interface):
 if __name__ == "__main__":
   
   if len (sys.argv) != 2:
-    print 'usage: python getAggress.py <interface (example: eth0)>'
+    print('usage: python getAggress.py <interface (example: eth0)>')
     exit()
 
   interface = sys.argv[1]
   address = getAddress(interface) 
-  print address
+  print(address)

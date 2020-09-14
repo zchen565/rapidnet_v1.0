@@ -31,15 +31,15 @@ def run_simulation (args, dir, logfile):
   command = './waf --run rapidnet-app-simulator --command-template="%%s --dir=%s --app=%s --nodes=%d --duration=%d --phy=%s --log-discovery=%d --log-app=%d --baseIp=%s --mm=%s --queryNum=%s %s --xbound=%d --ybound=%d --stream=%s --print-period=%s --print-reln=%s --maxJitter=%s" 2> %s'
 
   #Create directory
-  print ('Creating dir %s' % dir)
+  print(('Creating dir %s' % dir))
   os.system ('mkdir %s' % dir)
   os.system ('mkdir %s' % os.path.join (dir, 'pcaps'))
   os.system ('mkdir %s' % os.path.join (dir, 'apptable'))
-  print ('Log file: %s' % logfile)
+  print(('Log file: %s' % logfile))
 
   #Run command
   command = command % (dir, args['app'], args['nodes'], args['duration'], args['phy'], args['log-discovery'], args['log-app'], args['baseIp'], args['mm'], args['queryNum'], args['mob-args'], args['xbound'], args['ybound'], args['stream'], args['print-period'], args['print-reln'], args['maxJitter'], logfile)
-  print ('Running command %s' % command)
+  print(('Running command %s' % command))
   os.system (command)
 
 # Plot graphs
@@ -55,20 +55,20 @@ def plot_graphs (args, dir, logfile, route_quality=False, bandwidth_color = True
   plot_stats (dir, args['app'], nodes)
 
    # Generate apptable file for emulation
-  print 'Generating apptable files for cluster and orbit...'
+  print('Generating apptable files for cluster and orbit...')
   APPTABLE_PARSER = './rapidnet/apptable/apptable_parser'
   if args ['nodes'] <= 24:
     os.system ('%s %s %s %d %d > %s/apptable/apptable_cluster_%s' % (APPTABLE_PARSER, logfile, NODESMAP_CLUSTER, APPTABLE_PERIOD, args['duration'], dir, dir))
   os.system ('%s %s %s %d %d > %s/apptable/apptable_orbit_%s' % (APPTABLE_PARSER, logfile, NODESMAP_ORBIT, APPTABLE_PERIOD, args['duration'], dir, dir))
-  print 'Done!'
+  print('Done!')
 
   # Generate apptable topogen file for plotting emulation graph
-  print 'Generating apptable_topo files for cluster and orbit...'
+  print('Generating apptable_topo files for cluster and orbit...')
   APPTABLE_TOPOGEN = './rapidnet/apptable/apptable_topogen'
   if args ['nodes'] <= 24:
     os.system ('%s %s %s %d %d > %s/apptable/apptable_topo_clust_%s' % (APPTABLE_TOPOGEN, logfile, NODESMAP_CLUSTER, APPTABLE_PERIOD, args['duration'], dir, dir))
   os.system ('%s %s %s %d %d > %s/apptable/apptable_topo_orbit_%s' % (APPTABLE_TOPOGEN, logfile, NODESMAP_ORBIT, APPTABLE_PERIOD, args['duration'], dir, dir))
-  print 'Done!'
+  print('Done!')
 
   if route_quality:
     # Compute packet losses
@@ -90,19 +90,19 @@ def plot_graphs (args, dir, logfile, route_quality=False, bandwidth_color = True
 # Simulates with given arguments.
 def simulate (args, route_quality=False, bandwidth_color = True):
 
-  if 'stream' not in args.keys ():
+  if 'stream' not in list(args.keys ()):
     args['stream'] = 'clog'
-  if 'print-period' not in args.keys ():
+  if 'print-period' not in list(args.keys ()):
     args['print-period'] = 0
-  if 'xbound' not in args.keys ():
+  if 'xbound' not in list(args.keys ()):
     args['xbound'] = 2000
-  if 'ybound' not in args.keys ():
+  if 'ybound' not in list(args.keys ()):
     args['ybound'] = 2000
-  if 'baseIp' not in args.keys ():
+  if 'baseIp' not in list(args.keys ()):
     args['baseIp'] = '192.168.0.0'
-  if 'tag' not in args.keys ():
+  if 'tag' not in list(args.keys ()):
     args['tag'] = ''
-  if 'print-reln' not in args.keys ():
+  if 'print-reln' not in list(args.keys ()):
     args['print-reln'] = 'tLink'
   if 'maxJitter' not in args:
     args['maxJitter'] = 500

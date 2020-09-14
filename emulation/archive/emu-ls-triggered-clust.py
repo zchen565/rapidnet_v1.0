@@ -2,7 +2,7 @@ import sys
 from emulate import *
 
 if len (sys.argv) != 3:
-  print 'Usage: program <dir> <apptable-file>'
+  print('Usage: program <dir> <apptable-file>')
 
 args = {}
 

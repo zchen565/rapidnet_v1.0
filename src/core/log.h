@@ -25,37 +25,39 @@
 #include <iostream>
 #include <stdint.h>
 
-namespace ns3 {
+namespace ns3
+{
 
-enum LogLevel {
-  LOG_NONE           = 0x00000000, // no logging
+  enum LogLevel
+  {
+    LOG_NONE = 0x00000000, // no logging
 
-  LOG_ERROR          = 0x00000001, // serious error messages only
-  LOG_LEVEL_ERROR    = 0x00000001,
+    LOG_ERROR = 0x00000001, // serious error messages only
+    LOG_LEVEL_ERROR = 0x00000001,
 
-  LOG_WARN           = 0x00000002, // warning messages
-  LOG_LEVEL_WARN     = 0x00000003,
+    LOG_WARN = 0x00000002, // warning messages
+    LOG_LEVEL_WARN = 0x00000003,
 
-  LOG_DEBUG          = 0x00000004, // rare ad-hoc debug messages
-  LOG_LEVEL_DEBUG    = 0x00000007,
+    LOG_DEBUG = 0x00000004, // rare ad-hoc debug messages
+    LOG_LEVEL_DEBUG = 0x00000007,
 
-  LOG_INFO           = 0x00000008, // informational messages (e.g., banners)
-  LOG_LEVEL_INFO     = 0x0000000f,
+    LOG_INFO = 0x00000008, // informational messages (e.g., banners)
+    LOG_LEVEL_INFO = 0x0000000f,
 
-  LOG_FUNCTION       = 0x00000010, // function tracing
-  LOG_LEVEL_FUNCTION = 0x0000001f, 
+    LOG_FUNCTION = 0x00000010, // function tracing
+    LOG_LEVEL_FUNCTION = 0x0000001f,
 
-  LOG_LOGIC          = 0x00000020, // control flow tracing within functions
-  LOG_LEVEL_LOGIC    = 0x0000003f,
+    LOG_LOGIC = 0x00000020, // control flow tracing within functions
+    LOG_LEVEL_LOGIC = 0x0000003f,
 
-  LOG_ALL            = 0x3fffffff, // print everything
-  LOG_LEVEL_ALL      = LOG_ALL,
+    LOG_ALL = 0x3fffffff, // print everything
+    LOG_LEVEL_ALL = LOG_ALL,
 
-  LOG_PREFIX_FUNC    = 0x80000000, // prefix all trace prints with function
-  LOG_PREFIX_TIME    = 0x40000000  // prefix all trace prints with simulation time
-};
+    LOG_PREFIX_FUNC = 0x80000000, // prefix all trace prints with function
+    LOG_PREFIX_TIME = 0x40000000  // prefix all trace prints with simulation time
+  };
 
-/**
+  /**
  * \param name a log component name
  * \param level a logging level
  * \ingroup logging
@@ -67,9 +69,9 @@ enum LogLevel {
  * Same as running your program with the NS_LOG environment
  * variable set as NS_LOG='name=level'
  */
-void LogComponentEnable (char const *name, enum LogLevel level);
+  void LogComponentEnable(char const *name, enum LogLevel level);
 
-/**
+  /**
  * \param level a logging level
  * \ingroup logging
  *
@@ -78,10 +80,9 @@ void LogComponentEnable (char const *name, enum LogLevel level);
  * Same as running your program with the NS_LOG environment
  * variable set as NS_LOG='*=level'
  */
-void LogComponentEnableAll (enum LogLevel level);
+  void LogComponentEnableAll(enum LogLevel level);
 
-
-/**
+  /**
  * \param name a log component name
  * \param level a logging level
  * \ingroup logging
@@ -90,22 +91,19 @@ void LogComponentEnableAll (enum LogLevel level);
  * The logging output can be later re-enabled with a call
  * to ns3::LogComponentEnable.
  */
-void LogComponentDisable (char const *name, enum LogLevel level);
+  void LogComponentDisable(char const *name, enum LogLevel level);
 
-/**
+  /**
  * \param level a logging level
  * \ingroup logging
  *
  * Disable all logging for all components.
  */
-void LogComponentDisableAll (enum LogLevel level);
-
+  void LogComponentDisableAll(enum LogLevel level);
 
 } // namespace ns3
 
-
 #ifdef NS3_LOG_ENABLE
-
 
 /**
  * \ingroup debugging
@@ -146,31 +144,29 @@ void LogComponentDisableAll (enum LogLevel level);
  * ns3::LogComponentDisable functions or with the NS_LOG
  * environment variable.
  */
-#define NS_LOG_COMPONENT_DEFINE(name)                           \
-  static ns3::LogComponent g_log = ns3::LogComponent (name)
+#define NS_LOG_COMPONENT_DEFINE(name) \
+  static ns3::LogComponent g_log = ns3::LogComponent(name)
 
-#define NS_LOG_APPEND_TIME_PREFIX                               \
-  if (g_log.IsEnabled (ns3::LOG_PREFIX_TIME))                   \
-    {                                                           \
-      ns3::LogTimePrinter printer = ns3::LogGetTimePrinter ();  \
-      if (printer != 0)                                         \
-        {                                                       \
-          (*printer) (std::clog);                               \
-          std::clog << " ";                                     \
-        }                                                       \
-    }
+#define NS_LOG_APPEND_TIME_PREFIX                           \
+  if (g_log.IsEnabled(ns3::LOG_PREFIX_TIME))                \
+  {                                                         \
+    ns3::LogTimePrinter printer = ns3::LogGetTimePrinter(); \
+    if (printer != 0)                                       \
+    {                                                       \
+      (*printer)(std::clog);                                \
+      std::clog << " ";                                     \
+    }                                                       \
+  }
 
 #define NS_LOG_APPEND_FUNC_PREFIX                               \
-  if (g_log.IsEnabled (ns3::LOG_PREFIX_FUNC))                   \
-    {                                                           \
-      std::clog << g_log.Name () << ":" <<                      \
-        __FUNCTION__ << "(): ";                                 \
-    }                                                           \
+  if (g_log.IsEnabled(ns3::LOG_PREFIX_FUNC))                    \
+  {                                                             \
+    std::clog << g_log.Name() << ":" << __FUNCTION__ << "(): "; \
+  }
 
 #ifndef NS_LOG_APPEND_CONTEXT
 #define NS_LOG_APPEND_CONTEXT
 #endif /* NS_LOG_APPEND_CONTEXT */
-
 
 /**
  * \ingroup logging
@@ -186,18 +182,17 @@ void LogComponentDisableAll (enum LogLevel level);
  * NS_LOG (LOG_DEBUG, "a number="<<aNumber<<", anotherNumber="<<anotherNumber);
  * \endcode
  */
-#define NS_LOG(level, msg)                                      \
-  do                                                            \
-    {                                                           \
-      if (g_log.IsEnabled (level))                              \
-        {                                                       \
-          NS_LOG_APPEND_TIME_PREFIX;                            \
-          NS_LOG_APPEND_CONTEXT;                                \
-          NS_LOG_APPEND_FUNC_PREFIX;                            \
-          std::clog << msg << std::endl;                        \
-        }                                                       \
-    }                                                           \
-  while (false)
+#define NS_LOG(level, msg)           \
+  do                                 \
+  {                                  \
+    if (g_log.IsEnabled(level))      \
+    {                                \
+      NS_LOG_APPEND_TIME_PREFIX;     \
+      NS_LOG_APPEND_CONTEXT;         \
+      NS_LOG_APPEND_FUNC_PREFIX;     \
+      std::clog << msg << std::endl; \
+    }                                \
+  } while (false)
 
 /**
  * \ingroup logging
@@ -240,19 +235,17 @@ void LogComponentDisableAll (enum LogLevel level);
  *
  * Output the name of the function.
  */
-#define NS_LOG_FUNCTION_NOARGS()                                \
-  do                                                            \
-    {                                                           \
-      if (g_log.IsEnabled (ns3::LOG_FUNCTION))                  \
-        {                                                       \
-          NS_LOG_APPEND_TIME_PREFIX;                            \
-          NS_LOG_APPEND_CONTEXT;                                \
-          std::clog << g_log.Name () << ":"                     \
-                    << __FUNCTION__ << "()" << std::endl;       \
-        }                                                       \
-    }                                                           \
-  while (false)
-
+#define NS_LOG_FUNCTION_NOARGS()                      \
+  do                                                  \
+  {                                                   \
+    if (g_log.IsEnabled(ns3::LOG_FUNCTION))           \
+    {                                                 \
+      NS_LOG_APPEND_TIME_PREFIX;                      \
+      NS_LOG_APPEND_CONTEXT;                          \
+      std::clog << g_log.Name() << ":"                \
+                << __FUNCTION__ << "()" << std::endl; \
+    }                                                 \
+  } while (false)
 
 /**
  * \ingroup logging
@@ -270,21 +263,19 @@ void LogComponentDisableAll (enum LogLevel level);
  * Component:Function (aNumber, anotherNumber)
  * \endcode
  */
-#define NS_LOG_FUNCTION(parameters)                             \
-  do                                                            \
-    {                                                           \
-      if (g_log.IsEnabled (ns3::LOG_FUNCTION))                  \
-        {                                                       \
-          NS_LOG_APPEND_TIME_PREFIX;                            \
-          NS_LOG_APPEND_CONTEXT;                                \
-          std::clog << g_log.Name () << ":"                     \
-                    << __FUNCTION__ << "(";                     \
-          ns3::ParameterLogger (std::clog)  << parameters;      \
-          std::clog << ")" << std::endl;                        \
-        }                                                       \
-    }                                                           \
-  while (false)
-
+#define NS_LOG_FUNCTION(parameters)                  \
+  do                                                 \
+  {                                                  \
+    if (g_log.IsEnabled(ns3::LOG_FUNCTION))          \
+    {                                                \
+      NS_LOG_APPEND_TIME_PREFIX;                     \
+      NS_LOG_APPEND_CONTEXT;                         \
+      std::clog << g_log.Name() << ":"               \
+                << __FUNCTION__ << "(";              \
+      ns3::ParameterLogger(std::clog) << parameters; \
+      std::clog << ")" << std::endl;                 \
+    }                                                \
+  } while (false)
 
 /**
  * \ingroup logging
@@ -301,56 +292,57 @@ void LogComponentDisableAll (enum LogLevel level);
  *
  * Output the requested message unconditionaly.
  */
-#define NS_LOG_UNCOND(msg)              \
-  do                                    \
-    {                                   \
-      std::clog << msg << std::endl;    \
-    }                                   \
-  while (false)
+#define NS_LOG_UNCOND(msg)         \
+  do                               \
+  {                                \
+    std::clog << msg << std::endl; \
+  } while (false)
 
-namespace ns3 {
+namespace ns3
+{
 
-
-/**
+  /**
  * \ingroup logging
  *
  * Print the list of logging messages available.
  * Same as running your program with the NS_LOG environment
  * variable set as NS_LOG=print-list
  */
-void LogComponentPrintList (void);
+  void LogComponentPrintList(void);
 
-typedef void (*LogTimePrinter) (std::ostream &os);
+  typedef void (*LogTimePrinter)(std::ostream &os);
 
-void LogSetTimePrinter (LogTimePrinter);
-LogTimePrinter LogGetTimePrinter(void);
+  void LogSetTimePrinter(LogTimePrinter);
+  LogTimePrinter LogGetTimePrinter(void);
 
-
-class LogComponent {
-public:
-  LogComponent (char const *name);
-  void EnvVarCheck (char const *name);
-  bool IsEnabled (enum LogLevel level) const;
-  bool IsNoneEnabled (void) const;
-  void Enable (enum LogLevel level);
-  void Disable (enum LogLevel level);
-  char const *Name (void) const;
-private:
-  int32_t     m_levels;
-  char const *m_name;
-};
-
-class ParameterLogger : public std::ostream
-{
-  int m_itemNumber;
-  std::ostream &m_os;
-public:
-  ParameterLogger (std::ostream &os);
-
-  template<typename T>
-  ParameterLogger& operator<< (T param)
+  class LogComponent
   {
-    switch (m_itemNumber)
+  public:
+    LogComponent(char const *name);
+    void EnvVarCheck(char const *name);
+    bool IsEnabled(enum LogLevel level) const;
+    bool IsNoneEnabled(void) const;
+    void Enable(enum LogLevel level);
+    void Disable(enum LogLevel level);
+    char const *Name(void) const;
+
+  private:
+    int32_t m_levels;
+    char const *m_name;
+  };
+
+  class ParameterLogger
+  {
+    int m_itemNumber;
+    std::ostream &m_os;
+
+  public:
+    ParameterLogger(std::ostream &os);
+
+    template <typename T>
+    ParameterLogger &operator<<(T param)
+    {
+      switch (m_itemNumber)
       {
       case 0: // first parameter
         m_os << param;
@@ -359,10 +351,10 @@ public:
         m_os << ", " << param;
         break;
       }
-    m_itemNumber++;
-    return *this;
-  }
-};
+      m_itemNumber++;
+      return *this;
+    }
+  };
 
 } // namespace ns3
 

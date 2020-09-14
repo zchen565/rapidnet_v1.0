@@ -7,7 +7,7 @@ scripts_dir = 'rapidnet/plot'
 scripts = ['bandwidth-recd.gnuplot', 'bandwidth-sent.gnuplot', 'stretch.gnuplot', 'validity.gnuplot']
 
 if len (sys.argv) != 4:
-  print 'Usage: ./plot <ls_dir> <hsls_dir> <dest_dir>'
+  print('Usage: ./plot <ls_dir> <hsls_dir> <dest_dir>')
   sys.exit (0)
 
 args = {}

@@ -198,7 +198,7 @@ def pre_scan_hook(dummy_module_parser,
         except KeyError:
             pass
         else:
-            for key,value in annotations.items():
+            for key,value in list(annotations.items()):
                 if key == 'params':
                     parameter_annotations.update (value)
                     del annotations['params']
@@ -244,7 +244,7 @@ def ns3_module_scan(top_builddir, pygen_file_name, everything_h):
     ## do a topological sort on the modules graph
     from topsort import topsort
     graph = []
-    for ns3_module_name, (ns3_module_deps, dummy) in ns3_modules.iteritems():
+    for ns3_module_name, (ns3_module_deps, dummy) in ns3_modules.items():
         for dep in ns3_module_deps:
             graph.append((dep, ns3_module_name))
     sorted_ns3_modules = topsort(graph)

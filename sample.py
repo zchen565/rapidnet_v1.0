@@ -38,8 +38,8 @@ if __name__ == '__main__':
   args = parse()
   data = pd.read_csv('./data/trust/bitcoinotc-prob.csv', sep=',')
   data = data[data['node1']<args.n][data['node2']<args.n]
-  print data.shape
+  print(data.shape)
   sampled = pd.DataFrame(columns=data.columns)
   sampled = sample(data, sampled, args.d, -1, args.w)
-  print sampled
+  print(sampled)
   sampled.to_csv('./data/trust/sample_'+np.str(args.n)+'.csv', encoding='gbk', index=False)

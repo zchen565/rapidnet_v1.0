@@ -155,11 +155,11 @@ def transpose(matrix):
     [['a', 'd', 'g'], ['b', 'e', 'h']]
 
     """
-    result = zip(*matrix)
+    result = list(zip(*matrix))
     # Convert list of tuples to list of lists.
     # map is faster than a list comprehension since it is being used with
     # a built-in function as an argument.
-    result = map(list, result)
+    result = list(map(list, result))
     return result
 
 
@@ -472,7 +472,7 @@ def nice_units(value, dp=0, sigfigs=None, suffix='', space=' ',
         prefixes = si_prefixes
     prefixes[1] = ('', '')  # Unity.
     # Determine appropriate multiplier.
-    multipliers = prefixes.keys()
+    multipliers = list(prefixes.keys())
     multipliers.sort()
     mult = None
     for i in range(len(multipliers) - 1):
@@ -567,7 +567,7 @@ def uniquify(seq, preserve_order=False):
         else:
             for x in seq:
                 d[x] = 0
-            return d.keys()
+            return list(d.keys())
     except TypeError:
         # Have an unhashable object, so use slow algorithm.
         result = []
@@ -594,7 +594,7 @@ def reverse_dict(d):
 
     """
     result = {}
-    for key, value in d.items():
+    for key, value in list(d.items()):
         result[value] = key
     return result
 
@@ -827,13 +827,13 @@ def getmodule(obj):
     else:
         # Handle classes.
         func = None
-        for item in obj.__dict__.values():
+        for item in list(obj.__dict__.values()):
             if hasattr(item, 'func_globals'):
                 func = item
                 break
         if func is None:
             raise ValueError("No functions attached to object: %r" % obj)
-    module_name = func.func_globals['__name__']
+    module_name = func.__globals__['__name__']
     # Get module.
     module = sys.modules[module_name]
     return module

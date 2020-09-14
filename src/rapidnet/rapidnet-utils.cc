@@ -25,174 +25,179 @@
 #include "ns3/buffer.h"
 #include "relation-base.h"
 
-namespace ns3 {
-namespace rapidnet {
-
-bool HasTimedout (Time timestamp, Time ttl, Time now)
+namespace ns3
 {
-  if (ttl.GetSeconds () == TIME_INFINITY)
-    {
-      return false;
-    }
-  Time diff = now - timestamp;
-  return diff > ttl;
-}
-
-string
-GetInsertStatusAsString (int statusCode)
-{
-  switch (statusCode)
+  namespace rapidnet
   {
-    case RelationBase::INSERTED: return "Inserted";
-    case RelationBase::REFRESHED: return "Refreshed";
-    case RelationBase::UPDATED: return "Updated";
-    default: return "Default inserted";
-  }
-}
 
-Ptr<Tuple>
-tuple (string name)
-{
-  return Tuple::New (name);
-}
-
-Ptr<Tuple>
-tuple (string name, list<Ptr<TupleAttribute> > attributes)
-{
-  return Tuple::New (name, attributes);
-}
-
-Ptr<Tuple> tuple (string name, Ptr<TupleAttribute> attr1)
-{
-  return tuple (name, attrlist (
-    attr1));
-}
-
-Ptr<Tuple>
-tuple (string name, Ptr<TupleAttribute> attr1,
-  Ptr<TupleAttribute> attr2)
-{
-  return tuple (name, attrlist (
-    attr1, attr2));
-}
-
-Ptr<Tuple>
-tuple (string name, Ptr<TupleAttribute> attr1,
-  Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3)
-{
-  return tuple (name, attrlist (
-    attr1, attr2, attr3));
-}
-
-Ptr<Tuple>
-tuple (string name, Ptr<TupleAttribute> attr1,
-  Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
-  Ptr<TupleAttribute> attr4)
-{
-  return tuple (name, attrlist (
-    attr1, attr2, attr3, attr4));
-}
-
-Ptr<Tuple>
-tuple (string name, Ptr<TupleAttribute> attr1,
-  Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
-  Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5)
-{
-  return tuple (name, attrlist (
-    attr1, attr2, attr3, attr4, attr5));
-}
-
-Ptr<Tuple>
-tuple (string name, Ptr<TupleAttribute> attr1,
-  Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
-  Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5,
-  Ptr<TupleAttribute> attr6)
-{
-  return tuple (name, attrlist (
-    attr1, attr2, attr3, attr4, attr5, attr6));
-}
-
-
-Ptr<Tuple>
-tuple (string name, Ptr<TupleAttribute> attr1,
-  Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
-  Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5,
-  Ptr<TupleAttribute> attr6, Ptr<TupleAttribute> attr7)
-{
-  return tuple (name, attrlist (
-    attr1, attr2, attr3, attr4, attr5, attr6, attr7));
-}
-string
-GetSHA1Digest (string message)
-{
-  unsigned char obuf[SHA_DIGEST_LENGTH];
-  SHA1(reinterpret_cast<const unsigned char*>(message.c_str ()),
-    message.length (), obuf);
-
-  char temp[3];
-  stringstream digest;
-
-  for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
+    bool HasTimedout(Time timestamp, Time ttl, Time now)
     {
+      if (ttl.GetSeconds() == TIME_INFINITY)
+      {
+        return false;
+      }
+      Time diff = now - timestamp;
+      return diff > ttl;
+    }
+
+    string
+    GetInsertStatusAsString(int statusCode)
+    {
+      switch (statusCode)
+      {
+      case RelationBase::INSERTED:
+        return "Inserted";
+      case RelationBase::REFRESHED:
+        return "Refreshed";
+      case RelationBase::UPDATED:
+        return "Updated";
+      default:
+        return "Default inserted";
+      }
+    }
+
+    Ptr<Tuple>
+    rtuple(string name)
+    {
+      return Tuple::New(name);
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, list<Ptr<TupleAttribute>> attributes)
+    {
+      return Tuple::New(name, attributes);
+    }
+
+    Ptr<Tuple> rtuple(string name, Ptr<TupleAttribute> attr1)
+    {
+      return rtuple(name, attrlist(
+                              attr1));
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, Ptr<TupleAttribute> attr1,
+           Ptr<TupleAttribute> attr2)
+    {
+      return rtuple(name, attrlist(
+                              attr1, attr2));
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, Ptr<TupleAttribute> attr1,
+           Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3)
+    {
+      return rtuple(name, attrlist(
+                              attr1, attr2, attr3));
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, Ptr<TupleAttribute> attr1,
+           Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
+           Ptr<TupleAttribute> attr4)
+    {
+      return rtuple(name, attrlist(
+                              attr1, attr2, attr3, attr4));
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, Ptr<TupleAttribute> attr1,
+           Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
+           Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5)
+    {
+      return rtuple(name, attrlist(
+                              attr1, attr2, attr3, attr4, attr5));
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, Ptr<TupleAttribute> attr1,
+           Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
+           Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5,
+           Ptr<TupleAttribute> attr6)
+    {
+      return rtuple(name, attrlist(
+                              attr1, attr2, attr3, attr4, attr5, attr6));
+    }
+
+    Ptr<Tuple>
+    rtuple(string name, Ptr<TupleAttribute> attr1,
+           Ptr<TupleAttribute> attr2, Ptr<TupleAttribute> attr3,
+           Ptr<TupleAttribute> attr4, Ptr<TupleAttribute> attr5,
+           Ptr<TupleAttribute> attr6, Ptr<TupleAttribute> attr7)
+    {
+      return rtuple(name, attrlist(
+                              attr1, attr2, attr3, attr4, attr5, attr6, attr7));
+    }
+    string
+    GetSHA1Digest(string message)
+    {
+      unsigned char obuf[SHA_DIGEST_LENGTH];
+      SHA1(reinterpret_cast<const unsigned char *>(message.c_str()),
+           message.length(), obuf);
+
+      char temp[3];
+      stringstream digest;
+
+      for (int i = 0; i < SHA_DIGEST_LENGTH; i++)
+      {
         sprintf(temp, "%02x", obuf[i]);
         digest << temp;
+      }
+      return digest.str();
     }
-  return digest.str ();
-}
 
-Ptr<Tuple>
-RemoveAllRapidNetAttributes (Ptr<Tuple> tuple)
-{
-  Ptr<Tuple> retval = Tuple::New (tuple->GetName ());
-  map<string, Ptr<TupleAttribute> > attrMap = tuple->GetAllAttributes ();
-  map<string, Ptr<TupleAttribute> >::iterator it;
-
-  for (it = attrMap.begin (); it != attrMap.end (); ++it)
+    Ptr<Tuple>
+    RemoveAllRapidNetAttributes(Ptr<Tuple> tuple)
     {
-      if ((it->first).find ("rn-") == 0)
+      Ptr<Tuple> retval = Tuple::New(tuple->GetName());
+      map<string, Ptr<TupleAttribute>> attrMap = tuple->GetAllAttributes();
+      map<string, Ptr<TupleAttribute>>::iterator it;
+
+      for (it = attrMap.begin(); it != attrMap.end(); ++it)
+      {
+        if ((it->first).find("rn-") == 0)
         {
           //clog << "Removing: " << it->second << endl;
-          retval->AddAttribute (it->second);
-          tuple->RemoveAttribute (it->first);
+          retval->AddAttribute(it->second);
+          tuple->RemoveAttribute(it->first);
         }
+      }
+
+      return retval;
     }
 
-  return retval;
-}
+    Ptr<ByteArrayValue>
+    SerializeTupleToByteArray(Ptr<Tuple> tuple)
+    {
+      uint32_t numBytes = tuple->GetSerializedSize();
 
-Ptr<ByteArrayValue>
-SerializeTupleToByteArray (Ptr<Tuple> tuple)
-{
-  uint32_t numBytes = tuple->GetSerializedSize ();
+      Buffer buffer;
+      buffer.AddAtStart(numBytes);
 
-  Buffer buffer;
-  buffer.AddAtStart (numBytes);
+      Buffer::Iterator it = buffer.Begin();
+      tuple->Serialize(it);
 
-  Buffer::Iterator it = buffer.Begin ();
-  tuple->Serialize (it);
+      uint8_t *arr = new uint8_t[numBytes];
+      buffer.Begin().Read(arr, numBytes);
 
-  uint8_t *arr = new uint8_t[numBytes];
-  buffer.Begin ().Read (arr, numBytes);
+      return DynamicCast<ByteArrayValue, Value>(ByteArrayValue::New(
+          arr, numBytes));
+    }
 
-  return DynamicCast<ByteArrayValue, Value> (ByteArrayValue::New(
-    arr, numBytes));
-}
+    Ptr<Tuple>
+    DeserializeTupleFromByteArray(Ptr<ByteArrayValue> byteArray)
+    {
+      Ptr<Tuple> tuple = Tuple::New();
+      uint32_t numBytes = byteArray->GetByteArrayLen();
 
-Ptr<Tuple>
-DeserializeTupleFromByteArray (Ptr<ByteArrayValue> byteArray)
-{
-  Ptr<Tuple> tuple = Tuple::New ();
-  uint32_t numBytes = byteArray->GetByteArrayLen ();
+      Buffer buffer;
+      buffer.AddAtEnd(numBytes);
+      buffer.Begin().Write(byteArray->GetByteArrayPtr(), numBytes);
 
-  Buffer buffer;
-  buffer.AddAtEnd (numBytes);
-  buffer.Begin ().Write (byteArray->GetByteArrayPtr (), numBytes);
+      Buffer::Iterator it = buffer.Begin();
+      tuple->Deserialize(it);
 
-  Buffer::Iterator it = buffer.Begin ();
-  tuple->Deserialize (it);
+      return tuple;
+    }
 
-  return tuple;
-}
-
-} // namespace rapidnet
+  } // namespace rapidnet
 } // namespace ns3

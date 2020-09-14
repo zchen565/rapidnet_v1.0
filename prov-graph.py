@@ -32,7 +32,7 @@ nameDic = {0: 'ben', 1: 'Elena', 2: 'Dhanya', 3: 'Alex', 4:'Arti',
 
 
 def argsNum(func):
-  return len(func.func_code.co_varnames)
+  return len(func.__code__.co_varnames)
 
 def parseFile(file_name):
   with open(file_name, 'r') as f:
@@ -40,7 +40,7 @@ def parseFile(file_name):
     s = deleteRule(s, 'ra@n257')
     # s = preprocess(s)
     # s = deleteRule(s, 'r0@n257')
-    print s
+    print(s)
     d = parse(s)
     return d
 
@@ -184,7 +184,7 @@ def drawGraphWithObj(G, obj, name_dic, func_dic):
   l = []
   if isinstance(obj, dict):
     query_name = None
-    for key in obj.keys():
+    for key in list(obj.keys()):
       rule = key.split('_')[0]
       # in case of r0
       if rule=='r0':
@@ -197,7 +197,7 @@ def drawGraphWithObj(G, obj, name_dic, func_dic):
       children = drawGraphWithObj(G, obj[key], name_dic, func_dic)
       for child in children:
         G.add_edge(child, node_name)
-      query_name = func_dic[rule](*(children[i] for i in range(func_dic[rule].func_code.co_argcount)))
+      query_name = func_dic[rule](*(children[i] for i in range(func_dic[rule].__code__.co_argcount)))
       l.append(node_name)
     node_name = giveNodeName(G, query_name, name_dic)
     setTupleNode(G, node_name)
@@ -223,10 +223,10 @@ def drawGraphWithObj(G, obj, name_dic, func_dic):
 
 def drawGraph(file_name, save_name, func_dic):
   d = parseFile(file_name)
-  print d
+  print(d)
   d = prune(d)
-  print d
-  print toString(d)
+  print(d)
+  print(toString(d))
   name_dic = {}
   G = pgv.AGraph(strict=True, directed=True)
   G.graph_attr['rankdir'] = 'BT'
@@ -241,7 +241,7 @@ def drawGraph(file_name, save_name, func_dic):
 def prune(obj):
   if isinstance(obj, dict):
     d = {}
-    for key in obj.keys():
+    for key in list(obj.keys()):
       if obj[key]!=[]:
         p = prune(obj[key])
         if isinstance(p, list) and len(p)!=len(obj[key]):
@@ -265,7 +265,7 @@ def prune(obj):
 def toString(obj):
   if isinstance(obj, dict):
     s = ''
-    for key in obj.keys():
+    for key in list(obj.keys()):
       s += '('+key.split('_')[0]+'@n257'+toString(obj[key])+')'+'+'
     if len(obj)!=1:
       return '('+s[:-1]+')'

@@ -9,11 +9,11 @@ class MyModel(object):
         ns.Simulator.Schedule(ns.Seconds(10.0), self.DealWithEvent, ns.Simulator.Now().GetSeconds())
 
     def DealWithEvent(self, value):
-        print "Member method received event at ", ns.Simulator.Now().GetSeconds(), \
-            "s started at ", value, "s"
+        print("Member method received event at ", ns.Simulator.Now().GetSeconds(), \
+            "s started at ", value, "s")
 
 def random_function(model):
-    print "random function received event at ", ns.Simulator.Now().GetSeconds(), "s"
+    print("random function received event at ", ns.Simulator.Now().GetSeconds(), "s")
     model.Start()
 
 

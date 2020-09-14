@@ -18,131 +18,129 @@
 
 #include "pki-authentication-manager.h"
 #include "ns3/log.h"
+#include <openssl/evp.h>
 
 using namespace std;
 using namespace ns3;
 using namespace ns3::rapidnet;
 
-NS_LOG_COMPONENT_DEFINE ("PkiAuthenticationManager");
+NS_LOG_COMPONENT_DEFINE("PkiAuthenticationManager");
 
-PkiAuthenticationManager::PkiAuthenticationManager ()
+PkiAuthenticationManager::PkiAuthenticationManager()
 {
 }
 
-PkiAuthenticationManager::~PkiAuthenticationManager ()
+PkiAuthenticationManager::~PkiAuthenticationManager()
 {
 }
 
-void
-PkiAuthenticationManager::SetPrincipal (Ptr<RapidNetApplicationBase> principal)
+void PkiAuthenticationManager::SetPrincipal(Ptr<RapidNetApplicationBase> principal)
 {
-  SendlogAuthenticationManager::SetPrincipal (principal);
+  SendlogAuthenticationManager::SetPrincipal(principal);
 
   stringstream ss;
-  ss << m_principal->GetAddress ();
-  m_privateKey = EvpKey::New (ss.str (), EVP_PRIVATE_KEY);
+  ss << m_principal->GetAddress();
+  m_privateKey = EvpKey::New(ss.str(), EVP_PRIVATE_KEY);
 }
 
 Ptr<SendlogAuthenticationManager>
-PkiAuthenticationManager::New (Ptr<RapidNetApplicationBase> principal)
+PkiAuthenticationManager::New(Ptr<RapidNetApplicationBase> principal)
 {
-  Ptr<PkiAuthenticationManager> retval = Create<PkiAuthenticationManager> ();
-  retval->SetPrincipal (principal);
+  Ptr<PkiAuthenticationManager> retval = Create<PkiAuthenticationManager>();
+  retval->SetPrincipal(principal);
   return retval;
 }
 
-void
-PkiAuthenticationManager::Sign (Ptr<Tuple> tuple)
+void PkiAuthenticationManager::Sign(Ptr<Tuple> tuple)
 {
-  Ptr<Tuple> rnAttrs = RemoveAllRapidNetAttributes (tuple);
+  Ptr<Tuple> rnAttrs = RemoveAllRapidNetAttributes(tuple);
 
-  Ptr<Value> signature = OpenSslSign (tuple);
-  tuple->AddAttribute (TupleAttribute::New (PKI_ATTR_SIGNATURE, signature));
+  Ptr<Value> signature = OpenSslSign(tuple);
+  tuple->AddAttribute(TupleAttribute::New(PKI_ATTR_SIGNATURE, signature));
 
-  tuple->AddAllAttributes (rnAttrs);
+  tuple->AddAllAttributes(rnAttrs);
 }
 
 Ptr<Value>
-PkiAuthenticationManager::OpenSslSign (Ptr<Tuple> tuple)
+PkiAuthenticationManager::OpenSslSign(Ptr<Tuple> tuple)
 {
-  Ptr<ByteArrayValue> bytes = SerializeTupleToByteArray (tuple);
-  uint8_t* message = bytes->GetByteArrayPtr ();
-  int32_t msgLen = bytes->GetByteArrayLen ();
+  Ptr<ByteArrayValue> bytes = SerializeTupleToByteArray(tuple);
+  uint8_t *message = bytes->GetByteArrayPtr();
+  int32_t msgLen = bytes->GetByteArrayLen();
 
-  EVP_MD_CTX md_ctx;
-  EVP_MD_CTX_init (&md_ctx);
+  EVP_MD_CTX *md_ctx = EVP_MD_CTX_new();
+  EVP_MD_CTX_init(md_ctx);
 
-  EVP_SignInit (&md_ctx, EVP_sha1 ());
-  EVP_SignUpdate (&md_ctx, message, msgLen);
+  EVP_SignInit(md_ctx, EVP_sha1());
+  EVP_SignUpdate(md_ctx, message, msgLen);
 
-  EVP_PKEY* privateKey = m_privateKey->GetKey ();
-  uint8_t* signature = new uint8_t[EVP_PKEY_size (privateKey)];
+  EVP_PKEY *privateKey = m_privateKey->GetKey();
+  uint8_t *signature = new uint8_t[EVP_PKEY_size(privateKey)];
   uint32_t sigLen;
 
-  int err = EVP_SignFinal (&md_ctx, signature, &sigLen, privateKey);
+  int err = EVP_SignFinal(md_ctx, signature, &sigLen, privateKey);
 
   // Create this object here so that if alternate ways of
   // handling the err is chosen then the ByteArrayValue can
   // take care of freeing up the memory.
-  Ptr<Value> retval = ByteArrayValue::New (signature, sigLen);
+  Ptr<Value> retval = ByteArrayValue::New(signature, sigLen);
 
-  EVP_MD_CTX_cleanup (&md_ctx);
+  EVP_MD_CTX_free(md_ctx);
 
   if (err != 1)
-    {
-      NS_LOG_ERROR ("PkiAuthenticationManager(" << m_principal->GetAddress ()
-        << "): OpenSslSign error while signing tuple " << tuple);
-      return ByteArrayValue::New ();
-    }
+  {
+    NS_LOG_ERROR("PkiAuthenticationManager(" << m_principal->GetAddress()
+                                             << "): OpenSslSign error while signing tuple " << tuple);
+    return ByteArrayValue::New();
+  }
 
   return retval;
 }
 
-bool
-PkiAuthenticationManager::Verify (Ptr<Tuple> tuple,
-  Ptr<TupleAttribute> attr)
+bool PkiAuthenticationManager::Verify(Ptr<Tuple> tuple,
+                                      Ptr<TupleAttribute> attr)
 {
-  if (!tuple->HasAttribute (PKI_ATTR_SIGNATURE))
-    {
-      NS_LOG_WARN ("PkiAuthenticationManager: Verification failed due to "
-          "missing signature attribute in tuple: " << tuple);
-      return false;
-    }
+  if (!tuple->HasAttribute(PKI_ATTR_SIGNATURE))
+  {
+    NS_LOG_WARN("PkiAuthenticationManager: Verification failed due to "
+                "missing signature attribute in tuple: "
+                << tuple);
+    return false;
+  }
 
-  Ptr<Tuple> rnAttrs = RemoveAllRapidNetAttributes (tuple);
+  Ptr<Tuple> rnAttrs = RemoveAllRapidNetAttributes(tuple);
 
-  string srcId = attr->GetValue ()->ToString ();
+  string srcId = attr->GetValue()->ToString();
 
-  Ptr<TupleAttribute> signatureAttr = tuple->GetAttribute (PKI_ATTR_SIGNATURE);
-  Ptr<ByteArrayValue> signature = DynamicCast<ByteArrayValue, Value> (
-      signatureAttr->GetValue ());
-  tuple->RemoveAttribute (PKI_ATTR_SIGNATURE);
+  Ptr<TupleAttribute> signatureAttr = tuple->GetAttribute(PKI_ATTR_SIGNATURE);
+  Ptr<ByteArrayValue> signature = DynamicCast<ByteArrayValue, Value>(
+      signatureAttr->GetValue());
+  tuple->RemoveAttribute(PKI_ATTR_SIGNATURE);
 
-  Ptr<ByteArrayValue> serializedTuple = SerializeTupleToByteArray (tuple);
+  Ptr<ByteArrayValue> serializedTuple = SerializeTupleToByteArray(tuple);
 
-  bool sigValid = OpenSslVerify (signature, serializedTuple, srcId);
-  tuple->AddAllAttributes (rnAttrs);
+  bool sigValid = OpenSslVerify(signature, serializedTuple, srcId);
+  tuple->AddAllAttributes(rnAttrs);
 
   return sigValid;
 }
 
-bool
-PkiAuthenticationManager::OpenSslVerify (Ptr<ByteArrayValue> signature,
-  Ptr<ByteArrayValue> bytes, string keyId)
+bool PkiAuthenticationManager::OpenSslVerify(Ptr<ByteArrayValue> signature,
+                                             Ptr<ByteArrayValue> bytes, string keyId)
 {
-  EVP_MD_CTX md_ctx;
-  EVP_MD_CTX_init (&md_ctx);
+  EVP_MD_CTX *md_ctx = EVP_MD_CTX_new();
+  EVP_MD_CTX_init(md_ctx);
 
   Ptr<EvpKey> publicKey = m_publicKeys.GetKey(keyId, EVP_PUBLIC_KEY);
 
-  EVP_VerifyInit (&md_ctx, EVP_sha1 ());
-  EVP_VerifyUpdate (&md_ctx, bytes->GetByteArrayPtr (),
-    bytes->GetByteArrayLen ());
+  EVP_VerifyInit(md_ctx, EVP_sha1());
+  EVP_VerifyUpdate(md_ctx, bytes->GetByteArrayPtr(),
+                   bytes->GetByteArrayLen());
 
-  int err = EVP_VerifyFinal (&md_ctx, signature->GetByteArrayPtr (),
-    signature->GetByteArrayLen (), publicKey->GetKey ());
+  int err = EVP_VerifyFinal(md_ctx, signature->GetByteArrayPtr(),
+                            signature->GetByteArrayLen(), publicKey->GetKey());
 
-  EVP_MD_CTX_cleanup (&md_ctx);
+  EVP_MD_CTX_free(md_ctx);
 
   return err == 1;
 }

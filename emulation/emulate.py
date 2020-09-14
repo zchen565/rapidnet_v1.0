@@ -13,23 +13,23 @@ MODEL = {
   }
 
 def process_pcap (pcap_file):
-  print ('Processing ' + pcap_file)
+  print(('Processing ' + pcap_file))
 
   # Trace file for dumping individual node IP packet traces
   trace_file = pcap_file + '.trace'
 
   # Only dumping sender and destination address is always broadcast
-  print ('Creating ' + trace_file)
+  print(('Creating ' + trace_file))
   os.system ('sudo tcpdump -tt -nn -r %s broadcast | grep "IP" | grep ".4000: UDP, length" | cut -d \' \' -f 1,3,8 > %s' % (pcap_file, trace_file))
 
 def emulate(args):
 
   address=getAddress(args['device'])
 
-  if 'tag' not in args.keys ():
+  if 'tag' not in list(args.keys ()):
     args['tag'] = ''
 
-  if 'print-reln' not in args.keys ():
+  if 'print-reln' not in list(args.keys ()):
     args['print-reln'] = 'tLink'
 
   #Emulation variables
@@ -44,9 +44,9 @@ def emulate(args):
 
   #Create directory
   if args['testbed']=='orbit':
-    print "Creating dir %s" % dir
+    print("Creating dir %s" % dir)
     os.system ('mkdir %s' % dir)
-  print "Log file: %s" % logfile
+  print("Log file: %s" % logfile)
 
   # Calculate start time
   if args['testbed'] == 'orbit':
@@ -60,7 +60,7 @@ def emulate(args):
   topopath=args['path']+args['topofilename']
 #  command = command % (dir, args['app'], args['duration'], args['log-discovery'], args['log-app'], args['device'], address['mac'], address['ipnet'], address['ipmask'], address['ipbase'], address['ipaddr'], topopath, args['print-period'], args['print-reln'], logfile, logfile)
   command = command % (dir, args['app'], args['duration'], args['log-discovery'], args['log-app'], args['device'], address['mac'], address['ipnet'], address['ipmask'], address['ipbase'], address['ipaddr'], topopath, args['print-period'], args['print-reln'], start_time, logfile)
-  print ('Running command %s' % command)
+  print(('Running command %s' % command))
   os.system (command)
   process_pcap (pcap_file)
 

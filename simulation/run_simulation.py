@@ -71,7 +71,7 @@ def run_simulation (app, nodes, duration, speed_low, speed_up, xbound, ybound, q
 
 
 if len (sys.argv) not in [4, 6, 8, 9, 10, 11]:
-  print 'Usage: run_simulation <app> <nodes> <duration> [<speed_low> <speed_up>] [<xbound> <ybound>] [<mobility_model>] [<query/messageNum>] [<timestamp>]'
+  print('Usage: run_simulation <app> <nodes> <duration> [<speed_low> <speed_up>] [<xbound> <ybound>] [<mobility_model>] [<query/messageNum>] [<timestamp>]')
   sys.exit (0)
 
 app = sys.argv[1]

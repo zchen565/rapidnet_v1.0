@@ -22,161 +22,150 @@ const string VqapQuery::RECORDS = "records";
 const string VqapQuery::TEMP = "temp";
 const string VqapQuery::TUPLE = "tuple";
 
-NS_LOG_COMPONENT_DEFINE ("VqapQuery");
-NS_OBJECT_ENSURE_REGISTERED (VqapQuery);
+NS_LOG_COMPONENT_DEFINE("VqapQuery");
+NS_OBJECT_ENSURE_REGISTERED(VqapQuery);
 
 TypeId
-VqapQuery::GetTypeId (void)
+VqapQuery::GetTypeId(void)
 {
-  static TypeId tid = TypeId ("ns3::rapidnet::vqapquery::VqapQuery")
-    .SetParent<RapidNetApplicationBase> ()
-    .AddConstructor<VqapQuery> ()
-    ;
+  static TypeId tid = TypeId("ns3::rapidnet::vqapquery::VqapQuery")
+                          .SetParent<RapidNetApplicationBase>()
+                          .AddConstructor<VqapQuery>();
   return tid;
 }
 
 VqapQuery::VqapQuery()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 }
 
 VqapQuery::~VqapQuery()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 }
 
-void
-VqapQuery::DoDispose (void)
+void VqapQuery::DoDispose(void)
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::DoDispose ();
+  RapidNetApplicationBase::DoDispose();
 }
 
-void
-VqapQuery::StartApplication (void)
+void VqapQuery::StartApplication(void)
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::StartApplication ();
+  RapidNetApplicationBase::StartApplication();
   RAPIDNET_LOG_INFO("VqapQuery Application Started");
 }
 
-void
-VqapQuery::StopApplication ()
+void VqapQuery::StopApplication()
 {
-  NS_LOG_FUNCTION_NOARGS ();
+  NS_LOG_FUNCTION_NOARGS();
 
-  RapidNetApplicationBase::StopApplication ();
+  RapidNetApplicationBase::StopApplication();
   RAPIDNET_LOG_INFO("VqapQuery Application Stopped");
 }
 
-void
-VqapQuery::InitDatabase ()
+void VqapQuery::InitDatabase()
 {
   //RapidNetApplicationBase::InitDatabase ();
 
-  AddRelationWithKeys (RECORDS, attrdeflist (
-    attrdef ("records_attr1", IPV4),
-    attrdef ("records_attr2", ID),
-    attrdef ("records_attr3", ID),
-    attrdef ("records_attr4", STR)));
+  AddRelationWithKeys(RECORDS, attrdeflist(
+                                   attrdef("records_attr1", IPV4),
+                                   attrdef("records_attr2", ID),
+                                   attrdef("records_attr3", ID),
+                                   attrdef("records_attr4", STR)));
 
-  AddRelationWithKeys (TEMP, attrdeflist (
-    attrdef ("temp_attr1", IPV4),
-    attrdef ("temp_attr2", IPV4),
-    attrdef ("temp_attr3", IPV4)));
+  AddRelationWithKeys(TEMP, attrdeflist(
+                                attrdef("temp_attr1", IPV4),
+                                attrdef("temp_attr2", IPV4),
+                                attrdef("temp_attr3", IPV4)));
 
-  AddRelationWithKeys (TUPLE, attrdeflist (
-    attrdef ("tuple_attr1", IPV4),
-    attrdef ("tuple_attr2", STR),
-    attrdef ("tuple_attr3", IPV4),
-    attrdef ("tuple_attr4", STR)));
-
+  AddRelationWithKeys(TUPLE, attrdeflist(
+                                 attrdef("tuple_attr1", IPV4),
+                                 attrdef("tuple_attr2", STR),
+                                 attrdef("tuple_attr3", IPV4),
+                                 attrdef("tuple_attr4", STR)));
 }
 
-void
-VqapQuery::DemuxRecv (Ptr<Tuple> tuple)
+void VqapQuery::DemuxRecv(Ptr<Tuple> tuple)
 {
-  RapidNetApplicationBase::DemuxRecv (tuple);
+  RapidNetApplicationBase::DemuxRecv(tuple);
 
-  if (IsInsertEvent (tuple, TUPLE))
-    {
-      Q1Eca0Ins (tuple);
-    }
-  if (IsRecvEvent (tuple, PRETURN))
-    {
-      Q2_eca (tuple);
-    }
+  if (IsInsertEvent(tuple, TUPLE))
+  {
+    Q1Eca0Ins(tuple);
+  }
+  if (IsRecvEvent(tuple, PRETURN))
+  {
+    Q2_eca(tuple);
+  }
 }
 
-void
-VqapQuery::Q1Eca0Ins (Ptr<Tuple> tuple)
+void VqapQuery::Q1Eca0Ins(Ptr<Tuple> tuple)
 {
-  RAPIDNET_LOG_INFO ("Q1Eca0Ins triggered");
+  RAPIDNET_LOG_INFO("Q1Eca0Ins triggered");
 
   Ptr<Tuple> result = tuple;
 
-  result->Assign (Assignor::New ("UID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          VarExpr::New ("tuple_attr2"),
-          VarExpr::New ("tuple_attr3")),
-        VarExpr::New ("tuple_attr4")))));
+  result->Assign(Assignor::New("UID",
+                               FSha1::New(
+                                   Operation::New(RN_PLUS,
+                                                  Operation::New(RN_PLUS,
+                                                                 VarExpr::New("tuple_attr2"),
+                                                                 VarExpr::New("tuple_attr3")),
+                                                  VarExpr::New("tuple_attr4")))));
 
-  result->Assign (Assignor::New ("Time",
-    FNow::New (
-)));
+  result->Assign(Assignor::New("Time",
+                               FNow::New()));
 
-  result->Assign (Assignor::New ("QID",
-    FSha1::New (
-      Operation::New (RN_PLUS,
-        Operation::New (RN_PLUS,
-          ValueExpr::New (StrValue::New ("")),
-          VarExpr::New ("UID")),
-        VarExpr::New ("Time")))));
+  result->Assign(Assignor::New("QID",
+                               FSha1::New(
+                                   Operation::New(RN_PLUS,
+                                                  Operation::New(RN_PLUS,
+                                                                 ValueExpr::New(StrValue::New("")),
+                                                                 VarExpr::New("UID")),
+                                                  VarExpr::New("Time")))));
 
-  result->Assign (Assignor::New ("P",
-    FAppend::New (
-      ValueExpr::New (StrValue::New ("")))));
+  result->Assign(Assignor::New("P",
+                               FAppend::New(
+                                   ValueExpr::New(StrValue::New("")))));
 
-  result = result->Project (
-    PROVQUERY,
-    strlist ("tuple_attr3",
-      "QID",
-      "UID",
-      "P",
-      "tuple_attr1",
-      "tuple_attr3"),
-    strlist ("provQuery_attr1",
-      "provQuery_attr2",
-      "provQuery_attr3",
-      "provQuery_attr4",
-      "provQuery_attr5",
-      RN_DEST));
+  result = result->Project(
+      PROVQUERY,
+      strlist("tuple_attr3",
+              "QID",
+              "UID",
+              "P",
+              "tuple_attr1",
+              "tuple_attr3"),
+      strlist("provQuery_attr1",
+              "provQuery_attr2",
+              "provQuery_attr3",
+              "provQuery_attr4",
+              "provQuery_attr5",
+              RN_DEST));
 
-  Send (result);
+  Send(result);
 }
 
-void
-VqapQuery::Q2_eca (Ptr<Tuple> pReturn)
+void VqapQuery::Q2_eca(Ptr<Tuple> pReturn)
 {
-  RAPIDNET_LOG_INFO ("Q2_eca triggered");
+  RAPIDNET_LOG_INFO("Q2_eca triggered");
 
   Ptr<Tuple> result = pReturn;
 
-  result = result->Project (
-    RECORDS,
-    strlist ("pReturn_attr1",
-      "pReturn_attr2",
-      "pReturn_attr3",
-      "pReturn_attr4"),
-    strlist ("records_attr1",
-      "records_attr2",
-      "records_attr3",
-      "records_attr4"));
+  result = result->Project(
+      RECORDS,
+      strlist("pReturn_attr1",
+              "pReturn_attr2",
+              "pReturn_attr3",
+              "pReturn_attr4"),
+      strlist("records_attr1",
+              "records_attr2",
+              "records_attr3",
+              "records_attr4"));
 
-  Insert (result);
+  Insert(result);
 }
-

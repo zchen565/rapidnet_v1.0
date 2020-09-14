@@ -36,13 +36,15 @@
 
 using namespace std;
 
-namespace ns3 {
-namespace rapidnet {
+namespace ns3
+{
+  namespace rapidnet
+  {
 
-class Selector;
-class Assignor;
+    class Selector;
+    class Assignor;
 
-/**
+    /**
  * \ingroup rapidnet_library
  *
 * \brief A RapidNet tuple. A RapidNet tuple is a collection of @see
@@ -57,215 +59,213 @@ class Assignor;
 * as the table object. See @see Relation.
 *
 */
-class Tuple : public Object
-{
-public:
+    class Tuple : public Object
+    {
+    public:
+      static TypeId GetTypeId(void);
 
-  static TypeId GetTypeId (void);
+      virtual TypeId GetInstanceTypeId()
+      {
+        return Tuple::GetTypeId();
+      }
 
-  virtual TypeId GetInstanceTypeId ()
-  {
-    return Tuple::GetTypeId();
-  }
+      Tuple(string name = "no-name");
 
-  Tuple (string name = "no-name");
+      Tuple(Tuple &attrList);
 
-  Tuple (Tuple& attrList);
+      virtual ~Tuple();
 
-  virtual ~Tuple ();
-
-  /**
+      /**
    * \brief Returns the size in bytes when serialized.
    */
-  virtual uint32_t GetSerializedSize (void) const;
+      virtual uint32_t GetSerializedSize(void) const;
 
-  /**
+      /**
    * \brief Serializes the object for transmitting over the
    *        network inside a RapidNet header.
    */
-  virtual void Serialize (Buffer::Iterator& start) const;
+      virtual void Serialize(Buffer::Iterator &start) const;
 
-  /**
+      /**
    * \brief De-serializes the object that is embedded in a
    *         RapidNet header received from the network.
    */
-  virtual uint32_t Deserialize (Buffer::Iterator& end);
+      virtual uint32_t Deserialize(Buffer::Iterator &end);
 
-  /**
+      /**
    * \brief Returns the string representation of the TupleAttribute.
    */
-  virtual string ToString () const;
+      virtual string ToString() const;
 
-  virtual void SetName(string name);
+      virtual void SetName(string name);
 
-  virtual string GetName(void) const;
+      virtual string GetName(void) const;
 
-  /**
+      /**
    * \brief Adds a new attribute if it does not already exists. Throws
    * an error otherwise.
    *
    */
-  virtual void AddAttribute (Ptr<TupleAttribute> attr);
+      virtual void AddAttribute(Ptr<TupleAttribute> attr);
 
-  /**
+      /**
    * \brief Adds the attribute if it does not already exists. If it already
    *        exists, then it is overwritten with the given attribute object.
    */
-  virtual void OverwriteAttribute (Ptr<TupleAttribute> attr);
+      virtual void OverwriteAttribute(Ptr<TupleAttribute> attr);
 
-  /**
+      /**
    * \brief Adds the attribute objects in the given list to the tuple.
    */
-  virtual void AddAttributes (list<Ptr<TupleAttribute> > attributes);
+      virtual void AddAttributes(list<Ptr<TupleAttribute>> attributes);
 
-  /**
+      /**
    * \brief Returns true if an attribute is found and removed, false
    * otherwise.
    *
    */
-  virtual bool RemoveAttribute (string name);
+      virtual bool RemoveAttribute(string name);
 
-  /**
+      /**
    * \brief Returns the attribute with the given name if one exists. Throws
    *        an error otherwise.
    */
-  virtual Ptr<TupleAttribute> GetAttribute (string name);
+      virtual Ptr<TupleAttribute> GetAttribute(string name);
 
-  /**
+      /**
    * \brief Returns true if the tuple has an attribute with the given name.
    *        Returns false otherwise.
    */
-  virtual bool HasAttribute (string name);
+      virtual bool HasAttribute(string name);
 
-  /**
+      /**
    * \brief Returns all the attributes as a map, keyed by their names.
    */
-  virtual map<string, Ptr<TupleAttribute> >& GetAllAttributes ();
+      virtual map<string, Ptr<TupleAttribute>> &GetAllAttributes();
 
-  /**
+      /**
    * \brief Checks if the given list attribute values match with
    * the current tuple.
    *
    */
-  virtual bool Matches (Ptr<Tuple> tuple);
+      virtual bool Matches(Ptr<Tuple> tuple);
 
-  /*
+      /*
    * \brief Adds all attributes of another attribute list to itself.
    * The attribute names are qualified based on the second argument.
    *
    */
-  virtual void AddAllAttributes (Ptr<Tuple> attrList, bool qualified = false);
+      virtual void AddAllAttributes(Ptr<Tuple> attrList, bool qualified = false);
 
-  /**
+      /**
    * \brief Performs a project operation and returns a new tuple with the
    * given name and the requested attributes that are renamed correspondingly
    * with the given new names.
    *
    */
-  virtual Ptr<Tuple> Project (string newTupleName, list<string> attrNames,
-    list<string> newNames = list<string> ());
+      virtual Ptr<Tuple> Project(string newTupleName, list<string> attrNames,
+                                 list<string> newNames = list<string>());
 
-  /**
+      /**
    * \brief Invokes the given Assignor with this tuple as the argument.
    *
    */
-  virtual void Assign (Ptr<Assignor> assignor);
+      virtual void Assign(Ptr<Assignor> assignor);
 
-  /**
+      /**
    * \brief Invokes the given Selector with this tuple as the argument.
    *
    * If the selector evaluates to true then this tuple is returned. Otherwise,
    * an "empty" tuple is returned. See NewEmpty().
    */
-  virtual Ptr<Tuple> Select (Ptr<Selector> selector);
+      virtual Ptr<Tuple> Select(Ptr<Selector> selector);
 
-  /**
+      /**
    * \brief Returns true if this tuple is equal to the given tuple.
    */
-  virtual bool Equals (Ptr<Tuple> tuple);
+      virtual bool Equals(Ptr<Tuple> tuple);
 
-  /**
+      /**
    * \brief Returns true if this is an empty tuple.
    */
-  virtual bool IsEmpty ()
-  {
-    return GetName () == EMPTY;
-  }
-
-  void SetTimestampNow ()
-  {
-    m_timestamp = Simulator::Now ();
-  }
-
-  Time GetTimestamp ()
-  {
-    return m_timestamp;
-  }
-
-  void IncRefCount ()
-  {
-    m_refCount++;
-  }
-
-  unsigned int DecRefCount ()
-  {
-    if (m_refCount > 0) 
+      virtual bool IsEmpty()
       {
-        m_refCount--;
-      }	
-    return m_refCount;
-  }
+        return GetName() == EMPTY;
+      }
 
-  unsigned int GetRefCount ()
-  {
-    return m_refCount;
-  }
+      void SetTimestampNow()
+      {
+        m_timestamp = Simulator::Now();
+      }
 
-  static bool Less (Ptr<Tuple> l1, Ptr<Tuple> l2);
+      Time GetTimestamp()
+      {
+        return m_timestamp;
+      }
 
-  /**
+      void IncRefCount()
+      {
+        m_refCount++;
+      }
+
+      unsigned int DecRefCount()
+      {
+        if (m_refCount > 0)
+        {
+          m_refCount--;
+        }
+        return m_refCount;
+      }
+
+      unsigned int GetRefCount()
+      {
+        return m_refCount;
+      }
+
+      static bool Less(Ptr<Tuple> l1, Ptr<Tuple> l2);
+
+      /**
    * \brief Factory method to create a new tuple with the given name or
    *        a default name and no attributes.
    */
-  static Ptr<Tuple> New (string name = "no-name");
+      static Ptr<Tuple> New(string name = "no-name");
 
-  /**
+      /**
    * \brief Factory method to create a new tuple with the given name and
    *        the attributes in the given list added to it.
    */
-  static Ptr<Tuple> New (string name, list<Ptr<TupleAttribute> > attributes);
+      static Ptr<Tuple> New(string name, list<Ptr<TupleAttribute>> attributes);
 
-  /**
+      /**
    * \brief Creates and returns a new special tuple called the empty tuple.
    *
    * This tuple has a dummy name and no attributes. If a Selector
    * condition evaluates to false, then an empty tuple is returned.
    */
-  static Ptr<Tuple> NewEmpty ()
-  {
-    return New (EMPTY);
-  }
+      static Ptr<Tuple> NewEmpty()
+      {
+        return New(EMPTY);
+      }
 
-protected:
+    protected:
+      map<string, Ptr<TupleAttribute>> m_attributes;
 
-  map<string, Ptr<TupleAttribute> > m_attributes;
+      Ptr<StrValue> m_name;
 
-  Ptr<StrValue> m_name;
-
-  /**
+      /**
    * \brief Timestamp used for soft-state timeout.
    */
-  Time m_timestamp;
+      Time m_timestamp;
 
-  /**
+      /**
    * \brief Reference counter used for hard-state.
    */
-  uint32_t m_refCount;
-};
+      uint32_t m_refCount;
+    };
 
-ostream& operator << (ostream& os, const Ptr<Tuple>& tuple);
+    ostream &operator<<(ostream &os, const Ptr<Tuple> &tuple);
 
-} //namespace rapidnet
-} //namepsace ns3
+  } //namespace rapidnet
+} // namespace ns3
 
 #endif // TUPLE_H

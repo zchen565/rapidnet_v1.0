@@ -2,7 +2,7 @@ from dijkstra import Dijkstra
 
 def getEmptyRoutingTable (G, source):
   routes = {}
-  for node in G.keys ():
+  for node in list(G.keys ()):
     if node != source:
       routes[node] = [0, 999999]
   return routes
@@ -24,7 +24,7 @@ def getRoutingTable (G, source):
 
   #Compute inverse predecessor list
   invpred = {}
-  for k, v in pred.iteritems ():
+  for k, v in pred.items ():
     if v not in invpred:
       invpred[v] = []
     invpred[v] += [k]

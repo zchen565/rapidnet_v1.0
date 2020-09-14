@@ -2,7 +2,7 @@
 import os, sys
 
 if len (sys.argv) != 3:
-  print 'Usage: <run_folder> <user>'
+  print('Usage: <run_folder> <user>')
   raise SystemExit
 
 user = sys.argv[2]

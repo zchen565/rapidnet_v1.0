@@ -30,7 +30,7 @@ def run_simulation (nodes, duration):
   simulate (args, False)
 
 if len (sys.argv) < 3:
-  print 'Usage: run_chors <num_nodes> <duration>'
+  print('Usage: run_chors <num_nodes> <duration>')
   sys.exit (0)
 
 nodes = int (sys.argv[1])

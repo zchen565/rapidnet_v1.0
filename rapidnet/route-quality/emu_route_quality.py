@@ -17,7 +17,7 @@ STRETCH_GNUPLOT = './rapidnet/route-quality/stretch.gnuplot'
 
 # Check arguments
 if len (sys.argv) < 6:
-  print 'Usage: emu_route_quality <dir> <apptable-period> <duration> <node-count> <orbit|cluster> [blacklist]'
+  print('Usage: emu_route_quality <dir> <apptable-period> <duration> <node-count> <orbit|cluster> [blacklist]')
   sys.exit (0)
 
 
@@ -40,7 +40,7 @@ if len (sys.argv) > 6:
 
 # Parse the output file
 parse_all_outputs (dir, nodecount, nodes, blacklist)
-times = range (base+period, duration+period, period)
+times = list(range(base+period, duration+period, period))
 notfound = []
 
 
@@ -49,12 +49,12 @@ route_quality = {}
 for time in times:
   routes_file = os.path.join (dir, 'routes/route_%3.3d.py' % time)
   if not os.path.exists (routes_file):
-    print 'Routes file not found: ', routes_file
+    print('Routes file not found: ', routes_file)
     notfound += [time]
     continue
   else:
-    execfile (routes_file)
-  print 'Processing for time: ', time
+    exec(compile(open(routes_file, "rb").read(), routes_file, 'exec'))
+  print('Processing for time: ', time)
   route_quality[time] = computeRouteQuality (tLink, tLSU, nodecount)
 
 
@@ -64,8 +64,8 @@ validity_file = open (validity_filename, 'w')
 stretch_filename = os.path.join (dir, 'stretch.points')
 stretch_file = open (stretch_filename, 'w')
 
-print 'Writing validity data to ', validity_filename
-print 'Writing stretch data to ', stretch_filename
+print('Writing validity data to ', validity_filename)
+print('Writing stretch data to ', stretch_filename)
 for time in times:
   if time not in notfound:
     validity_file.write ('%d %f %d %d %d %d %.1f %d\n' % (time, route_quality[time][0], route_quality[time][2], \
@@ -80,7 +80,7 @@ stretch_file.close ()
 gnuplot_script = open (VALIDITY_GNUPLOT, 'r').read ()
 open ('temp.gnuplot', 'w').write (gnuplot_script % validity_filename)
 validity_imagefile = os.path.join (dir, 'validity.ps')
-print 'Plotting validity to file: ', validity_imagefile
+print('Plotting validity to file: ', validity_imagefile)
 os.system ('gnuplot temp.gnuplot > %s' % validity_imagefile)
 
 
@@ -88,7 +88,7 @@ os.system ('gnuplot temp.gnuplot > %s' % validity_imagefile)
 gnuplot_script = open (STRETCH_GNUPLOT, 'r').read ()
 open ('temp.gnuplot', 'w').write (gnuplot_script % stretch_filename)
 stretch_imagefile = os.path.join (dir, 'stretch.ps')
-print 'Plotting stretch to file: ', stretch_imagefile
+print('Plotting stretch to file: ', stretch_imagefile)
 os.system ('gnuplot temp.gnuplot > %s' % stretch_imagefile)
 
 os.system ('rm temp.gnuplot')

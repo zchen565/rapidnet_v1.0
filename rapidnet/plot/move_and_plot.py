@@ -5,7 +5,7 @@ import os, sys
 app_pairs = {'periodic': ('SimLsPeriodic', 'SimHslsPeriodic'), 'triggered': ('SimLsTriggered', 'SimHslsTriggered')}
 
 if len (sys.argv) != 6:
-  print 'Usage: ./move_and_plot <nodes> <duration> <speed_low> <speed_up> <timestamp>'
+  print('Usage: ./move_and_plot <nodes> <duration> <speed_low> <speed_up> <timestamp>')
   sys.exit (0)
 
 nodes = sys.argv[1]
@@ -19,7 +19,7 @@ def get_app_dir (prefix, suffix):
   for entry in entries:
     if entry.startswith (prefix) and entry.endswith (suffix):
       return entry
-  print 'No output folder found of the form %s*%s' % (prefix, suffix)
+  print('No output folder found of the form %s*%s' % (prefix, suffix))
   return None
 
 def move_and_plot (timestamp, app_pair, pair_name):
@@ -52,6 +52,6 @@ def move_and_plot (timestamp, app_pair, pair_name):
   os.system ('./rapidnet/plot/avg.py %s %s %s %s %s' % (ls_dir, hsls_dir, dest_dir, nodes, duration))
 
 
-for name, pair in app_pairs.iteritems ():
+for name, pair in app_pairs.items ():
   move_and_plot (timestamp, pair, name)
 

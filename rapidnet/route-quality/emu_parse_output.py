@@ -26,7 +26,7 @@ def parse_output (dir, nodecount, invnodesmap, output_filename = 'output.log', m
         if not os.path.exists (routefilename):
           # Write mode, create a fresh file and initialize values
           routefile = open (routefilename, 'w')
-          print 'Creating dump file for time %3d seconds: %s' % (time, routefilename)
+          print('Creating dump file for time %3d seconds: %s' % (time, routefilename))
           routefile.write ('tLink = {}\n')
           routefile.write ('tLSU = {}\n')
           routefile.write ('for i in range (1, %d + 1):\n' % nodecount)
@@ -36,7 +36,7 @@ def parse_output (dir, nodecount, invnodesmap, output_filename = 'output.log', m
           routefile.write ('    tLSU[i][j] = {}\n\n')
         else:
           # Append mode, append to already created file
-          print 'Appending to dump file for time %3d seconds: %s' % (time, routefilename)
+          print('Appending to dump file for time %3d seconds: %s' % (time, routefilename))
           routefile = open (routefilename, 'a')
 
       tuplename = words[2].split('=')[1]
@@ -60,7 +60,7 @@ def parse_all_outputs (dir, nodecount, nodesmap, blacklist):
 
   # Create inverse nodesmap
   invnodesmap = {}
-  for key, value in nodesmap.iteritems ():
+  for key, value in nodesmap.items ():
     invnodesmap[value] = key
 
   mode = 'w'
